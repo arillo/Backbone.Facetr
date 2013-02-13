@@ -1,2 +1,4 @@
 facetr
 ======
+
+Backbone Collection Facetr
