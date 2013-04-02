@@ -85,8 +85,6 @@ describe('Backbone.Facetr', function() {
 		// FacetCollection
 		describe('returns a FacetCollection that', function() {
 			
-			
-			
 			// FacetCollection facet
 			describe('has a facet method that', function() {
 				it('creates a new facet given a facet name and returns it for chaining', function() {
@@ -343,6 +341,32 @@ describe('Backbone.Facetr', function() {
 					// check that 'Ireland' count gets decreased and that new value 'Wales' with count 1 is properly added
 					expect(Facetr(collection).toJSON()[0].values[1].count).toBe(1);
 					expect(Facetr(collection).toJSON()[0].values[2].count).toBe(1);
+				});
+			});
+
+			describe('keeps model ids untouched', function() {
+				it('by deep cloning the models in the collection upon initialization', function() {
+					var collection = new Backbone.Collection([
+						{
+							id : '123',
+							Name : 'John'	
+						},
+						{
+							id : '456',
+							Name : 'Bob'	
+						},
+					]);
+
+					Facetr(collection).facet('Name').value('Bob');
+
+					expect(collection.at(0).id).toBe('456');
+
+					Facetr(collection).clearValues();
+
+					expect(collection.at(0).id).toBe('123');
+					expect(collection.at(1).id).toBe('456');	
+					
+					console.log(collection.at(0).id);			
 				});
 			});
 		});

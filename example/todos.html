@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<meta name="description" content="Backbone Facetr">
+		<meta name="author" content="Francesco Macri @ Arillo GmbH">
+
+		<meta name="viewport" content="width=device-width">
+		
+		<title>Backbone.Facetr - Todos Example</title>
+		<style>
+			a { text-decoration: none }
+			a:hover { text-decoration: underline }
+			
+			#TestContainer {
+				width: 1000px;
+				margin: 0 auto
+			}
+			
+				#Facets, #Items {
+					display: inline-block;
+					vertical-align: top
+				}
+				
+				#Facets {				
+					width: 250px
+				}
+					#Facets .facet .values .value .active {
+						color: #f00
+					}
+					
+					#Facets .facet .values .value .unavailable {
+						text-decoration: line-through;
+						color: #000
+					}
+					
+				#Items {
+					width: 600px;				
+				}
+					#Items ul {
+						height: 450px;
+						overflow: auto
+					}
+		</style>
+	</head>
+	<body>
+		<div id="TestContainer">
+			<h1>Facetr test</h1>
+			<div>
+				<span>Sort by</span>
+				<select id="SortAttr">
+					<option>Country</option>
+					<option>Age</option>
+				</select>
+				<select id="SortDir">
+					<option>ASC</option>
+					<option>DESC</option>
+				</select>
+			</div>
+			<div>
+				<span>Search by FirstName</span>
+				<input id="Search" type="text" size="20" placeholder="insert regex"/>
+			</div>
+			<div id="Facets">
+				
+			</div>
+			<div id="Items">
+				<h2>Items (<span> </span> of <span> </span>)</h2>
+				<div>
+					<span id="ExecTime">Exec (ms): <span> </span>&nbsp;<img src=""/></span> -
+					<span id="RenderTime">Render (ms): <span></span>&nbsp;<img src=""/></span>
+				</div>
+				<ul>
+					
+				</ul>
+			</div>
+		</div>
+
+		<!-- templates -->
+		<script type="text/html" id="Facets_template">
+			<% _.each(facets, function(facet) { %>
+				<div class="facet" id="<%= facet.data.name %>">
+					<h4><%= facet.data.label %></h4>
+					<ul class="values">
+						<% for(var i = 0, len = facet.values.length, value = facet.values[i]; i < len; i++,value = facet.values[i]) { %>
+							<li class="value">
+								<a href="#" class="<%= (value.active) ? 'active' : ((value.count === 0) ? 'unavailable':'available') %>">
+									<span><%= value.value %></span>
+									<span>(<%= value.activeCount %>/<%= value.count %>)</span>
+								</a>
+							</li>
+						<% } %>
+					</ul>
+				</div>
+			<% }); %> 
+		</script>
+		
+		<script type="text/html" id="Item_template">
+			<li>
+				<span><%= Name.FirstName+' '+Name.LastName %>, </span>
+				<span><%= Age %>, </span>
+				<span><%= Country %>, </span>
+				<span>Hobbies: <%= Hobbies %></span>
+			</li>
+		</script>
+		
+		<!-- include custom libs -->
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		
+		<!-- include Backbone.Facetr dependencies -->
+		<script src="../node_modules/underscore/underscore.js"></script>
+		<script src="../node_modules/backbone/backbone.js"></script>
+		
+		<!-- include Backbone.Facetr code -->
+		<script src="../dist/backbone.facetr.js"></script>
+		
+		<script>
+			(function($, _, Backbone, undefined) {
+				// generate dataset
+				var dataSetSize = parseInt(location.hash.replace('#','')) || 15,
+					items = window.items = (function(size) {
+					var dataSet = [],
+						i = 0,
+						names = 'Michael,Sonny,Fredo,Tom,Connie,Vito,Carmela,Vincent,Kay'.split(','),
+						surnames = 'Corleone,Hagen,Mancini,Adams'.split(','),
+						countries = 'Italy,USA,Canada,UK,Ireland,New Zealand,Australia'.split(','),
+						hobbies = 'fishing,shopping,painting,singing,drawing,playing the ukulele'.split(','),
+						minAge = 15,
+						maxAge = 95;
+					
+					while(i < size) {
+						var item = {
+							Name : {
+								FirstName : names[Math.floor((Math.random()*names.length))],
+								LastName  : surnames[Math.floor((Math.random()*surnames.length))]
+							},
+							Age : Math.floor((Math.random()*(maxAge-minAge))+minAge),
+							Country : countries[Math.floor((Math.random()*countries.length))],
+							Hobbies : (function(){
+								var hbs = [], nr = Math.floor((Math.random()*5)+1), taken = [];
+								for(var j = 0; j < nr; j++) {
+									var hobbie = hobbies[Math.floor((Math.random()*hobbies.length))];
+									while(_.indexOf(taken, hobbie) !== -1) {
+										hobbie = hobbies[Math.floor((Math.random()*hobbies.length))];
+									}
+									hbs.push(hobbie);
+									taken.push(hobbie);
+								};
+								return hbs;
+							}())
+						};
+						dataSet.push(item);	
+						i++;	
+					};
+					
+					return dataSet;
+				}(dataSetSize));
+				
+				$('#Items h2 span').html(dataSetSize);
+				
+				var execTime = 0, renderTime = 0,
+				images = {
+					loading : "img/loading.gif",
+					done: "img/done.gif"
+				},
+				$els = {
+					itemsNr: $('#Items h2 span').first(),
+					exec : {
+						span: $('#ExecTime span'),
+						img: $('#ExecTime img')
+					},
+					render : {
+						span: $('#RenderTime span'),
+						img: $('#RenderTime img')
+					}
+				};
+				
+				$(function() {
+					var collection = window.collection = new Backbone.Collection(),
+						itemsView = new (Backbone.View.extend({
+							el: '#Items',
+							collection: new Backbone.Collection(),
+							initialize: function() {
+								this.$ul = this.$('ul');
+								// this.collection.on('add', this.addOne, this);
+								// this.collection.on('reset', this.addAll, this);
+								
+								Facetr(this.collection).on('reset change remove add sort', this.addAll, this);
+
+								this.collection.reset(items);
+								
+								this.timeout = undefined;
+								this.origLen = false;
+							},
+							addOne: function(model) {
+								var itemHTML = _.template($('#Item_template').html(), model.toJSON());
+								this.$ul.append(itemHTML);
+							},
+							addAll: function() {
+								this.$ul.html('');
+								var i = 0, len = this.collection.length, self = this;
+								
+								this.$('ul').remove();
+								
+								renderTime = new Date().getTime();
+								$els.render.span.html('');
+								$els.render.img.attr('src', images.loading);
+								
+								clearTimeout(this.timeout);
+								
+								if(i !== len) {
+									(function loop() {
+										var model = self.collection.at(i);
+										
+										if(model) {
+											self.addOne(model);
+										}
+										
+										i = i+1;
+										if(i < len) {
+											if(i % 50 === 0) {
+												self.timeout = setTimeout(loop, 1);
+											} else {
+												loop();
+											}
+										} else {
+											self.$el.append(self.$ul);
+											renderTime = (new Date().getTime()) - renderTime;
+											$els.render.span.html(renderTime);
+											$els.render.img.attr('src', images.done);
+											
+											$('#Items h2 span').html(Facetr(self.collection).origLength());
+										}
+										
+										$els.itemsNr.html(i);
+									})();
+								} else {
+									$els.itemsNr.html(0);
+								}
+							}
+						}))({
+							collection: collection
+						}),
+						facetsView = new (Backbone.View.extend({
+							el: '#Facets',
+							events: {
+								'click .value a' : 'toggleValue'
+							},
+							initialize: function() {
+								Facetr(this.collection).facet('Country').label('Country').sortByValue().asc();
+								Facetr(this.collection).facet('Name.LastName').label('Last Name').sortByCount().desc();
+								Facetr(this.collection).facet('Hobbies').label('Hobbies').sortByCount().desc();
+								Facetr(this.collection).facetsOrder(['Name.LastName','Country']);
+								
+								Facetr(this.collection).on('reset clear change add remove facetsOrderChange', this.render, this);
+								
+								execTime = new Date().getTime();
+								$els.exec.span.html('');
+								$els.exec.img.attr('src',images.loading);
+								
+								this.render();
+								
+								this.sort();
+								
+								var self = this;
+								$("select").on("change", function() {
+									self.sort();
+								});
+								
+								var searchEl = $("#Search");
+								
+								var search = function() {
+									execTime = new Date().getTime();
+									Facetr(self.collection).filterBy('Name.FirstName', $(this).val());
+								}, searchDeb = _.debounce(search, 500);
+								
+								_.bind(search, searchEl);
+								
+								searchEl.on("keyup", searchDeb);
+							},
+							sort: function() {
+								this.sortBy($("select#SortAttr").find("option:selected").text(), $("select#SortDir").find("option:selected").text());
+							},
+							sortBy: function(attr, dir) {
+								execTime = new Date().getTime();
+								// dir [ASC|DESC] gets lowercased to match Facetr methods asc and desc
+								Facetr(this.collection).sortBy(attr)[dir.toLowerCase()]();
+							},
+							toggleValue: function(e) {
+								execTime = new Date().getTime();
+								$els.exec.span.html('');
+								$els.exec.img.attr('src',images.loading);
+								
+								e.preventDefault();
+								var $target = $(e.currentTarget), 
+									facet 	= $target.closest('.facet').attr('id'),
+									value 	= $target.find('span').first().html();
+								
+								if($target.hasClass('available')) {
+									Facetr(this.collection).facet(facet).value(value);	
+								} else if($target.hasClass('active')) {
+									Facetr(this.collection).facet(facet).removeValue(value);
+								}									
+							},
+							render: function(facetName, facetValue) {								
+								execTime = (new Date().getTime()) - execTime;
+								$els.exec.span.html(execTime);
+								$els.exec.img.attr('src', images.done);
+								execTime = false;
+								var facetsHTML = _.template($('#Facets_template').html(), {
+									facets : Facetr(this.collection).toJSON()
+								});
+								this.$el.html(facetsHTML);
+							}
+						}))({
+							collection: collection
+						});
+				});
+			}(jQuery, _, Backbone));
+		</script>
+	</body>
+</html>
