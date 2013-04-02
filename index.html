@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=640" />
+
+    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
+    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+
+    <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('#main_content').headsmart()
+      })
+    </script>
+    <title>Backbone.facetr by arillo</title>
+  </head>
+
+  <body>
+    <a id="forkme_banner" href="https://github.com/arillo/Backbone.Facetr">View on GitHub</a>
+    <div class="shell">
+
+      <header>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <h1>Backbone.facetr</h1>
+            <h2></h2>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+      </header>
+
+      <section id="downloads">
+        <span class="inner">
+          <a href="https://github.com/arillo/Backbone.Facetr/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/arillo/Backbone.Facetr/tarball/master" class="tgz"><em>download</em> .TGZ</a>
+        </span>
+      </section>
+
+
+      <span class="banner-fix"></span>
+
+
+      <section id="main_content">
+        <h1>Backbone.Facetr</h1>
+
+<p>VERSION 0.1.0 (EXPERIMENTAL)</p>
+
+<h3>
+<a name="contents"></a> CONTENTS</h3>
+
+<ul>
+<li><a href="#introduction">INTRODUCTION</a></li>
+<li><a href="#installation">INSTALLATION</a></li>
+<li><a href="#basic-usage">BASIC USAGE</a></li>
+<li><a href="#dot-notation">DOT NOTATION</a></li>
+<li><a href="#api-reference">API REFERENCE</a></li>
+<li><a href="#license">LICENSE</a></li>
+</ul><h3>
+<a name="introduction"></a> INTRODUCTION</h3>
+
+<p>Backbone.Facetr is a plugin which enables filtering of Backbone collections through facets, using an elegant API and with fast performance time.</p>
+
+<p>It works flawlessly up to 2500 items; computation starts getting slower with 5000 - 10000 items. This is however an 
+early version; optimizations may improve performance in future realeases.</p>
+
+<h3>
+<a name="installation"></a> INSTALLATION</h3>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    ....
+
+    &lt;!-- include Backbone.Facetr dependencies --&gt;
+    &lt;script src="js/lib/underscore.js"&gt;&lt;/script&gt;
+    &lt;script src="js/lib/backbone.js"&gt;&lt;/script&gt;
+
+    &lt;!-- include Backbone.Facetr code --&gt;
+    &lt;script src="js/code/backbone.facetr.js"&gt;&lt;/script&gt;
+    &lt;!-- include your js code --&gt;
+        &lt;script&gt; ..... &lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h3>
+<a name="basic-usage"></a> BASIC USAGE</h3>
+
+<pre><code>// create a collection with few test items
+var collection = new Backbone.Collection([
+    {
+        'Name'      : {
+            'FirstName' : 'Bob',
+            'LastName' : 'Smith'
+        },
+        'Age'       : 20,
+        'Country'   : 'Australia',
+        'Hobbies'   : ['fishing','painting','playing the ukulele']
+    },
+    {
+        'Name'      : {
+            'FirstName' : 'Otto',
+            'LastName'  : 'Von Braun'
+        },
+        'Age'       : 35,
+        'Country'   : 'New Zealand',
+        'Hobbies'   : ['drawing', 'painting', 'shopping']
+    },
+    {
+        'Name'      : {
+            'FirstName' : 'Sarah',
+            'LastName'  : 'Smith'
+        },
+        'Age'       : 28,
+        'Country'   : 'Ireland',
+        'Hobbies'   : ['shopping','painting']
+    }
+]);
+
+Facetr(collection).facet('Age').value(20); // collection contains only 'Sarah Smith'
+Facetr(collection).facet('Hobbies').value('fishing'); // contains 'Sarah Smith' and 'Bob Smith' 
+Facetr(collection).facet('Age').removeValue(20); // contains only 'Bob Smith'
+
+// removes all facet values and restores original collection content
+Facetr(collection).clearValues() 
+
+// if chaining is not your cup of tea, the following is equivalent to the above code
+var facetCollection = Facetr(collection); // returns a FacetCollection object
+var ageFacet = facetCollection.facet('Age'); // returns a Facet object
+var hobbiesFacet = facetCollection.facet('Hobbies');
+
+ageFacet.value(20); // returns a FacetExp object
+hobbiesFacet.value('fishing');
+ageFacet.removeValue(20);
+
+// read the API Reference section for more
+// most example will use the above collection reference to illustrate functionalities
+</code></pre>
+
+<h3>
+<a name="dot-notation"></a> DOT NOTATION</h3>
+
+<pre><code>Syntax: PropertyName{1}(.PropertyName)*
+</code></pre>
+
+<p>In the context of Facetr, Dot Notation refers to the syntax used to define facets on a collection. Using the 
+Facetr Dot Notation it is possible to define facets on properties of a Model, as well as on properties of its properties.</p>
+
+<p>For example, consider the following model:</p>
+
+<pre><code>var model = new Backbone.Model({
+    'Name' : {
+        'FirstName' : 'John',
+        'LastName' : ['Smith','White']
+    },
+    'City' : 'London',
+    'Age' : 45,
+    'FamilyMembers' : [
+        { 'Name' : 'Robert' },
+        { 'Name' : 'Margaret' }
+    ]
+});
+</code></pre>
+
+<p>To add a facet on property 'FirstName' the following expression in Dot Notation syntax can be used: 'Name.FirstName'.</p>
+
+<pre><code>Facetr(collection).facet('Name.FirstName');
+</code></pre>
+
+<p>Theoretically there is no depth limit for a Dot Notation expression (e.g. PropertyName1.PropertyName2...PropertyNameN), the only 
+limitation being the common sense.</p>
+
+<p>A facet can only be added on a Backbone Model or object property having any of the following value types:</p>
+
+<ul>
+<li>string | Number</li>
+<li>Array of strings</li>
+<li>Array of numbers</li>
+<li>Array of objects</li>
+<li>Array of Backbone models</li>
+</ul><p>It cannot be added on properties having the following value / composite types:</p>
+
+<ul>
+<li>object</li>
+<li>Backbone Collection</li>
+<li>Array of arrays</li>
+<li>Array of Backbone collections</li>
+</ul><p>.. and in any other case not mentioned in the list of allowed value types</p>
+
+<h4>EXAMPLE</h4>
+
+<pre><code>Facetr(collection).facet('City');               // valid, City is a string
+Facetr(collection).facet('Age');                // valid, Age is a Number
+Facetr(collection).facet('Name.LastName');      // valid, LastName is an Array of strings
+Facetr(collection).facet('FamilyMembers.Name'); // valid, takes value of Name of each object in array FamilyMembers
+Facetr(collection).facet('Name');               // error, Name is an object
+
+// etc..
+</code></pre>
+
+<h3>
+<a name="api-reference"></a> API Reference</h3>
+
+<ul>
+<li><p><a href="#facetr">Facetr</a></p></li>
+<li>
+<p><a href="#facetcollection">FacetCollection</a></p>
+
+<ul>
+<li><a href="#facetcollection-facet">facet</a></li>
+<li><a href="#facetcollection-tojson">toJSON</a></li>
+<li><a href="#facetcollection-clear">clear</a></li>
+<li><a href="#facetcollection-remove">remove</a></li>
+<li><a href="#facetcollection-sortby">sortBy</a></li>
+<li><a href="#facetcollection-asc">asc</a></li>
+<li><a href="#facetcollection-desc">desc</a></li>
+<li><a href="#facetcollection-clearvalues">clearValues</a></li>
+<li><a href="#facetcollection-facetsorder">facetsOrder</a></li>
+<li><a href="#facetcollection-collection">collection</a></li>
+<li><a href="#facetcollection-origlength">origLength</a></li>
+<li><a href="#facetcollection-settingsjson">settingsJSON</a></li>
+<li><a href="#facetcollection-initfromsettingsjson">initFromSettingsJSON</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#facet">Facet</a></p>
+
+<ul>
+<li><a href="#facet-value">value</a></li>
+<li><a href="#facet-removevalue">removeValue</a></li>
+<li><a href="#facet-tojson">toJSON</a></li>
+<li><a href="#facet-label">label</a></li>
+<li><a href="#facet-sortbycount">sortByCount</a></li>
+<li><a href="#facet-sortbyactivecount">sortByActiveCount</a></li>
+<li><a href="#facet-sortbyvalue">sortByValue</a></li>
+<li><a href="#facet-asc">asc</a></li>
+<li><a href="#facet-desc">desc</a></li>
+<li><a href="#facet-remove">remove</a></li>
+<li><a href="#facet-clear">clear</a></li>
+<li><a href="#facet-customdata">customData</a></li>
+</ul>
+</li>
+<li>
+<p><a href="#facetexp">FacetExp</a></p>
+
+<ul>
+<li><a href="#facetexp-and">and</a></li>
+<li><a href="#facetexp-or">or</a></li>
+</ul>
+</li>
+</ul><h3>
+<a name="facetr"></a> Facetr</h3>
+
+<h5>Facetr(collection:Backbone.Collection, [id:string]) : FacetCollection</h5>
+
+<p>Initialize a Collection to be used with Facetr. The first building block of
+any Facetr expression. Returns the created FacetCollection instance for
+method chaining. An id can be associated with the collection.</p>
+
+<p>example                                                                      </p>
+
+<pre><code>Facetr(collection);
+
+// or also
+Facetr(collection, 'myCollection');
+
+// which enables the following syntax
+Facetr('myCollection') === Facetr(collection); // true                                                      
+</code></pre>
+
+<h3>
+<a name="facetcollection"></a> FacetCollection</h3>
+
+<h5>
+<a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [operator:string]) : Facet</h5>
+
+<p>Adds a Facet on the given collection using the property refered to by the
+Dot Notation expression (See Dot Notation section for more details).
+Returns the created Facet instance to allow method chaining.
+Triggers a facet event with the facetName passed to the callback.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).on('facet', function(facetName) {
+    console.log(facetName);
+});
+
+// add facet on property 'Age' using default operator ('and')
+Facetr(collection).facet('Age');
+
+// add facet on property 'LastName' of object 'Name' using 'or' operator
+Facetr(collection).facet('Name.LastName', 'or');
+
+// console output would be
+// Age
+// Name.LastName
+</code></pre>
+
+<h5>
+<a name="facetcollection-tojson"></a> toJSON() : Array</h5>
+
+<p>Returns an array containing objects representing the status of the facets
+added to the collection. Useful for rendering out facets lists.
+Each object in the array is the result of invoking toJSON on each Facet
+(see Facet documentation below for the Facet.toJSON method).</p>
+
+<p>example</p>
+
+<pre><code>// create a collection with two models
+var collection = new Backbone.Collection([
+    {
+        'Name'      : {
+            'FirstName' : 'Bob',
+            'LastName' : 'Smith'
+        },
+        'Age'       : 20
+    },
+    {
+        'Name'      : {
+            'FirstName' : 'Otto',
+            'LastName'  : 'Von Braun'
+        },
+        'Age'       : 35
+    }
+]);
+
+Facetr(collection).facet('Name.FirstName').label('First Name');
+Facetr(collection).facet('Name.FirstName').value('Bob');
+
+var json = Facetr(collection).toJSON();
+
+// value of json will be an array of Facet data object with the following format:
+//
+// [
+//      {
+//          data : {
+//              extOperator : 'and',
+//              intOperator : 'or',
+//              label       : 'First Name',
+//              name        : 'Name.FirstName',
+//              selected    : true,
+//              sort        : {
+//                  by        : 'value',
+//                  direction : 'asc'
+//              }
+//              customData : {}
+//          },
+//          values : [
+//              {
+//                  active      : true,
+//                  activeCount : 1,
+//                  count       : 1,
+//                  value       : 'Bob'
+//              },
+//              {
+//                  active      : false,
+//                  activeCount : 0,
+//                  count       : 1,
+//                  value       : 'Otto'
+//              }
+//          ]
+//      }
+// ]
+</code></pre>
+
+<h5>
+<a name="facetcollection-clear"></a> clear([silent:boolean]) : FacetCollection</h5>
+
+<p>Removes all the facets added to the collection and unfilters it accordingly.
+Use this method to reset the original models in the collection.
+Triggers a clear event, unless true is passed as parameter.</p>
+
+<p>example</p>
+
+<pre><code>Facet(collection).on('clear', function() {
+    console.log('All facets were removed');
+});
+
+Facet(collection).clear();
+
+// console output
+All facets were removed
+</code></pre>
+
+<h5>
+<a name="facetcollection-remove"></a> remove() : undefined</h5>
+
+<p>Removes all the facets and the facetrid added on the collection id upon
+Facetr(collection) initialization. Resets the original items in the
+collection.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).remove()
+</code></pre>
+
+<h5>
+<a name="facetcollection-sortby"></a> sortBy(attribute:string, [silent]) : FacetCollection</h5>
+
+<p>Sorts the collection according to the given attribute name. By default
+ascendent sort is used. See asc() and desc() methods below to define sort
+direction. Triggers sort event unless true is passed as parameter.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).on('sort', function(attr, dir) {
+    console.log('Sorting by ' + attr + ' ' + dir);
+});
+
+Facetr(collection).sortBy('Age');
+
+// console output
+Sorting by Age asc
+</code></pre>
+
+<h5>
+<a name="facetcollection-asc"></a> asc([silent:boolean]) : FacetCollection</h5>
+
+<p>Sorts the collection in ascendent order by the attribute selected using
+sortBy method.
+If sortBy was not invoked before, this method has no effect. Triggers sort
+event unless true is passed as parameter.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).sortBy('Age').asc();
+</code></pre>
+
+<h5>
+<a name="facetcollection-desc"></a> desc([silent:boolean]) : FacetCollection</h5>
+
+<p>Sorts the collection in descendent order by the attribute selected using
+sortBy method.
+If sortBy was not invoked before, this method has no effect. Triggers sort
+event unless true is passed as parameter.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).sortBy('Age').asc();
+</code></pre>
+
+<h5>
+<a name="facetcollection-filterby"></a> filterBy(attribute:string, regex:string, [silent:boolean]) : FacetCollection</h5>
+
+<p>Filters the collection by mathing the given regex on each model attribuge
+value. Triggers reset unless true is passed as last parameter.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).filterBy('Age', '20');
+</code></pre>
+
+<h5>
+<a name="facetcollection-clearvalues"></a> clearValues([silent:boolean]) : FacetCollection</h5>
+
+<p>Removes all the currently selected values from all the facets, bringing
+the collection to its initial state.
+Triggers a clearValues event unless true is passed as parameter.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).clearValues();
+</code></pre>
+
+<h5>
+<a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array) : FacetCollection</h5>
+
+<p>Sometimes it is convinient to give the facets list a predefined order. This method
+can be used to achieve this by passing an array of facet names which corresponds to
+the order to be given to the facets in the list.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).facet('Age');
+Facetr(collection).facet('Name.FirstName');
+
+// Facetr(collection).toJSON() has facet 'Age' at index 0 and 'Name.FirstName' at index 1
+
+Facetr(collection).facetsOrder(['Name.FirstName', 'Age']);
+
+// Facetr(collection).toJSON() has facet 'Name.FirstName' at index 0 and 'Age' at index 1
+</code></pre>
+
+<h5>
+<a name="facetcollection-collection"></a> collection() : Backbone.Collection</h5>
+
+<p>Returns the reference to the Backbone.Collection. Useful for cases where the reference
+is needed but it was declared in another scope and is no more accessible.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).collection() === collection; // true
+</code></pre>
+
+<h5>
+<a name="facetcollection-origlength"></a> origLength() : Number</h5>
+
+<p>Returns the length of the collection before any faceted filtering was applied.</p>
+
+<p>example</p>
+
+<pre><code>var collection = new Backbone.Collection([
+    {
+        Name : 'John'
+        Age  : 19
+    },
+    {
+        Name : 'Sarah',
+        Age  : 35
+    }
+]);
+
+collection.length() // 2
+
+Facetr(collection).facet('Age').value(35);
+
+collection.length(); // 1
+Facetr(collection).origLength(); // 2
+</code></pre>
+
+<h5>
+<a name="facetcollection-settingsjson"></a> settingsJSON() : object</h5>
+
+<p>Returns an object representation of the current state of the Facetr collection which
+can be used to reload the same state in future using the initFromSettingsJSON method.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).facet('Name.FirstName').label('First Name');
+Facetr(collection).sortBy('Name.FirstName').asc();
+Facetr(collection).facet('Name.FirstName').value('Bob');
+
+var json = Facetr(collection).settingsJSON();
+
+// value of json will be the following:
+//  
+// {
+//      sort : {
+//          by  :   "Name.FirstName",
+//          dir :   "asc"
+//      },
+//      facets : [
+//          {
+//              attr    :   "Name.FirstName",
+//              eop     :   "and",
+//              iop     :   "or",
+//              vals    :   [ "Bob" ]
+//          }
+//      ]
+//  }
+</code></pre>
+
+<h5>
+<a name="facetcollection-initfromsettingsjson"></a> initFromSettingsJSON(json:object) : FacetCollection</h5>
+
+<p>Initializes the Facetr collection using a settings object generated
+using the settingsJSON method.</p>
+
+<h3>
+<a name="facet"></a> Facet</h3>
+
+<h5>
+<a name="facet-value"></a> value(value:string, [operator:string]) : FacetExp</h5>
+
+<p>Adds a value to the facet. This will result in the collection being filtered
+by { FacetName : 'Value' }. An operator ('and' or 'or') can be passed to change
+the internal logical operator of the facet.
+Triggers a 'filter' event passing facetName and facetValue to the handler.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).on('filter', function(facetName, facetValue) {
+    console.log('filtered by '+ facetName + ' with value equal ' + facetValue);
+});
+
+Facetr(collection).facet('Name.FirstName').value('Bob');
+
+// console output: "filtered by Name.FirstName with value Bob"
+// collection contains only models with FirstName = 'Bob'
+</code></pre>
+
+<h5>
+<a name="facet-removevalue"></a> removeValue(value:string) : FacetExp</h5>
+
+<p>Removes the given value from the facet and resets the collection to
+the state previous of the filtering caused by the removed value.
+Triggers an 'unfilter' event passing facetName and facetValue to the handler.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).on('unfilter', function(facetName, facetValue) {
+    console.log('unfiltered by '+ facetName + ' with value equal ' + facetValue);
+});
+
+Facetr(collection).facet('Name.FirstName').removeValue('Bob');
+
+// console output: "unfiltered by Name.FirstName with value Bob"
+// collection contains again also models with FirstName = 'Bob'
+</code></pre>
+
+<h5>
+<a name="facet-tojson"></a> toJSON() : object</h5>
+
+<p>Returns an object representation of the current facet data and values.
+Useful for rendering the facet to the page.</p>
+
+<p>example</p>
+
+<pre><code>// create a collection with two models
+var collection = new Backbone.Collection([
+    {
+        'Name'      : {
+            'FirstName' : 'Bob',
+            'LastName' : 'Smith'
+        },
+        'Age'       : 20
+    },
+    {
+        'Name'      : {
+            'FirstName' : 'Otto',
+            'LastName'  : 'Von Braun'
+        },
+        'Age'       : 35
+    }
+]);
+
+Facetr(collection).facet('Name.FirstName').label('First Name');
+Facetr(collection).facet('Name.FirstName').value('Bob');
+
+var json = Facetr(collection).facet('Name.FirstName').toJSON();
+
+// json is equal to:
+//
+//  {
+//      data : {
+//          extOperator : 'and',
+//          intOperator : 'or',
+//          label       : 'First Name',
+//          name        : 'Name.FirstName',
+//          selected    : true,
+//          sort        : {
+//              by        : 'value',
+//              direction : 'asc'
+//          }
+//          customData : {}
+//      },
+//      values : [
+//          {
+//              active      : true,
+//              activeCount : 1,
+//              count       : 1,
+//              value       : 'Bob'
+//          },
+//          {
+//              active      : false,
+//              activeCount : 0,
+//              count       : 1,
+//              value       : 'Otto'
+//          }
+//      ]
+//  }
+</code></pre>
+
+<h5>
+<a name="facet-label"></a> label(label:string) : Facet</h5>
+
+<p>Use this method to set a human readable label for the facet.
+This can be used when rendering the facet on the page.</p>
+
+<p>example:</p>
+
+<pre><code>Facetr(collection).facet('Name.FirstName').label('First Name');
+
+Facetr(collection).facet('Name.FirstName').toJSON();
+
+// the property data.label has value 'First Name'
+// while the property data.name stays 'Name.FirstName'
+</code></pre>
+
+<h5>
+<a name="facet-sortbycount"></a> sortByCount() : Facet</h5>
+
+<p>Sorts the facet values by their count. The count is the number 
+of models in the original collection with an attribute having as name 
+the facet name and value the given value.</p>
+
+<p>example</p>
+
+<pre><code>// we use the colleciton defined in Basic Usage section
+var facet = Facetr(collection).facet('Hobbies');
+
+facet.value('painting'); // painting count = 3  
+facet.value('drawing');  // drawing count = 1
+
+// facet.toJSON().data.values[0] = 'drawing'
+// facet.toJSON().data.values[1] = 'painting'
+
+facet.sortByCount();
+
+// facet.toJSON().data.values[0] = 'painting'
+// facet.toJSON().data.values[1] = 'drawing'
+</code></pre>
+
+<h5>
+<a name="facet-sortbyactivecount"></a> sortByActiveCount() : Facet</h5>
+
+<p>Sorts the facet values by their active count. The active count is the number
+of models in the current filtered collection with an attribute having as name
+the facet name and value the given value.</p>
+
+<p>example</p>
+
+<pre><code>var facet = Facetr(collection).facet('Hobbies');
+
+facet.value('fishing');   
+facet.value('shopping');  
+
+// fishing active count = 1
+// shopping active count = 2
+
+// facet.toJSON().data.values[0] = 'fishing'
+// facet.toJSON().data.values[1] = 'shopping'
+
+facet.sortByActiveCount();
+
+// facet.toJSON().data.values[0] = 'shopping'
+// facet.toJSON().data.values[1] = 'fishing' 
+</code></pre>
+
+<h5>
+<a name="facet-sortbyvalue"></a> sortByValue() : Facet</h5>
+
+<p>Sorts the facet values by their value. This is the default sort.</p>
+
+<h5>
+<a name="facet-asc"></a> asc() : Facet</h5>
+
+<p>Sets the direction of the values sort to ascendent.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).facet('Name.FirstName').asc();
+</code></pre>
+
+<h5>
+<a name="facet-desc"></a> desc() : Facet</h5>
+
+<p>Sets the direction of the values sort to descendant.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).facet('Name.FirstName').sortByCount().desc();
+</code></pre>
+
+<h5>
+<a name="facet-remove"></a> remove() : undefined</h5>
+
+<p>Removes the facet and all its values and unfilters the collection accordingly.</p>
+
+<h5>
+<a name="facet-clear"></a> clear() : Facet</h5>
+
+<p>Unselects all the values from the facet. It triggers a 'unfilter' event for each remove value.</p>
+
+<h5>
+<a name="facet-customdata"></a> customData(key:string, value:object) : Facet</h5>
+
+<p>This method can be used to add arbitrary data to pass to the templates.
+Data added using this method is included in the object returned by the toJSON() method
+in the data.customData property.</p>
+
+<p>example</p>
+
+<pre><code>var facet = Facetr('myCollection').facet('Hobbies').customData('sublabel', 'Available hobbies');
+
+// facet.toJSON().data.customData = { sublabel : 'Available hobbies' }
+</code></pre>
+
+<h3>
+<a name="facetexp"></a> FacetExp</h3>
+
+<p>FacetExp objects are returned from Facet value and removeValue methods.
+They can be used to coincisely define multiple values on a facet, using
+different operators.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).facet('Age').value(12, 'and');
+Facetr(collection).facet('Age').value(15, 'or');
+Facetr(collection).facet('Age').value(39, 'and');
+
+// can also be expressed with the following syntax
+
+Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
+</code></pre>
+
+<h5>
+<a name="facetexp-and"></a> and(value:string) : Facet</h5>
+
+<p>Equivalent to facet.value('Value', 'and'), but can be used for FacetExp chains.</p>
+
+<h5>
+<a name="facetexp-or"></a> or(value:string) : Facet</h5>
+
+<p>Equivalent to facet.value('Value', 'or'), but can be used for FacetExp chains.</p>
+
+<h3>
+<a name="license"></a> LICENSE</h3>
+
+<p>Backbone.Facetr may be freely distributed under the MIT license.</p>
+
+<p>Copyright (C) 2012-2013 Arillo GmbH <a href="http://arillo.net">http://arillo.net</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies 
+of the Software, and to permit persons to whom the Software is furnished to do so, 
+subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies
+or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE
+FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+DEALINGS IN THE SOFTWARE.</p>
+      </section>
+
+      <footer>
+        <span class="ribbon-outer">
+          <span class="ribbon-inner">
+            <p>this project by <a href="https://github.com/arillo">arillo</a> can be found on <a href="https://github.com/arillo/Backbone.Facetr">GitHub</a></p>
+          </span>
+          <span class="left-tail"></span>
+          <span class="right-tail"></span>
+        </span>
+        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
+        <span class="octocat"></span>
+      </footer>
+
+    </div>
+
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-39794666-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
