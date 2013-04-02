@@ -119,7 +119,7 @@ To add a facet on property 'FirstName' the following expression in Dot Notation 
 	Facetr(collection).facet('Name.FirstName');
 
 
-Theoretically there is no depth limit for a Dot Notation expression (e.g. PropertyName1.PropertyName2...PropertyNameN), only 
+Theoretically there is no depth limit for a Dot Notation expression (e.g. PropertyName1.PropertyName2...PropertyNameN), the only 
 limitation being the common sense.
 
 A facet can only be added on a Backbone Model or object property having any of the following value types:
