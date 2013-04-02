@@ -2,7 +2,7 @@
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author Francesco Macri 
 // Distributed under MIT license 
-// https://github.com/arillo/facetr 
+// https://github.com/arillo/Backbone.Facetr 
 (function (root, factory) {
 	if (typeof exports === 'object') {
 
