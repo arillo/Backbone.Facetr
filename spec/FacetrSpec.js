@@ -364,9 +364,7 @@ describe('Backbone.Facetr', function() {
 					Facetr(collection).clearValues();
 
 					expect(collection.at(0).id).toBe('123');
-					expect(collection.at(1).id).toBe('456');	
-					
-					console.log(collection.at(0).id);			
+					expect(collection.at(1).id).toBe('456');		
 				});
 			});
 		});
