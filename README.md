@@ -10,6 +10,7 @@ VERSION 0.1.0 (EXPERIMENTAL)
 * [BASIC USAGE](#basic-usage)
 * [DOT NOTATION](#dot-notation)
 * [API REFERENCE](#api-reference)
+* [EXAMPLES](#examples)
 * [LICENSE](#license)
 
 ### <a name="introduction"></a> INTRODUCTION
@@ -702,6 +703,14 @@ Equivalent to facet.value('Value', 'and'), but can be used for FacetExp chains.
 ##### <a name="facetexp-or"></a> or(value:string) : Facet
 
 Equivalent to facet.value('Value', 'or'), but can be used for FacetExp chains.
+
+
+### <a name="examples"></a> EXAMPLES
+
+This section contains a list of websites / projects using Facetr.
+
+* [terra-vecchia.ch](http://terra-vecchia.ch/sozialtherapie/angebote-und-betriebe)
+
 
 ### <a name="license"></a> LICENSE
 
