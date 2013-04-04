@@ -226,6 +226,14 @@ describe('Backbone.Facetr', function() {
 							expect(collection.length).toEqual(4);
 						});
 					});
+
+					describe('has a customData method that', function() {
+						it('can be used to set and get arbitrary data', function() {
+							Facetr(collection).facet('Name.LastName').customData('test', 'some data');
+
+							expect(Facetr(collection).facet('Name.LastName').customData('test')).toBe('some data');
+						});
+					});
 				});
 			});
 			

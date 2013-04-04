@@ -526,9 +526,12 @@
 		};
 		
 		this.customData = function(key, value) {
-			_customData[key] = value;
+			if(value) {
+				_customData[key] = value;
+				return this;
+			}
 	
-			return this;
+			return _customData[key];
 		};
 	
 		// compute values once the facet is added to the FacetCollection
