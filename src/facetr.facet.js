@@ -448,7 +448,7 @@ var	Facet = function(facetName, modelsMap, vent, extOperator) {
 	};
 	
 	this.customData = function(key, value) {
-		if(value) {
+		if(value !== undefined) {
 			_customData[key] = value;
 			return this;
 		}

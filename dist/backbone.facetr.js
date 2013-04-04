@@ -36,7 +36,7 @@
 		return _getCollection(collection);
 	};
 	
-	Backbone.Facetr.VERSION = '0.0.1';
+	Backbone.Facetr.VERSION = '0.1.0';
 	
 	// facet collections cache
 	var _collections = {};
@@ -526,7 +526,7 @@
 		};
 		
 		this.customData = function(key, value) {
-			if(value) {
+			if(value !== undefined) {
 				_customData[key] = value;
 				return this;
 			}
@@ -820,7 +820,7 @@
 								facets.push(facetJSON);
 							}
 						} else {
-						facets.push(facetJSON);
+							facets.push(facetJSON);
 						}
 					}
 			}

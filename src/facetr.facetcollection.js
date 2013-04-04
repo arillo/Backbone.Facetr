@@ -272,7 +272,7 @@ var	FacetCollection = function(collection) {
 							facets.push(facetJSON);
 						}
 					} else {
-					facets.push(facetJSON);
+						facets.push(facetJSON);
 					}
 				}
 		}

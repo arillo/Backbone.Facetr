@@ -669,16 +669,18 @@ Removes the facet and all its values and unfilters the collection accordingly.
 
 Unselects all the values from the facet. It triggers a 'unfilter' event for each remove value.
 
-##### <a name="facet-customdata"></a> customData(key:string, value:object) : Facet
+##### <a name="facet-customdata"></a> customData(key:string, [value:object]) : Facet
 
 This method can be used to add arbitrary data to pass to the templates.
 Data added using this method is included in the object returned by the toJSON() method
 in the data.customData property.
+To retrieve previously set data, just pass the key parameter without any value.
 
 example
 
 	var facet = Facetr('myCollection').facet('Hobbies').customData('sublabel', 'Available hobbies');
 
+	// facet.customData('sublabel') returns 'Available hobbies'
 	// facet.toJSON().data.customData = { sublabel : 'Available hobbies' }
 
 ### <a name="facetexp"></a> FacetExp
