@@ -452,7 +452,7 @@
 		// removes the given value
 		this.removeValue = function(facetValue) {
 			var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(),
-				value, modelsToRemove;
+				value, modelsToAdd, modelsToRemove;
 			
 			// check if was exists	
 			if(valueIndex !== -1) {
@@ -736,9 +736,17 @@
 					val1,
 					val2;
 					
-					val1 = parseInt(v1, 10);
-					val2 = parseInt(v2, 10);
+				val1 = parseInt(v1, 10); // check if value is a number
+				val2 = parseInt(v2, 10);
 				
+				if(isNaN(val1) || isNaN(val2)){
+					val1 = v1;
+					val2 = v2;
+				}
+	
+				val1 = Date.parse(v1);	// check if value is a date
+				val2 = Date.parse(v2);
+	
 				if(isNaN(val1) || isNaN(val2)){
 					val1 = v1;
 					val2 = v2;

@@ -336,6 +336,7 @@ example
 Sorts the collection according to the given attribute name. By default
 ascendent sort is used. See asc() and desc() methods below to define sort
 direction. Triggers sort event unless true is passed as parameter.
+This method automatically recognizes string, numeric or date values.
 
 example
 

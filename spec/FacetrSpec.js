@@ -367,6 +367,42 @@ describe('Backbone.Facetr', function() {
 					expect(collection.at(1).id).toBe('456');		
 				});
 			});
+
+			describe('has a sortBy method that', function() {
+				var collection = new Backbone.Collection([
+					{
+						id : '123',
+						Name : 'John',
+						Age : 25,
+						DateOfBirth : '1988-04-03 10:00:08'	
+					},
+					{
+						id : '456',
+						Name : 'Bob',
+						Age : 34,
+						DateOfBirth : '1979-02-24 19:43:20'	
+					},
+				]);
+
+				Facetr(collection).sortBy('Name').asc();
+
+				it('sorts the collection according to the given attribute and direction', function() {
+					expect(collection.at(0).get('Name')).toBe('Bob');
+					expect(collection.at(1).get('Name')).toBe('John');
+				});
+
+				it('works also with numeric values', function() {
+					Facetr(collection).sortBy('Age').asc();
+					expect(collection.at(0).get('Age')).toBe(25);
+					expect(collection.at(1).get('Age')).toBe(34);
+				});
+
+				it('works also with date values', function() {
+					Facetr(collection).sortBy('DateOfBirth').asc();
+					expect(collection.at(0).get('DateOfBirth')).toBe('1979-02-24 19:43:20');
+					expect(collection.at(1).get('DateOfBirth')).toBe('1988-04-03 10:00:08');
+				});				
+			});
 		});
 	});
 });

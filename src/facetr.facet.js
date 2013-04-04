@@ -374,7 +374,7 @@ var	Facet = function(facetName, modelsMap, vent, extOperator) {
 	// removes the given value
 	this.removeValue = function(facetValue) {
 		var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(),
-			value, modelsToRemove;
+			value, modelsToAdd, modelsToRemove;
 		
 		// check if was exists	
 		if(valueIndex !== -1) {
