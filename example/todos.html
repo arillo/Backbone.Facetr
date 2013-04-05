@@ -272,8 +272,14 @@
 								var searchEl = $("#Search");
 								
 								var search = function() {
+									var el = this;
 									execTime = new Date().getTime();
-									Facetr(self.collection).filterBy('Name.FirstName', $(this).val());
+
+									Facetr(self.collection).addFilter('searchByKeyword', function(model) {
+										var regex = new RegExp($(el).val(), 'i');
+
+										return regex.test(model.get('Name').FirstName);
+									});
 								}, searchDeb = _.debounce(search, 500);
 								
 								_.bind(search, searchEl);

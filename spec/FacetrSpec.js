@@ -411,6 +411,62 @@ describe('Backbone.Facetr', function() {
 					expect(collection.at(1).get('DateOfBirth')).toBe('1988-04-03 10:00:08');
 				});				
 			});
+
+			describe('has methods to add and remove custom filters to/from the collection', function() {
+				var collection = new Backbone.Collection([
+					{
+						id : '123',
+						Name : 'John',
+						Age : 25,
+						DateOfBirth : '1988-04-03 10:00:08'	
+					},
+					{
+						id : '456',
+						Name : 'Bob',
+						Age : 34,
+						DateOfBirth : '1979-02-24 19:43:20'	
+					},
+				]);
+
+				it('the addFilter method adds a filter function and filters the collection accordingly ', function() {
+					var fc = Facetr(collection);
+
+					fc.addFilter('exampleFilter', function(model) {
+						return model.get('Age') > 30;
+					});
+
+					expect(collection.length).toBe(1);
+					expect(collection.at(0).get('Age')).toBe(34);
+				});
+
+				it('the removeFilter method removes a filter function and unfilters the collection accordingly ', function() {
+					var fc = Facetr(collection);
+
+					fc.removeFilter('exampleFilter');
+
+					expect(collection.length).toBe(2);
+				});
+
+				it('the clearFitlers method removes all the filters and unfilters the collection accordingly', function() {
+					var fc = Facetr(collection);
+
+					fc.addFilter('exampleFilter', function(model) {
+						return model.get('Age') > 30;
+					});
+
+					expect(collection.length).toBe(1);
+
+					fc.addFilter('exampleFilter2', function(model) {
+						return model.get('Age') < 18;
+					});
+
+					expect(collection.length).toBe(0);
+
+					fc.clearFilters();
+
+					expect(collection.length).toBe(2);
+				});
+			});
 		});
 	});
 });

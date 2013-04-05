@@ -9,10 +9,9 @@ var	FacetCollection = function(collection) {
 		_cidModelMap				= {},	 							// an hash containing cid/model pairs used for fast model lookup
 		_activeModels				= {},								// cids of the active models for each facet (a facetName -> [cid] map)
 		_vent						= _.extend({}, Backbone.Events),	// a local event handler used for local events
+		_filters					= {},								// an hashmap of custom filters
 		_sortDir					= 'asc',
 		_sortAttr,
-		_filterRegex, 
-		_filterAttr,
 		_facetsOrder,
 	
 
@@ -94,17 +93,22 @@ var	FacetCollection = function(collection) {
 						modelsCids = _.intersection(modelsCids, _activeModels[key]);
 					}	
 				}
+			}
+		}
+			
+		// filter using the added filter functions
+		for(var filterName in _filters) {
+			if(_filters.hasOwnProperty(filterName)) {
+				var filter = _filters[filterName];
+
+				if(filter instanceof Function) {
+					modelsCids = _.filter(modelsCids, function(cid) {
+						return filter(_cidModelMap[cid]);
+					});
 				}
+			}
 		}
-		
-		// filterBy
-		if(_filterRegex && _filterAttr) {
-			modelsCids = _.filter(modelsCids, function(cid) {
-				var value = _getValue(_cidModelMap[cid], _filterAttr);
-				return _filterRegex.test(value);					
-			});
-		}
-					
+
 		// sort the models by cid
 		modelsCids.sort();
 		
@@ -191,20 +195,18 @@ var	FacetCollection = function(collection) {
 				val1,
 				val2;
 				
-			val1 = parseInt(v1, 10); // check if value is a number
-			val2 = parseInt(v2, 10);
-			
-			if(isNaN(val1) || isNaN(val2)){
-				val1 = v1;
-				val2 = v2;
-			}
-
-			val1 = Date.parse(v1);	// check if value is a date
-			val2 = Date.parse(v2);
-
-			if(isNaN(val1) || isNaN(val2)){
-				val1 = v1;
-				val2 = v2;
+			// check if value is a number
+			if(isNaN(v1) || isNaN(v2)) { 
+			    val1 = Date.parse(v1);	// check if value is a date
+    			val2 = Date.parse(v2);
+    
+    			if(isNaN(val1) || isNaN(val2)){
+    				val1 = v1;	// otherwise is a string
+    				val2 = v2;
+    			}
+			} else {
+			    val1 = parseFloat(v1, 10); 
+			    val2 = parseFloat(v2, 10);
 			}
 
 			if(_sortDir === "asc") {
@@ -385,19 +387,39 @@ var	FacetCollection = function(collection) {
 		return this;
 	};
 	
-	// filters the collection by applying regex.test to each value in the model for the given attribute
-	this.filterBy = function(attr, keywords, silent) {
-		if(keywords) {
-			_filterRegex = new RegExp(keywords, 'i');
-		} else {
-			_filterRegex = undefined;
+	// adds a filter
+	this.addFilter = function(filterName, filter, silent) {
+		if(filter && filterName) {
+			_filters[filterName] = filter;
+			_resetCollection(silent);
 		}
-		_filterAttr = attr;
-		_resetCollection(silent);
-		
+
 		return this;
 	};
-	
+
+	// removes a filter
+	this.removeFilter = function(filterName, silent) {
+		if(filterName) {
+			delete _filters[filterName];
+			_resetCollection(silent);
+		}
+
+		return this;
+	};
+
+	// removes all the filters
+	this.clearFilters = function(silent) {
+		for(var filterName in _filters) {
+			if(_filters.hasOwnProperty(filterName)) {
+				delete _filters[filterName];
+			}
+		}
+
+		_resetCollection(silent);
+
+		return this;
+	};
+
 	// returns a reference to the Backbone.Collection instance
 	this.collection = function(){
 		return collection;
@@ -445,15 +467,6 @@ var	FacetCollection = function(collection) {
 			}
 		}
 		
-		if(filter) {
-			var fattr  = filter.attr,
-				fregex = filter.regex;
-				
-			if(fattr && fregex) {
-				Facetr(collection).filterBy(fattr, fregex, true);
-			}
-		}
-		
 		this.trigger('reset');
 		
 		return this;
@@ -466,13 +479,6 @@ var	FacetCollection = function(collection) {
 			json.sort = {
 				'by' : _sortAttr,
 				'dir' : _sortDir
-			};
-		}
-		
-		if(_filterAttr && _filterRegex) {
-			json.search = {
-				'attr' : _filterAttr,
-				'regex' : _filterRegex.toString().replace('/i','').replace('/','')
 			};
 		}
 		

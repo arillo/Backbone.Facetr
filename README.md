@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.1.0 (EXPERIMENTAL)
+VERSION 0.2.0
 
 ### <a name="contents"></a> CONTENTS
 
@@ -164,6 +164,9 @@ It cannot be added on properties having the following value / composite types:
     * [sortBy](#facetcollection-sortby)
     * [asc](#facetcollection-asc)
     * [desc](#facetcollection-desc)
+    * [addFilter](#facetcollection-addfilter)
+    * [removeFilter](#facetcollection-removefilter)
+    * [clearFilters](#facetcollection-clearfilters)
     * [clearValues](#facetcollection-clearvalues)
     * [facetsOrder](#facetcollection-facetsorder)
     * [collection](#facetcollection-collection)
@@ -374,14 +377,37 @@ example
 	Facetr(collection).sortBy('Age').asc();
 
 
-##### <a name="facetcollection-filterby"></a> filterBy(attribute:string, regex:string, [silent:boolean]) : FacetCollection
+##### <a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection
 
-Filters the collection by mathing the given regex on each model attribuge
-value. Triggers reset unless true is passed as last parameter.
+Adds a filter which is used to filter the collection by testing each model against it. 
+Triggers reset unless true is passed as last parameter. Multiple filters can be added as long as they have
+different names. Adding two filters with the same name will result in the first being overwritten by the second.
 
 example
 
-	Facetr(collection).filterBy('Age', '20');
+	Facetr(collection).addFilter('AgeFilter', function(model) {
+		return model.get('Age') >= 20 && model.get('Age') < 60; 
+	});
+
+
+##### <a name="facetcollection-removefilter"></a> removeFilter(filterName:string, [silent:boolean]) : FacetCollection
+
+Removes the filter with the given name from the collection and unfilters it accordingly. 
+Triggers reset unless true is passed as last parameter.
+
+example
+
+	Facetr(collection).removeFilter('AgeFilter');
+	
+
+##### <a name="facetcollection-clearfilters"></a> clearFilters([silent:boolean]) : FacetCollection
+
+Removes all the filters previously added to the collection and unfilters it accordingly. 
+Triggers reset unless true is passed as parameter.
+
+example
+
+	Facetr(collection).clearFilters();
 
 
 ##### <a name="facetcollection-clearvalues"></a> clearValues([silent:boolean]) : FacetCollection
