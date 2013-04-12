@@ -992,14 +992,14 @@
 					attr 	= f.attr,
 					eop     = f.eop,
 					iop     = f.iop,
-					sort    = f.sort,
+					fsort   = f.sort,
 					cust    = f.cust,
 					values 	= f.vals,
 					facet;
 				
 				facet = Facetr(collection).facet(attr, eop);
 	
-				switch(sort.by){
+				switch(fsort.by){
 					case 'count' : {
 						facet.sortByCount();
 					} break;
@@ -1011,7 +1011,7 @@
 					}
 				}
 	
-				facet[sort.direction]();
+				facet[fsort.direction]();
 				
 				if(cust){
 					for(var k in cust){
