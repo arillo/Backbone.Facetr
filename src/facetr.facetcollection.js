@@ -443,6 +443,7 @@ var	FacetCollection = function(collection) {
 				eop     = f.eop,
 				iop     = f.iop,
 				sort    = f.sort,
+				cust    = f.cust,
 				values 	= f.vals,
 				facet;
 			
@@ -462,10 +463,16 @@ var	FacetCollection = function(collection) {
 
 			facet[sort.direction]();
 			
-			if(facet) {
-				for(var j = 0, len2 = values.length; j < len2; j += 1) {
-					facet.value(values[j], iop);
+			if(cust){
+				for(var k in cust){
+					if(cust.hasOwnProperty(k)){
+						facet.customData(k, cust[k]);
+					}
 				}
+			}
+
+			for(var j = 0, len2 = values.length; j < len2; j += 1) {
+				facet.value(values[j], iop);
 			}
 		}
 		
@@ -517,6 +524,7 @@ var	FacetCollection = function(collection) {
 						'eop'  : facetJSON.data.extOperator,
 						'iop'  : facetJSON.data.intOperator,
 						'sort' : facetJSON.data.sort,
+						'cust' : facetJSON.data.customData,
 						'vals' : activeValues 
 					});
 				}
