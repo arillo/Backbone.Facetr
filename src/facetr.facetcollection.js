@@ -442,11 +442,26 @@ var	FacetCollection = function(collection) {
 				attr 	= f.attr,
 				eop     = f.eop,
 				iop     = f.iop,
+				sort    = f.sort,
 				values 	= f.vals,
 				facet;
 			
 			facet = Facetr(collection).facet(attr, eop);
 
+			switch(sort.by){
+				case 'count' : {
+					facet.sortByCount();
+				} break;
+				case 'activeCount' : {
+					facet.sortByActiveCount();
+				} break;
+				default:{
+					facet.sortByValue();
+				}
+			}
+
+			facet[sort.direction]();
+			
 			if(facet) {
 				for(var j = 0, len2 = values.length; j < len2; j += 1) {
 					facet.value(values[j], iop);
@@ -487,8 +502,7 @@ var	FacetCollection = function(collection) {
 			
 			for(var facet in _facets) {
 				if(_facets.hasOwnProperty(facet)) {
-					var facetJSON= _facets[facet].facet.toJSON(), 
-					    operator = _facets[facet].operator, 
+					var facetJSON= _facets[facet].facet.toJSON(),
 					    values = _.pluck(facetJSON.values, 'active'), 
 					    activeValues = [];
 					
@@ -502,7 +516,8 @@ var	FacetCollection = function(collection) {
 						'attr' : facetJSON.data.name,
 						'eop'  : facetJSON.data.extOperator,
 						'iop'  : facetJSON.data.intOperator,
-							'vals' : activeValues 
+						'sort' : facetJSON.data.sort,
+						'vals' : activeValues 
 					});
 				}
 			}

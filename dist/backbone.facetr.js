@@ -165,7 +165,7 @@
 			});
 		},
 		// sort method sorts the facet values according to the given sortBy and sortDirection
-		_sort = function() {
+		_sort = function() {		
 			_values.sort(function(v1,v2) {
 				if(_sortBy === 'value') {
 					// note that facet values are always unique, so v1.value === v2.value is never true
@@ -438,7 +438,7 @@
 				
 				// update is local _selected value
 				_selected = _isSelected();
-				
+	
 				// trigger a value event to notify the FacetCollection about the change
 				vent.trigger('value', _name, facetValue, _activeModels);
 				
@@ -497,9 +497,10 @@
 						}
 						_activeModels = _.union(_activeModels, modelsToAdd);
 					}
-														
+						
+					// update is local _selected value								
 					_selected = _isSelected();
-					
+	
 					// notify the FacetCollection to update this facet values
 					vent.trigger('removeValue', _name, facetValue, _activeModels);
 				}
@@ -539,6 +540,7 @@
 		
 		// compute facet values count on collection reset
 		vent.on('resetCollection', _computeActiveValuesCount);
+		vent.on('resetCollection', _sort);
 		
 		// bind actions on Backbone Collection events, shived by the FacetCollection instance
 		vent.on('resetOrigCollection', _resetFacet);
@@ -990,11 +992,26 @@
 					attr 	= f.attr,
 					eop     = f.eop,
 					iop     = f.iop,
+					sort    = f.sort,
 					values 	= f.vals,
 					facet;
 				
 				facet = Facetr(collection).facet(attr, eop);
 	
+				switch(sort.by){
+					case 'count' : {
+						facet.sortByCount();
+					} break;
+					case 'activeCount' : {
+						facet.sortByActiveCount();
+					} break;
+					default:{
+						facet.sortByValue();
+					}
+				}
+	
+				facet[sort.direction]();
+				
 				if(facet) {
 					for(var j = 0, len2 = values.length; j < len2; j += 1) {
 						facet.value(values[j], iop);
@@ -1035,8 +1052,7 @@
 				
 				for(var facet in _facets) {
 					if(_facets.hasOwnProperty(facet)) {
-						var facetJSON= _facets[facet].facet.toJSON(), 
-						    operator = _facets[facet].operator, 
+						var facetJSON= _facets[facet].facet.toJSON(),
 						    values = _.pluck(facetJSON.values, 'active'), 
 						    activeValues = [];
 						
@@ -1050,7 +1066,8 @@
 							'attr' : facetJSON.data.name,
 							'eop'  : facetJSON.data.extOperator,
 							'iop'  : facetJSON.data.intOperator,
-								'vals' : activeValues 
+							'sort' : facetJSON.data.sort,
+							'vals' : activeValues 
 						});
 					}
 				}
