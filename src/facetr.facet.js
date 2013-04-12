@@ -457,6 +457,10 @@ var	Facet = function(facetName, modelsMap, vent, extOperator) {
 		return _customData[key];
 	};
 
+	this.isSelected = function(){
+		return _selected;
+	};
+
 	// compute values once the facet is added to the FacetCollection
 	_computeValues(modelsMap);
 	

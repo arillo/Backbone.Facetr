@@ -1,4 +1,4 @@
-// Backbone.Facetr 0.2.0 
+// Backbone.Facetr 0.2.1 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author Francesco Macri 
 // Distributed under MIT license 
@@ -36,7 +36,7 @@
 		return _getCollection(collection);
 	};
 	
-	Backbone.Facetr.VERSION = '0.2.0';
+	Backbone.Facetr.VERSION = '0.2.1';
 	
 	// facet collections cache
 	var _collections = {};
@@ -533,6 +533,10 @@
 			}
 	
 			return _customData[key];
+		};
+	
+		this.isSelected = function(){
+			return _selected;
 		};
 	
 		// compute values once the facet is added to the FacetCollection

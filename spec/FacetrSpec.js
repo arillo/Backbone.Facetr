@@ -234,6 +234,20 @@ describe('Backbone.Facetr', function() {
 							expect(Facetr(collection).facet('Name.LastName').customData('test')).toBe('some data');
 						});
 					});
+
+					describe('has a isSelected method that', function(){
+						it('returns true if any value of the facet is selected, false otherwise', function(){
+							var facet = Facetr(collection).facet('Name.FirstName');
+
+							facet.value('Bob');
+							
+							expect(facet.isSelected()).toBeTruthy();
+
+							facet.clear();
+
+							expect(facet.isSelected()).toBeFalsy();
+						});
+					});
 				});
 			});
 			

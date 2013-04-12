@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.2.0
+VERSION 0.2.1
 
 ### <a name="contents"></a> CONTENTS
 
@@ -187,6 +187,7 @@ It cannot be added on properties having the following value / composite types:
 	* [remove](#facet-remove)
 	* [clear](#facet-clear)
 	* [customData](#facet-customdata)
+	* [isSelected](#facet-isselected)
 
 * [FacetExp](#facetexp)
 	* [and](#facetexp-and)
@@ -708,6 +709,23 @@ example
 
 	// facet.customData('sublabel') returns 'Available hobbies'
 	// facet.toJSON().data.customData = { sublabel : 'Available hobbies' }
+
+##### <a name="facet-isselected"></a> isSelected : Boolean
+
+Returns true if any value is selected from this facet, false otherwise.
+
+example
+
+	var facet = Facetr('myCollection').facet('Hobbies');
+
+	facet.value('fishing');
+
+	// facet.isSelected returns true
+
+	facet.clear(); // remove all selected values
+
+	// facet.isSelected returns false
+
 
 ### <a name="facetexp"></a> FacetExp
 
