@@ -693,7 +693,7 @@ Removes the facet and all its values and unfilters the collection accordingly.
 
 ##### <a name="facet-clear"></a> clear() : Facet
 
-Unselects all the values from the facet. It triggers a 'unfilter' event for each remove value.
+Unselects all the values from the facet. It triggers a 'unfilter' event for each removed value.
 
 ##### <a name="facet-customdata"></a> customData(key:string, [value:object]) : Facet
 
