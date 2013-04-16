@@ -20,12 +20,12 @@ var	Facet = function(facetName, modelsMap, vent, extOperator) {
 		
 	// creates a facetValue with count 1 or increases the count by 1 of an existing faceValue in values 
 	_begetFacetValue = function(facetValues, value, cid) {
-		var val = value || 'undefined', isObj = false;
-		
+		var val = (value != null) ? value : 'undefined', isObj = false;
+
 		// TODO - find better solution, this is just a quick fix
 		// Problem: case of property consisting of Array of Objects was overlooked
 		// in original design of dot notation
-		if(val instanceof Object) {
+		if(Object.prototype.toString.call(val) === '[object Object]') {
 			var attr = _name.split('.')[1];
 			val = attr && (val instanceof Backbone.Model && val.get(attr) || val[attr]) || 'undefined';
 			isObj = true; 
@@ -61,23 +61,27 @@ var	Facet = function(facetName, modelsMap, vent, extOperator) {
 	_parseModel = function(model, facetName) {
 		var value = _getValue(model, _name);
 		
-		if(value) {
-			if(value instanceof Array) {
+		if(value instanceof Array) {
+			if(value.length === 0){
+				_begetFacetValue(_values, 'undefined', model.cid);
+				_valModelMap['undefined'].push(model.cid);
+			} else {
 				_.each(value, function(v) {
 					_begetFacetValue(_values, v, model.cid);
 					// push the model.cid in the current value entry of the value to model map
-					if(_valModelMap[v])
+					if(_valModelMap[v]) {
 						_valModelMap[v].push(model.cid);
+					}
 				});
-			} else {
-				if(typeof value === 'object') {
-					_self.remove();
-					throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
-				}
-				
-				_begetFacetValue(_values, value);
-				_valModelMap[value].push(model.cid);			
 			}
+		} else {
+			if(typeof value === 'object') {
+				_self.remove();
+				throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
+			}
+			
+			_begetFacetValue(_values, value);
+			_valModelMap[value].push(model.cid);			
 		}
 	},
 	// reads model.get(facetName) from the models in the collection and populates the array of values

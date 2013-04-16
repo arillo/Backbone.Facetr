@@ -191,6 +191,16 @@
 
 								this.collection.reset(items);
 								
+								this.collection.add({
+									Name : {
+										FirstName : 'John',
+										LastName : 'Smith'
+									},
+									Age : 0,
+									Country : undefined,
+									Hobbies : [ ]
+								});
+
 								this.timeout = undefined;
 								this.origLen = false;
 							},

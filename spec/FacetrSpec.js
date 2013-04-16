@@ -97,10 +97,49 @@ describe('Backbone.Facetr', function() {
 					expect(Facetr(collection).facet('Country').toJSON().values[0].count).toEqual(2);
 				});
 				
-				it('works also with deep properties (ie. properties of properties)', function() {
+				it('works also with properties of properties', function() {
 					expect(Facetr(collection).facet('Name.LastName').toJSON().values.length).toEqual(3);
 					expect(Facetr(collection).facet('Name.LastName').toJSON().values[0].value).toBe('Green');
 					expect(Facetr(collection).facet('Name.LastName').toJSON().values[0].count).toEqual(1);
+				});
+
+				it('works also with undefined values, 0, booleans and empty arrays', function() {
+					var collection = new Backbone.Collection([
+						{
+							Title : 'title',
+							Domain: undefined,
+							Count: 0,
+							Users: [],
+							Active: false
+						},
+						{
+							Title : 'another title',
+							Domain: 'domain',
+							Count: 5,
+							Users: [],
+							Active: true
+						}
+					]);
+
+					var domain = Facetr(collection).facet('Domain');
+					var count = Facetr(collection).facet('Count');
+					var users = Facetr(collection).facet('Users');
+					var active = Facetr(collection).facet('Active');
+
+					expect(domain.toJSON().values.length).toBe(2);
+					expect(domain.toJSON().values[0].value).toBe('domain');
+					expect(domain.toJSON().values[1].value).toBe('undefined');
+
+					expect(count.toJSON().values.length).toBe(2);
+					expect(count.toJSON().values[0].value).toBe(0);
+					expect(count.toJSON().values[1].value).toBe(5);
+					
+					expect(users.toJSON().values.length).toBe(1);
+					expect(users.toJSON().values[0].value).toBe('undefined');
+
+					expect(active.toJSON().values.length).toBe(2);
+					expect(active.toJSON().values[0].value).toBe(false);
+					expect(active.toJSON().values[1].value).toBe(true);
 				});
 				
 				it('works also with array properties', function() {
@@ -319,9 +358,9 @@ describe('Backbone.Facetr', function() {
 					Facetr(collection).facet('Profession');
 
 					var toJSON = Facetr(collection).toJSON();
-					
-					expect(toJSON[1].values.length).toBe(3); // check that Age values are still only 3
-					expect(toJSON[2].values.length).toBe(1); // check that Profession has only 1 value
+
+					expect(toJSON[1].values.length).toBe(4); // check that Age values are 4 (3 + the 'undefined' of the last added model)
+					expect(toJSON[2].values.length).toBe(2); // check that Profession has 2 values (the one of the last added model + 'undefined' with cound 4 from the previous models)
 				});
 			});
 			

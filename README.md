@@ -125,9 +125,10 @@ limitation being the common sense.
 
 A facet can only be added on a Backbone Model or object property having any of the following value types:
  
-* string | Number
+* string | number | boolean
 * Array of strings
 * Array of numbers
+* Array of booleans
 * Array of objects
 * Array of Backbone models
 
@@ -720,11 +721,11 @@ example
 
 	facet.value('fishing');
 
-	// facet.isSelected returns true
+	// facet.isSelected() returns true
 
 	facet.clear(); // remove all selected values
 
-	// facet.isSelected returns false
+	// facet.isSelected() returns false
 
 
 ### <a name="facetexp"></a> FacetExp

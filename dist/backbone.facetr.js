@@ -53,7 +53,7 @@
 	};
 	
 	// checks if the given collection exists in the cache, if not creates a new FacetCollection with the given collection data
-	// adds a facetrid attribute to the original collection for fast lookup
+	// adds a facetrid attribute to the original collection for quick lookup
 	var _begetCollection = function(collection, id) {
 		var colid = collection.facetrid || id || 'fctr'+new Date().getTime()+Math.floor((Math.random()*99)+1),
 			coll = _getCollection(colid);
@@ -69,11 +69,29 @@
 		var value, tokens = attr.split('.'), len = tokens.length, i = 0;
 		// iterate over possible properties of properties in order to allow Property.Property notation
 		// if tokens length is 1, just return the Backbone.Model property value if any is found
-		do {
-			value = (value instanceof Array) ? value : (value && ((value.get && value.get(tokens[i])) || value[tokens[i]])) || (model && model instanceof Backbone.Model && model.get(tokens[i])) || undefined;
-			i += 1; 
-		} while(i < len);
+		// do {
+		// 	value = (value instanceof Array) ? value : (value && ((value.get && value.get(tokens[i])) || value[tokens[i]])) || (model && model instanceof Backbone.Model && model.get(tokens[i])) || undefined;
+		// 	i += 1; 
+		// } while(i < len);
 		 
+		value = model.get(tokens[i]);
+	
+		for(i = 1; i < len; i += 1){
+			if(value !== undefined){
+				if(value instanceof Array){
+					return value;
+				} else if(value instanceof Backbone.Model){
+					value = value.get(tokens[i]);
+				} else if(Object.prototype.toString.call(value) === '[object Object]'){
+					value = value[tokens[i]];
+				} else {
+					value = value;
+				}
+			} else {
+				return value;
+			}
+		}
+	
 		return value;
 	};
 	// Facet class
@@ -98,12 +116,12 @@
 			
 		// creates a facetValue with count 1 or increases the count by 1 of an existing faceValue in values 
 		_begetFacetValue = function(facetValues, value, cid) {
-			var val = value || 'undefined', isObj = false;
-			
+			var val = (value != null) ? value : 'undefined', isObj = false;
+	
 			// TODO - find better solution, this is just a quick fix
 			// Problem: case of property consisting of Array of Objects was overlooked
 			// in original design of dot notation
-			if(val instanceof Object) {
+			if(Object.prototype.toString.call(val) === '[object Object]') {
 				var attr = _name.split('.')[1];
 				val = attr && (val instanceof Backbone.Model && val.get(attr) || val[attr]) || 'undefined';
 				isObj = true; 
@@ -139,23 +157,27 @@
 		_parseModel = function(model, facetName) {
 			var value = _getValue(model, _name);
 			
-			if(value) {
-				if(value instanceof Array) {
+			if(value instanceof Array) {
+				if(value.length === 0){
+					_begetFacetValue(_values, 'undefined', model.cid);
+					_valModelMap['undefined'].push(model.cid);
+				} else {
 					_.each(value, function(v) {
 						_begetFacetValue(_values, v, model.cid);
 						// push the model.cid in the current value entry of the value to model map
-						if(_valModelMap[v])
+						if(_valModelMap[v]) {
 							_valModelMap[v].push(model.cid);
+						}
 					});
-				} else {
-					if(typeof value === 'object') {
-						_self.remove();
-						throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
-					}
-					
-					_begetFacetValue(_values, value);
-					_valModelMap[value].push(model.cid);			
 				}
+			} else {
+				if(typeof value === 'object') {
+					_self.remove();
+					throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
+				}
+				
+				_begetFacetValue(_values, value);
+				_valModelMap[value].push(model.cid);			
 			}
 		},
 		// reads model.get(facetName) from the models in the collection and populates the array of values
