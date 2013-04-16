@@ -130,7 +130,7 @@
 			var facetValue = _.find(facetValues, function(v) {
 				return v.value === val;
 			});
-			
+	
 			if(facetValue) {
 				facetValue.count = facetValue.count + 1;
 				facetValue.activeCount = facetValue.activeCount + 1;
@@ -153,31 +153,33 @@
 			if(isObj) {
 				_valModelMap[val].push(cid);	
 			}
+	
+			return val;
 		},
-		_parseModel = function(model, facetName) {
-			var value = _getValue(model, _name);
+		_parseModel = function(model) {
+			var value = _getValue(model, _name), val;
 			
 			if(value instanceof Array) {
 				if(value.length === 0){
-					_begetFacetValue(_values, 'undefined', model.cid);
-					_valModelMap['undefined'].push(model.cid);
+					val = _begetFacetValue(_values, 'undefined', model.cid);
+					_valModelMap[val].push(model.cid);
 				} else {
 					_.each(value, function(v) {
-						_begetFacetValue(_values, v, model.cid);
+						val = _begetFacetValue(_values, v, model.cid);
 						// push the model.cid in the current value entry of the value to model map
-						if(_valModelMap[v]) {
-							_valModelMap[v].push(model.cid);
+						if(_valModelMap[val]) {
+							_valModelMap[val].push(model.cid);
 						}
 					});
 				}
 			} else {
-				if(typeof value === 'object') {
+				if(Object.prototype.toString.call(value) === '[object Object]') {
 					_self.remove();
 					throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
 				}
 				
-				_begetFacetValue(_values, value);
-				_valModelMap[value].push(model.cid);			
+				val = _begetFacetValue(_values, value);
+				_valModelMap[val].push(model.cid);			
 			}
 		},
 		// reads model.get(facetName) from the models in the collection and populates the array of values
