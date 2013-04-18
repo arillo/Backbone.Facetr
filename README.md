@@ -72,21 +72,21 @@ early version; optimizations may improve performance in future realeases.
 		}
 	]);
 
-	Facetr(collection).facet('Age').value(28); // collection contains only 'Sarah Smith'
-	Facetr(collection).facet('Hobbies').value('fishing'); // contains 'Sarah Smith' and 'Bob Smith' 
-	Facetr(collection).facet('Age').removeValue(20); // contains only 'Bob Smith'
+	Facetr(collection).facet('Name.LastName').value('Smith'); // collection contains 'Sarah Smith' and 'Bob Smith'
+	Facetr(collection).facet('Hobbies').value('shopping'); // contains only 'Sarah Smith' 
+	Facetr(collection).facet('Name.LastName').removeValue('Smith'); // contains 'Sarah Smith' and 'Otto Von Braun'
 
 	// removes all facet values and restores original collection content
 	Facetr(collection).clearValues() 
 
 	// if chaining is not your cup of tea, the following is equivalent to the above code
 	var facetCollection = Facetr(collection); // returns a FacetCollection object
-	var ageFacet = facetCollection.facet('Age'); // returns a Facet object
+	var lastNameFacet = facetCollection.facet('Name.LastName'); // returns a Facet object
 	var hobbiesFacet = facetCollection.facet('Hobbies');
 
-	ageFacet.value(28);	// returns a FacetExp object
-	hobbiesFacet.value('fishing');
-	ageFacet.removeValue(20);
+	lastNameFacet.value('Smith');	// returns a FacetExp object
+	hobbiesFacet.value('shopping');
+	lastNameFacet.removeValue('Smith');
 
 	// read the API Reference section for more
 	// most examples will use the above collection reference to illustrate functionalities
@@ -221,6 +221,7 @@ example
 
 Adds a Facet on the given collection using the property refered to by the
 Dot Notation expression (See Dot Notation section for more details).
+Valid operator values are: 'or' and 'and' (anything else will default to 'and').
 Returns the created Facet instance to allow method chaining.
 Triggers a facet event with the facetName passed to the callback.
 
