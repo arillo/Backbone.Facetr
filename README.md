@@ -72,7 +72,7 @@ early version; optimizations may improve performance in future realeases.
 		}
 	]);
 
-	Facetr(collection).facet('Age').value(20); // collection contains only 'Sarah Smith'
+	Facetr(collection).facet('Age').value(28); // collection contains only 'Sarah Smith'
 	Facetr(collection).facet('Hobbies').value('fishing'); // contains 'Sarah Smith' and 'Bob Smith' 
 	Facetr(collection).facet('Age').removeValue(20); // contains only 'Bob Smith'
 
@@ -84,12 +84,12 @@ early version; optimizations may improve performance in future realeases.
 	var ageFacet = facetCollection.facet('Age'); // returns a Facet object
 	var hobbiesFacet = facetCollection.facet('Hobbies');
 
-	ageFacet.value(20);	// returns a FacetExp object
+	ageFacet.value(28);	// returns a FacetExp object
 	hobbiesFacet.value('fishing');
 	ageFacet.removeValue(20);
 
 	// read the API Reference section for more
-	// most example will use the above collection reference to illustrate functionalities
+	// most examples will use the above collection reference to illustrate functionalities
 
 
 ### <a name="dot-notation"></a> DOT NOTATION
