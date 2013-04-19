@@ -4,16 +4,16 @@ var	FacetCollection = function(collection) {
 	_.extend(this, Backbone.Events);
 	
 	// init local variables
-	var _self						= this,
-		_facets 					= {},								// facets list
-		_cidModelMap				= {},	 							// an hash containing cid/model pairs used for fast model lookup
-		_activeModels				= {},								// cids of the active models for each facet (a facetName -> [cid] map)
-		_vent						= _.extend({}, Backbone.Events),	// a local event handler used for local events
-		_filters					= {},								// an hashmap of custom filters
-		_sortDir					= 'asc',
+	var _self = this,
+		_facets = {}, // facets list
+		_cidModelMap = {}, // an hash containing cid/model pairs used for fast model lookup
+		_activeModels = {}, // cids of the active models for each facet (a facetName -> [cid] map)
+		_vent = _.extend({}, Backbone.Events), // a local event handler used for local events
+		_filters = {}, // an hashmap of custom filters
+		_sortDir = 'asc', // default sort direction
 		_sortAttr,
 		_facetsOrder,
-	
+
 
 	// inits the models map	
 	_initModelsMap	= function() {

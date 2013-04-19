@@ -1,41 +1,41 @@
 (function (root, factory) {
-	if (typeof exports === 'object') {
+    if (typeof exports === 'object') {
 
-		var underscore = require('underscore');
-		var backbone = require('backbone');
+        var underscore = require('underscore');
+        var backbone = require('backbone');
 
-		module.exports = factory(underscore, backbone);
+        module.exports = factory(underscore, backbone);
 
-	} else if (typeof define === 'function' && define.amd) {
+    } else if (typeof define === 'function' && define.amd) {
 
-		define(['underscore', 'backbone'], factory);
+        define(['underscore', 'backbone'], factory);
 
-	} else {
+    } else {
 
-		factory(root, _, Backbone);
-	
-	}
+        factory(root, _, Backbone);
+
+    }
 }(this, function (window, _, Backbone, undefined) {
-  	"use strict";
+    "use strict";
 
-  	// create Facetr function as Backbone property
-  	// create a global reference of Facetr for convenience
-  	// when adding a collection, an id can be associated with it
-  	// future call to Facetr can use either the Backbone.Collection instance
-  	// as paramter or the given id to retrieve the FacetCollection
-  	Backbone.Facetr = function(collection, id) {
-  		if(collection instanceof Backbone.Collection) {
-    		return _begetCollection(collection, id);
-		} 
-			
-		return _getCollection(collection);
-	};
+    // create Facetr function as Backbone property
+    // create a global reference of Facetr for convenience
+    // when adding a collection, an id can be associated with it
+    // future call to Facetr can use either the Backbone.Collection instance
+    // as paramter or the given id to retrieve the FacetCollection
+    Backbone.Facetr = function(collection, id) {
+        if(collection instanceof Backbone.Collection) {
+            return _begetCollection(collection, id);
+        } 
 	
-	Backbone.Facetr.VERSION = '0.2.1';
-	
-	//= facetr.helpers.js
-	//= facetr.facet.js
-	//= facetr.facetcollection.js
+        return _getCollection(collection);
+    };
 
-	return window.Facetr = Backbone.Facetr;
+    Backbone.Facetr.VERSION = '0.2.1';
+
+    //= facetr.helpers.js
+    //= facetr.facet.js
+    //= facetr.facetcollection.js
+
+    return window.Facetr = Backbone.Facetr;
 }));

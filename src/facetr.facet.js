@@ -1,166 +1,165 @@
-// Facet class
 var	Facet = function(facetName, modelsMap, vent, extOperator) {
     // give facet instances ability to handle Backbone Events
     _.extend(this, Backbone.Events);
 
     // init local variables with default values
-    var _self 			= this,
-        _name 			= facetName, 	// corresponds to the model attribute name or 'Property.Property1.PropertyN' for deeper relations
-		_label 			= facetName, 	// a human readable label
-		_sortBy 		= 'value',	 	// determines if facet values are sorted by 'value' or 'count'
-		_sortDirection 	= 'asc',	 	// determines facet values sort direction
-		_values 		= [],		 	// facet values computed from collection models (Ex.: { value: 'Title', count: 2 })
-		_activeValues	= [],			// currently selected facet values
-		_activeModels 	= [],			// active models according to currently selected values
-		_valModelMap	= {},			// a map of values to model, used for fast filtering. it exploits the unique 'cid' given to each Backbone.Model 
-		_extOperator    = extOperator,
-		_operator		= 'or',			// default internal operator
-		_selected		= false,		// a flag which is set to true if any of the facet values is selected,
-		_customData		= {},			// a map of custom data which can be added to the facet
-		
-	// creates a facetValue with count 1 or increases the count by 1 of an existing faceValue in values 
-	_begetFacetValue = function(facetValues, value, cid) {
-		var val = (value != null) ? value : 'undefined', isObj = false;
+    var _self = this,
+        _name = facetName, // corresponds to the model attribute name or 'Property.Property1.PropertyN' for deeper relations
+        _label = facetName, // a human readable label
+        _sortBy = 'value', // determines if facet values are sorted by 'value' or 'count'
+        _sortDirection = 'asc', // determines facet values sort direction
+        _values = [], // facet values computed from collection models (Ex.: { value: 'Title', count: 2 })
+        _activeValues = [], // currently selected facet values
+        _activeModels = [], // active models according to currently selected values
+        _valModelMap = {}, // a map of values to model, used for fast filtering. it exploits the unique 'cid' given to each Backbone.Model 
+        _extOperator = extOperator, // external facet operator, used by FacetrCollection when filtering the Backbone.Collection
+        _operator = 'or', // default internal operator
+        _selected = false, // a flag which is set to true if any of the facet values is selected,
+        _customData = {}, // a map of custom data which can be added to the facet
 
-		// TODO - find better solution, this is just a quick fix
-		// Problem: case of property consisting of Array of Objects was overlooked
-		// in original design of dot notation
-		if(Object.prototype.toString.call(val) === '[object Object]') {
-			var attr = _name.split('.')[1];
-			val = attr && (val instanceof Backbone.Model && val.get(attr) || val[attr]) || 'undefined';
-			isObj = true; 
-		}
-		
-		var facetValue = _.find(facetValues, function(v) {
-			return v.value === val;
-		});
+    // creates a facetValue with count 1 or increases the count by 1 of an existing faceValue in values 
+    _begetFacetValue = function(facetValues, value, cid) {
+        var val = (value != null) ? value : 'undefined', isObj = false;
 
-		if(facetValue) {
-			facetValue.count = facetValue.count + 1;
-			facetValue.activeCount = facetValue.activeCount + 1;
-		} else {
-			// use sort index to get index where value should be put in order to keep values sorted
-			var sortedIndex = _.sortedIndex(_.pluck(_values, 'value'), val);
-			
-			// note that at init values are sorted by the default sort property and direction, ie. 'value' and 'asc'
-			_values.splice(sortedIndex, 0, {
-				value		: val,
-				count		: 1,
-				activeCount	: 1,
-				active 		: false
-			});
-			
-			// create an entry in the value to model map for the given value
-			_valModelMap[val] = [];
-		}
-		
-		if(isObj) {
-			_valModelMap[val].push(cid);	
-		}
+        // TODO - find better solution, this is just a quick fix
+        // Problem: case of property consisting of Array of Objects was overlooked
+        // in original implementation of Dot Notation
+        if(Object.prototype.toString.call(val) === '[object Object]') {
+            var attr = _name.split('.')[1];
+            val = attr && (val instanceof Backbone.Model && val.get(attr) || val[attr]) || 'undefined';
+            isObj = true; 
+        }
 
-		return val;
-	},
-	_parseModel = function(model) {
-		var value = _getValue(model, _name), val;
-		
-		if(value instanceof Array) {
-			if(value.length === 0){
-				val = _begetFacetValue(_values, 'undefined', model.cid);
-				_valModelMap[val].push(model.cid);
-			} else {
-				_.each(value, function(v) {
-					val = _begetFacetValue(_values, v, model.cid);
-					// push the model.cid in the current value entry of the value to model map
-					if(_valModelMap[val]) {
-						_valModelMap[val].push(model.cid);
-					}
-				});
-			}
-		} else {
-			if(Object.prototype.toString.call(value) === '[object Object]') {
-				_self.remove();
-				throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
-			}
-			
-			val = _begetFacetValue(_values, value);
-			_valModelMap[val].push(model.cid);			
-		}
-	},
-	// reads model.get(facetName) from the models in the collection and populates the array of values
-	_computeValues = function(modelsMap) {
-		_(modelsMap).each(function(model) {
-			_parseModel(model);
-		});
-	},
-	// sort method sorts the facet values according to the given sortBy and sortDirection
-	_sort = function() {		
-		_values.sort(function(v1,v2) {
-			if(_sortBy === 'value') {
-				// note that facet values are always unique, so v1.value === v2.value is never true
-				return (_sortDirection === 'asc') ? ((v1.value > v2.value)-(v1.value < v2.value)) : ((v1.value < v2.value)-(v1.value > v2.value)); 
-			} else if(_sortBy === 'activeCount') {
-				if(_sortDirection === 'asc')  {
-					if(v1.activeCount < v2.activeCount) {
-						return -1;	
-					} else if(v1.activeCount > v2.activeCount) {
-						return 1;
-					} else {
-						// if both facet values have same activeCount, sort by value
-						return ((v1.value > v2.value)-(v1.value < v2.value));
-					}
-				} else {
-					if(v1.activeCount < v2.activeCount) {
-						return 1;		
-					} else if(v1.activeCount > v2.activeCount) {
-						return -1;
-					} else {
-						return ((v1.value < v2.value)-(v1.value > v2.value));
-					}
-				}
-			} else {
-				if(_sortDirection === 'asc')  {
-					if(v1.count < v2.count) {
-						return -1;	
-					} else if(v1.count > v2.count) {
-						return 1;
-					} else {
-						// if both facet values have same count, sort by value
-						return ((v1.value > v2.value)-(v1.value < v2.value));
-					}
-				} else {
-					if(v1.count < v2.count) {
-						return 1;		
-					} else if(v1.count > v2.count) {
-						return -1;
-					} else {
-						return ((v1.value < v2.value)-(v1.value > v2.value));
-					}
-				}
-			}
-		});
-	},
-	// checks if any of the facet values is currently selected by testing if _activeValues is empty
-	_isSelected = function() {
-		return _activeValues.length !== 0;
-	},
-	// compute active facet values count
-	_computeActiveValuesCount = function(filteredModels) {			
-		for(var i = 0, len = _values.length; i < len; i += 1) {
-			// if(filteredModels.length !== 0) {
-			// compute intersection of value models and filtered models and store the length
-			var intersectLen = _.intersection(_valModelMap[_values[i].value], filteredModels).length;
+        var facetValue = _.find(facetValues, function(v) {
+            return v.value === val;
+        });
 
-			// if any filtered model is in the value models
-			if(intersectLen !== 0) {
-				// value active count is the length of the intersection
-				_values[i].activeCount = intersectLen;
-			} else {
-				// if no values are selected for the facet and the value is not in any of the filtered models
-				// then the value active count is equal 0
-				_values[i].activeCount = 0;
-			}
-		}			
-	},
+        if(facetValue) {
+            facetValue.count = facetValue.count + 1;
+            facetValue.activeCount = facetValue.activeCount + 1;
+        } else {
+            // use sort index to get index where value should be put in order to keep values sorted
+            var sortedIndex = _.sortedIndex(_.pluck(_values, 'value'), val);
+
+            // note that at init values are sorted by the default sort property and direction, ie. 'value' and 'asc'
+            _values.splice(sortedIndex, 0, {
+                value : val,
+                count : 1,
+                activeCount : 1,
+                active : false
+            });
+
+            // create an entry in the value to model map for the given value
+            _valModelMap[val] = [];
+        }
+
+        if(isObj) {
+            _valModelMap[val].push(cid);	
+        }
+
+        return val;
+    },
+    _parseModel = function(model) {
+        var value = _getValue(model, _name), val;
+
+        if(value instanceof Array) {
+            if(value.length === 0){
+                val = _begetFacetValue(_values, 'undefined', model.cid);
+                _valModelMap[val].push(model.cid);
+            } else {
+                _.each(value, function(v) {
+                    val = _begetFacetValue(_values, v, model.cid);
+                    // push the model.cid in the current value entry of the value to model map
+                    if(_valModelMap[val]) {
+                        _valModelMap[val].push(model.cid);
+                    }
+                });
+            }
+        } else {
+            if(Object.prototype.toString.call(value) === '[object Object]') {
+                _self.remove();
+                throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
+            }
+
+            val = _begetFacetValue(_values, value);
+            _valModelMap[val].push(model.cid);			
+        }
+    },
+    // reads model.get(facetName) from the models in the collection and populates the array of values
+    _computeValues = function(modelsMap) {
+        _(modelsMap).each(function(model) {
+            _parseModel(model);
+        });
+    },
+    // sort method sorts the facet values according to the given sortBy and sortDirection
+    _sort = function() {		
+        _values.sort(function(v1,v2) {
+            if(_sortBy === 'value') {
+                // note that facet values are always unique, so v1.value === v2.value is never true
+                return (_sortDirection === 'asc') ? ((v1.value > v2.value)-(v1.value < v2.value)) : ((v1.value < v2.value)-(v1.value > v2.value)); 
+            } else if(_sortBy === 'activeCount') {
+                if(_sortDirection === 'asc')  {
+                    if(v1.activeCount < v2.activeCount) {
+                        return -1;	
+                    } else if(v1.activeCount > v2.activeCount) {
+                        return 1;
+                    } else {
+		                // if both facet values have same activeCount, sort by value
+		                return ((v1.value > v2.value)-(v1.value < v2.value));
+                    }
+                } else {
+                    if(v1.activeCount < v2.activeCount) {
+                        return 1;		
+                    } else if(v1.activeCount > v2.activeCount) {
+                        return -1;
+                    } else {
+                        return ((v1.value < v2.value)-(v1.value > v2.value));
+                    }
+                }
+            } else {
+                if(_sortDirection === 'asc')  {
+                    if(v1.count < v2.count) {
+                        return -1;	
+                    } else if(v1.count > v2.count) {
+                        return 1;
+                    } else {
+                        // if both facet values have same count, sort by value
+                        return ((v1.value > v2.value)-(v1.value < v2.value));
+                    }
+                } else {
+                    if(v1.count < v2.count) {
+                        return 1;		
+                    } else if(v1.count > v2.count) {
+                        return -1;
+                    } else {
+                        return ((v1.value < v2.value)-(v1.value > v2.value));
+                    }
+                }
+            }
+        });
+    },
+    // checks if any of the facet values is currently selected by testing if _activeValues is empty
+    _isSelected = function() {
+        return _activeValues.length !== 0;
+    },
+    // compute active facet values count
+    _computeActiveValuesCount = function(filteredModels) {			
+        for(var i = 0, len = _values.length; i < len; i += 1) {
+            // if(filteredModels.length !== 0) {
+            // compute intersection of value models and filtered models and store the length
+            var intersectLen = _.intersection(_valModelMap[_values[i].value], filteredModels).length;
+
+            // if any filtered model is in the value models
+            if(intersectLen !== 0) {
+                // value active count is the length of the intersection
+                _values[i].activeCount = intersectLen;
+            } else {
+                // if no values are selected for the facet and the value is not in any of the filtered models
+                // then the value active count is equal 0
+                _values[i].activeCount = 0;
+            }
+        }		
+    },
 	// invoked whenever a Backbone collection is reset
 	_resetFacet = function(modelsMap) {
 		// empty current select values and copy them in a new array

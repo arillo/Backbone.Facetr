@@ -20,6 +20,8 @@ Backbone.Facetr is a plugin which enables filtering of Backbone collections thro
 It works flawlessly up to 2500 items; computation starts getting slower with 5000 - 10000 items. This is however an 
 early version; optimizations may improve performance in future realeases.
 
+If you decide to use Facetr on one of your projects, contact us, we would be glad to add the link to your project in the [examples](#examples) section.
+
 
 ### <a name="installation"></a> INSTALLATION
 
@@ -220,7 +222,7 @@ example
 ##### <a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [operator:string]) : Facet
 
 Adds a Facet on the given collection using the property refered to by the
-Dot Notation expression (See Dot Notation section for more details).
+Dot Notation expression (see [Dot Notation section](#dot-notation) for more details).
 Valid operator values are: 'or' and 'and' (anything else will default to 'and').
 Returns the created Facet instance to allow method chaining.
 Triggers a facet event with the facetName passed to the callback.
@@ -377,7 +379,7 @@ event unless true is passed as parameter.
 
 example
 
-	Facetr(collection).sortBy('Age').asc();
+	Facetr(collection).sortBy('Age').desc();
 
 
 ##### <a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection
