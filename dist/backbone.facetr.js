@@ -1,4 +1,4 @@
-// Backbone.Facetr 0.2.1 
+// backbone.facetr 0.2.1 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author Francesco Macri 
 // Distributed under MIT license 
