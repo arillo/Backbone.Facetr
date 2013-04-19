@@ -20,7 +20,7 @@ Backbone.Facetr is a plugin which enables filtering of Backbone collections thro
 It works flawlessly up to 2500 items; computation starts getting slower with 5000 - 10000 items. This is however an 
 early version; optimizations may improve performance in future realeases.
 
-If you decide to use Facetr on one of your projects, contact us, we would be glad to add the link to your project in the [examples](#examples) section.
+If you decide to use Facetr in one of your projects, contact us, we would be glad to add the link to your project in the [examples](#examples) section.
 
 
 ### <a name="installation"></a> INSTALLATION
