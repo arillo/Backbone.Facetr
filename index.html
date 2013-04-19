@@ -28,7 +28,7 @@
         <span class="ribbon-outer">
           <span class="ribbon-inner">
             <h1>Backbone.facetr</h1>
-            <h2></h2>
+            <h2>A library to perform faceted search on Backbone collections</h2>
           </span>
           <span class="left-tail"></span>
           <span class="right-tail"></span>
@@ -48,7 +48,7 @@
       <section id="main_content">
         <h1>Backbone.Facetr</h1>
 
-<p>VERSION 0.1.0 (EXPERIMENTAL)</p>
+<p>VERSION 0.2.1</p>
 
 <h3>
 <a name="contents"></a> CONTENTS</h3>
@@ -59,6 +59,7 @@
 <li><a href="#basic-usage">BASIC USAGE</a></li>
 <li><a href="#dot-notation">DOT NOTATION</a></li>
 <li><a href="#api-reference">API REFERENCE</a></li>
+<li><a href="#examples">EXAMPLES</a></li>
 <li><a href="#license">LICENSE</a></li>
 </ul><h3>
 <a name="introduction"></a> INTRODUCTION</h3>
@@ -67,6 +68,8 @@
 
 <p>It works flawlessly up to 2500 items; computation starts getting slower with 5000 - 10000 items. This is however an 
 early version; optimizations may improve performance in future realeases.</p>
+
+<p>If you decide to use Facetr on one of your projects, contact us, we would be glad to add the link to your project in the <a href="#examples">examples</a> section.</p>
 
 <h3>
 <a name="installation"></a> INSTALLATION</h3>
@@ -121,24 +124,24 @@ var collection = new Backbone.Collection([
     }
 ]);
 
-Facetr(collection).facet('Age').value(20); // collection contains only 'Sarah Smith'
-Facetr(collection).facet('Hobbies').value('fishing'); // contains 'Sarah Smith' and 'Bob Smith' 
-Facetr(collection).facet('Age').removeValue(20); // contains only 'Bob Smith'
+Facetr(collection).facet('Name.LastName').value('Smith'); // collection contains 'Sarah Smith' and 'Bob Smith'
+Facetr(collection).facet('Hobbies').value('shopping'); // contains only 'Sarah Smith' 
+Facetr(collection).facet('Name.LastName').removeValue('Smith'); // contains 'Sarah Smith' and 'Otto Von Braun'
 
 // removes all facet values and restores original collection content
 Facetr(collection).clearValues() 
 
 // if chaining is not your cup of tea, the following is equivalent to the above code
 var facetCollection = Facetr(collection); // returns a FacetCollection object
-var ageFacet = facetCollection.facet('Age'); // returns a Facet object
+var lastNameFacet = facetCollection.facet('Name.LastName'); // returns a Facet object
 var hobbiesFacet = facetCollection.facet('Hobbies');
 
-ageFacet.value(20); // returns a FacetExp object
-hobbiesFacet.value('fishing');
-ageFacet.removeValue(20);
+lastNameFacet.value('Smith');   // returns a FacetExp object
+hobbiesFacet.value('shopping');
+lastNameFacet.removeValue('Smith');
 
 // read the API Reference section for more
-// most example will use the above collection reference to illustrate functionalities
+// most examples will use the above collection reference to illustrate functionalities
 </code></pre>
 
 <h3>
@@ -177,9 +180,10 @@ limitation being the common sense.</p>
 <p>A facet can only be added on a Backbone Model or object property having any of the following value types:</p>
 
 <ul>
-<li>string | Number</li>
+<li>string | number | boolean</li>
 <li>Array of strings</li>
 <li>Array of numbers</li>
+<li>Array of booleans</li>
 <li>Array of objects</li>
 <li>Array of Backbone models</li>
 </ul><p>It cannot be added on properties having the following value / composite types:</p>
@@ -218,6 +222,9 @@ Facetr(collection).facet('Name');               // error, Name is an object
 <li><a href="#facetcollection-sortby">sortBy</a></li>
 <li><a href="#facetcollection-asc">asc</a></li>
 <li><a href="#facetcollection-desc">desc</a></li>
+<li><a href="#facetcollection-addfilter">addFilter</a></li>
+<li><a href="#facetcollection-removefilter">removeFilter</a></li>
+<li><a href="#facetcollection-clearfilters">clearFilters</a></li>
 <li><a href="#facetcollection-clearvalues">clearValues</a></li>
 <li><a href="#facetcollection-facetsorder">facetsOrder</a></li>
 <li><a href="#facetcollection-collection">collection</a></li>
@@ -242,6 +249,7 @@ Facetr(collection).facet('Name');               // error, Name is an object
 <li><a href="#facet-remove">remove</a></li>
 <li><a href="#facet-clear">clear</a></li>
 <li><a href="#facet-customdata">customData</a></li>
+<li><a href="#facet-isselected">isSelected</a></li>
 </ul>
 </li>
 <li>
@@ -279,7 +287,8 @@ Facetr('myCollection') === Facetr(collection); // true
 <a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [operator:string]) : Facet</h5>
 
 <p>Adds a Facet on the given collection using the property refered to by the
-Dot Notation expression (See Dot Notation section for more details).
+Dot Notation expression (see <a href="#dot-notation">Dot Notation section</a> for more details).
+Valid operator values are: 'or' and 'and' (anything else will default to 'and').
 Returns the created Facet instance to allow method chaining.
 Triggers a facet event with the facetName passed to the callback.</p>
 
@@ -403,7 +412,8 @@ collection.</p>
 
 <p>Sorts the collection according to the given attribute name. By default
 ascendent sort is used. See asc() and desc() methods below to define sort
-direction. Triggers sort event unless true is passed as parameter.</p>
+direction. Triggers sort event unless true is passed as parameter.
+This method automatically recognizes string, numeric or date values.</p>
 
 <p>example</p>
 
@@ -440,18 +450,43 @@ event unless true is passed as parameter.</p>
 
 <p>example</p>
 
-<pre><code>Facetr(collection).sortBy('Age').asc();
+<pre><code>Facetr(collection).sortBy('Age').desc();
 </code></pre>
 
 <h5>
-<a name="facetcollection-filterby"></a> filterBy(attribute:string, regex:string, [silent:boolean]) : FacetCollection</h5>
+<a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection</h5>
 
-<p>Filters the collection by mathing the given regex on each model attribuge
-value. Triggers reset unless true is passed as last parameter.</p>
+<p>Adds a filter which is used to filter the collection by testing each model against it. 
+Triggers reset unless true is passed as last parameter. Multiple filters can be added as long as they have
+different names. Adding two filters with the same name will result in the first being overwritten by the second.</p>
 
 <p>example</p>
 
-<pre><code>Facetr(collection).filterBy('Age', '20');
+<pre><code>Facetr(collection).addFilter('AgeFilter', function(model) {
+    return model.get('Age') &gt;= 20 &amp;&amp; model.get('Age') &lt; 60; 
+});
+</code></pre>
+
+<h5>
+<a name="facetcollection-removefilter"></a> removeFilter(filterName:string, [silent:boolean]) : FacetCollection</h5>
+
+<p>Removes the filter with the given name from the collection and unfilters it accordingly. 
+Triggers reset unless true is passed as last parameter.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).removeFilter('AgeFilter');
+</code></pre>
+
+<h5>
+<a name="facetcollection-clearfilters"></a> clearFilters([silent:boolean]) : FacetCollection</h5>
+
+<p>Removes all the filters previously added to the collection and unfilters it accordingly. 
+Triggers reset unless true is passed as parameter.</p>
+
+<p>example</p>
+
+<pre><code>Facetr(collection).clearFilters();
 </code></pre>
 
 <h5>
@@ -764,20 +799,40 @@ facet.sortByActiveCount();
 <h5>
 <a name="facet-clear"></a> clear() : Facet</h5>
 
-<p>Unselects all the values from the facet. It triggers a 'unfilter' event for each remove value.</p>
+<p>Unselects all the values from the facet. It triggers a 'unfilter' event for each removed value.</p>
 
 <h5>
-<a name="facet-customdata"></a> customData(key:string, value:object) : Facet</h5>
+<a name="facet-customdata"></a> customData(key:string, [value:object]) : Facet</h5>
 
 <p>This method can be used to add arbitrary data to pass to the templates.
 Data added using this method is included in the object returned by the toJSON() method
-in the data.customData property.</p>
+in the data.customData property.
+To retrieve previously set data, just pass the key parameter without any value.</p>
 
 <p>example</p>
 
 <pre><code>var facet = Facetr('myCollection').facet('Hobbies').customData('sublabel', 'Available hobbies');
 
+// facet.customData('sublabel') returns 'Available hobbies'
 // facet.toJSON().data.customData = { sublabel : 'Available hobbies' }
+</code></pre>
+
+<h5>
+<a name="facet-isselected"></a> isSelected : Boolean</h5>
+
+<p>Returns true if any value is selected from this facet, false otherwise.</p>
+
+<p>example</p>
+
+<pre><code>var facet = Facetr('myCollection').facet('Hobbies');
+
+facet.value('fishing');
+
+// facet.isSelected() returns true
+
+facet.clear(); // remove all selected values
+
+// facet.isSelected() returns false
 </code></pre>
 
 <h3>
@@ -809,6 +864,13 @@ Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 <p>Equivalent to facet.value('Value', 'or'), but can be used for FacetExp chains.</p>
 
 <h3>
+<a name="examples"></a> EXAMPLES</h3>
+
+<p>This section contains a list of websites / projects using Facetr.</p>
+
+<ul>
+<li><a href="http://terra-vecchia.ch/sozialtherapie/angebote-und-betriebe">terra-vecchia.ch</a></li>
+</ul><h3>
 <a name="license"></a> LICENSE</h3>
 
 <p>Backbone.Facetr may be freely distributed under the MIT license.</p>
