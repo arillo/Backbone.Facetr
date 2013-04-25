@@ -585,7 +585,7 @@
     		_sortDir = 'asc', // default sort direction
     		_sortAttr,
     		_facetsOrder,
-    
+    		_ownReset = false,
     
     	// inits the models map	
     	_initModelsMap	= function() {
@@ -645,18 +645,18 @@
     		// expose unfilter event
     		this.trigger('unfilter', facetName, facetValue);
     	},
-    	_resetCollection = function(silent) {
-    		var modelsCids = [], models = [];
-    		
-    		// if no values are selected, return all models
-    		for(var cid in _cidModelMap) {
-    			if(_cidModelMap.hasOwnProperty(cid)) {
-    				modelsCids.push(cid);
-    			}
-    		}
-    		
+        _resetCollection = function(silent) {
+            var modelsCids = [], models = [], cid, key, filterName;
+    
+            // if no values are selected, return all models
+            for(cid in _cidModelMap) {
+                if(_cidModelMap.hasOwnProperty(cid)) {
+                    modelsCids.push(cid);
+                }
+            }
+    
     		// otherwise merge the active models of each facet
-    		for (var key in _activeModels) {
+    		for(key in _activeModels) {
     				if (_activeModels.hasOwnProperty(key)) {
     					if(_facets[key].facet.toJSON().data.selected) {
       					if(_facets[key].operator === 'or') {
@@ -669,7 +669,7 @@
     		}
     			
     		// filter using the added filter functions
-    		for(var filterName in _filters) {
+    		for(filterName in _filters) {
     			if(_filters.hasOwnProperty(filterName)) {
     				var filter = _filters[filterName];
     
@@ -689,9 +689,13 @@
     			models.push(_cidModelMap[modelsCids[i]]);
     		}
     		
+    		_ownReset = true;
+    
     		// reset the collecton with the active models
-    		collection.reset(models, { silent : true });
+    		collection.reset(models);
     		
+    		_ownReset = false;
+    
     		// notify facets to recompute active facet values count
     		_vent.trigger('resetCollection', modelsCids);
     
@@ -701,6 +705,8 @@
     	},
     	// triggered whenever the Backbone collection is reset
     	_resetOrigCollection = function() {
+    		if(_ownReset) return;
+    
     		_initModelsMap();
     		// notify facets to recompute 
     		_vent.trigger('resetOrigCollection', _cidModelMap);	
@@ -872,15 +878,14 @@
     				}
     		}
     		
-    		collection.reset(models, { silent: true });
-    		//collection.reset(models);
-    		
-    		if(!silent) {
-    			this.trigger('clear', models);
-    		}
+    		collection.reset(models);
     		
     		// reset active models
     		_activeModels = {};
+    
+    		if(!silent) {
+    			this.trigger('clear', models);
+    		}
     		
     		return this;
     	};
@@ -903,14 +908,14 @@
     				}
     		}
     		
-    		collection.reset(models, { silent: true });
+    		collection.reset(models);
     		
+    		// reset active models
+    		_activeModels = {};
+    
     		if(!silent) {
     			this.trigger('clearValues', models);
     		}
-    
-    		// reset active models
-    		_activeModels = {};
     
     		return this;
     	};
@@ -1106,6 +1111,10 @@
     		return json;
     	};
     	
+    	this.update = function(silent){
+    		_resetOrigCollection();
+    
+    	}
     	// init models map
     	_initModelsMap();
     	

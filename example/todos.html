@@ -187,6 +187,7 @@
 								// this.collection.on('add', this.addOne, this);
 								// this.collection.on('reset', this.addAll, this);
 								
+								this.collection.on('reset', this.addAll, this);
 								Facetr(this.collection).on('reset change remove add sort', this.addAll, this);
 
 								this.collection.reset(items);
@@ -264,6 +265,7 @@
 								Facetr(this.collection).facet('Hobbies').label('Hobbies').sortByCount().desc();
 								Facetr(this.collection).facetsOrder(['Name.LastName','Country']);
 								
+								this.collection.on('reset', this.render, this);
 								Facetr(this.collection).on('reset clear change add remove facetsOrderChange', this.render, this);
 								
 								execTime = new Date().getTime();
