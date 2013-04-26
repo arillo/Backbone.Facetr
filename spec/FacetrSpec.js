@@ -157,7 +157,7 @@ describe('Backbone.Facetr', function() {
 						// Facetr(collection).facet('UnexistingProperty');
 					// }).toThrow(new Error('Facetr cannot add a facet using a non-existent model property'));
 				});
-				
+
 				// Facet
 				describe('returns a Facet that', function() {
 					// Facet toJSON

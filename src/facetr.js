@@ -37,5 +37,9 @@
     //= facetr.facet.js
     //= facetr.facetcollection.js
 
-    return window.Facetr = Backbone.Facetr;
+    if(window){
+        window.Facetr = Backbone.Facetr;
+    }
+
+    return Backbone.Facetr;
 }));
