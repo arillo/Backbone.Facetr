@@ -4,7 +4,7 @@
         var underscore = require('underscore');
         var backbone = require('backbone');
 
-        module.exports = factory(underscore, backbone);
+        module.exports = factory(root, underscore, backbone);
 
     } else if (typeof define === 'function' && define.amd) {
 
@@ -15,7 +15,7 @@
         factory(root, _, Backbone);
 
     }
-}(this, function (window, _, Backbone, undefined) {
+}(this, function (global, _, Backbone, undefined) {
     "use strict";
 
     // create Facetr function as Backbone property
@@ -31,14 +31,14 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.2.2';
+    Backbone.Facetr.VERSION = '0.2.3';
 
     //= facetr.helpers.js
     //= facetr.facet.js
     //= facetr.facetcollection.js
 
-    if(window){
-        window.Facetr = Backbone.Facetr;
+    if(global){
+        global.Facetr = Backbone.Facetr;
     }
 
     return Backbone.Facetr;

@@ -78,7 +78,7 @@ var	Facet = function(facetName, modelsMap, vent, extOperator) {
         } else {
             if(Object.prototype.toString.call(value) === '[object Object]') {
                 _self.remove();
-                throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
+                throw new Error('Model property can only be a value (string,number,boolean) or Array of values, not an object');
             }
 
             val = _begetFacetValue(_values, value);

@@ -153,9 +153,6 @@ describe('Backbone.Facetr', function() {
 					expect(function() { 
 						Facetr(collection).facet('Name'); 
 					}).toThrow(new Error('Model property can only be a value (string,number) or Array of values, not an object'));
-					// expect(function() {
-						// Facetr(collection).facet('UnexistingProperty');
-					// }).toThrow(new Error('Facetr cannot add a facet using a non-existent model property'));
 				});
 
 				// Facet

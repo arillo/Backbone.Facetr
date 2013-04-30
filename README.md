@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.2.2
+VERSION 0.2.3
 
 ### <a name="contents"></a> CONTENTS
 
@@ -40,6 +40,12 @@ If you decide to use Facetr in one of your projects, contact us at &#102;&#097;&
 		</body>
 	</html>
 
+#### node.js
+
+	npm install backbone.facetr
+
+	// then in your code
+	var Facetr = require('backbone.facetr');
 
 ### <a name="basic-usage"></a> BASIC USAGE
 

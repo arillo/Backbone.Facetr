@@ -1,7 +1,7 @@
 {
   "name": "Backbone.Facetr",
-  "version": "0.2.2",
-  "main": "dist/backbone.facetr.min.js",
+  "version": "0.2.3",
+  "main": "dist/backbone.facetr.js",
   "ignore": [
     "**/.*",
     "node_modules",
