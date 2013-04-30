@@ -152,7 +152,7 @@ describe('Backbone.Facetr', function() {
 				it('throws an error if the property is an object', function() {
 					expect(function() { 
 						Facetr(collection).facet('Name'); 
-					}).toThrow(new Error('Model property can only be a value (string,number) or Array of values, not an object'));
+					}).toThrow(new Error('Model property can only be a value (string,number,boolean) or Array of values, not an object'));
 				});
 
 				// Facet

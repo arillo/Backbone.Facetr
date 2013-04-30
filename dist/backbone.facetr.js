@@ -1,4 +1,4 @@
-// backbone.facetr 0.2.2 
+// backbone.facetr 0.2.3 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author Francesco Macri 
 // Distributed under MIT license 
@@ -9,7 +9,7 @@
         var underscore = require('underscore');
         var backbone = require('backbone');
 
-        module.exports = factory(underscore, backbone);
+        module.exports = factory(root, underscore, backbone);
 
     } else if (typeof define === 'function' && define.amd) {
 
@@ -20,7 +20,7 @@
         factory(root, _, Backbone);
 
     }
-}(this, function (window, _, Backbone, undefined) {
+}(this, function (global, _, Backbone, undefined) {
     "use strict";
 
     // create Facetr function as Backbone property
@@ -36,7 +36,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.2.2';
+    Backbone.Facetr.VERSION = '0.2.3';
 
     // facet collections cache
     var _collections = {};
@@ -169,7 +169,7 @@
             } else {
                 if(Object.prototype.toString.call(value) === '[object Object]') {
                     _self.remove();
-                    throw new Error('Model property can only be a value (string,number) or Array of values, not an object');
+                    throw new Error('Model property can only be a value (string,number,boolean) or Array of values, not an object');
                 }
     
                 val = _begetFacetValue(_values, value);
@@ -1132,8 +1132,8 @@
     	collection.on('change', _modifyModel);
     };
 
-    if(window){
-        window.Facetr = Backbone.Facetr;
+    if(global){
+        global.Facetr = Backbone.Facetr;
     }
 
     return Backbone.Facetr;
