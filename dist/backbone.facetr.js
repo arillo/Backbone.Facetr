@@ -462,8 +462,6 @@
     			
     			// return a FacetExp object to allow Facetr expression chain
     			return new FacetExp(this, _operator);
-    		} else {
-    			throw new Error('Value "'+facetValue+'" does not exist for facet '+_name);
     		}
     	};
     	
@@ -1012,7 +1010,11 @@
     			facets     = json.facets,
     			sort       = json.sort,
     			filter     = json.search;
-    			
+    		
+    		// clear current collection facets and filters
+    		this.clear(true);
+            this.clearFilters(true);
+    
     		for(var i = 0, len = facets.length; i < len; i += 1) {
     			
     			var f 		= facets[i],

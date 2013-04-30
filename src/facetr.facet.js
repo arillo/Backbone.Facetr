@@ -371,8 +371,6 @@ var	Facet = function(facetName, modelsMap, vent, extOperator) {
 			
 			// return a FacetExp object to allow Facetr expression chain
 			return new FacetExp(this, _operator);
-		} else {
-			throw new Error('Value "'+facetValue+'" does not exist for facet '+_name);
 		}
 	};
 	
