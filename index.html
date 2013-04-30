@@ -1,54 +1,39 @@
 <!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=640" />
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Backbone.facetr : A library to perform faceted search on Backbone collections" />
 
-    <link rel="stylesheet" href="stylesheets/core.css" media="screen"/>
-    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)"/>
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <script type="text/javascript" src="javascripts/modernizr.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $('#main_content').headsmart()
-      })
-    </script>
-    <title>Backbone.facetr by arillo</title>
+    <title>Backbone.facetr</title>
   </head>
 
   <body>
-    <a id="forkme_banner" href="https://github.com/arillo/Backbone.Facetr">View on GitHub</a>
-    <div class="shell">
 
-      <header>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <h1>Backbone.facetr</h1>
-            <h2>A library to perform faceted search on Backbone collections</h2>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
-      </header>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/arillo/Backbone.Facetr">View on GitHub</a>
 
-      <section id="downloads">
-        <span class="inner">
-          <a href="https://github.com/arillo/Backbone.Facetr/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/arillo/Backbone.Facetr/tarball/master" class="tgz"><em>download</em> .TGZ</a>
-        </span>
-      </section>
+          <h1 id="project_title">Backbone.facetr</h1>
+          <h2 id="project_tagline">A library to perform faceted search on Backbone collections</h2>
 
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/arillo/Backbone.Facetr/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/arillo/Backbone.Facetr/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
 
-      <span class="banner-fix"></span>
-
-
-      <section id="main_content">
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>Backbone.Facetr</h1>
 
-<p>VERSION 0.2.1</p>
+<p>VERSION 0.2.3</p>
 
 <h3>
 <a name="contents"></a> CONTENTS</h3>
@@ -69,7 +54,7 @@
 <p>It works flawlessly up to 2500 items; computation starts getting slower with 5000 - 10000 items. This is however an 
 early version; optimizations may improve performance in future realeases.</p>
 
-<p>If you decide to use Facetr on one of your projects, contact us, we would be glad to add the link to your project in the <a href="#examples">examples</a> section.</p>
+<p>If you decide to use Facetr in one of your projects, contact us at facetr@arillo.net, we would be glad to add the link to your project in the <a href="#examples">examples</a> section.</p>
 
 <h3>
 <a name="installation"></a> INSTALLATION</h3>
@@ -88,6 +73,14 @@ early version; optimizations may improve performance in future realeases.</p>
         &lt;script&gt; ..... &lt;/script&gt;
     &lt;/body&gt;
 &lt;/html&gt;
+</code></pre>
+
+<h4>node.js</h4>
+
+<pre><code>npm install backbone.facetr
+
+// then in your code
+var Facetr = require('backbone.facetr');
 </code></pre>
 
 <h3>
@@ -894,19 +887,14 @@ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TOR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 DEALINGS IN THE SOFTWARE.</p>
       </section>
+    </div>
 
-      <footer>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <p>this project by <a href="https://github.com/arillo">arillo</a> can be found on <a href="https://github.com/arillo/Backbone.Facetr">GitHub</a></p>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
-        <p>Generated with <a href="http://pages.github.com">GitHub Pages</a> using Merlot</p>
-        <span class="octocat"></span>
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Backbone.facetr maintained by <a href="https://github.com/arillo">arillo</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
       </footer>
-
     </div>
 
               <script type="text/javascript">
@@ -919,6 +907,7 @@ DEALINGS IN THE SOFTWARE.</p>
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
+
 
   </body>
 </html>
