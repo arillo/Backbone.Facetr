@@ -24,12 +24,12 @@ var _begetCollection = function(collection, id) {
         return _collections[colid] = new FacetCollection(collection);
     }
 };
-	
+
 var _getValue = function(model, attr) {
     var value, tokens = attr.split('.'), len = tokens.length, i = 0;
     // iterate over possible properties of properties in order to allow Property.Property notation
     // if tokens length is 1, just return the Backbone.Model property value if any is found
-	value = model.get(tokens[i]);
+    value = model.get(tokens[i]);
 
     for(i = 1; i < len; i += 1){
         if(value !== undefined){

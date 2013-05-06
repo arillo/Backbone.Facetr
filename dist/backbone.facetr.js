@@ -1,26 +1,22 @@
-// backbone.facetr 0.2.3 
+// backbone.facetr 0.2.4 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author Francesco Macri 
 // Distributed under MIT license 
 // https://github.com/arillo/Backbone.Facetr 
 (function (root, factory) {
     if (typeof exports === 'object') {
-
+        // node.js
         var underscore = require('underscore');
         var backbone = require('backbone');
 
-        module.exports = factory(root, underscore, backbone);
-
+        module.exports = factory(underscore, backbone);
     } else if (typeof define === 'function' && define.amd) {
-
+        // AMD
         define(['underscore', 'backbone'], factory);
-
     } else {
-
-        factory(root, _, Backbone);
-
+        root.Facetr = factory(_, Backbone);
     }
-}(this, function (global, _, Backbone, undefined) {
+}(this, function (_, Backbone, undefined) {
     "use strict";
 
     // create Facetr function as Backbone property
@@ -31,12 +27,11 @@
     Backbone.Facetr = function(collection, id) {
         if(collection instanceof Backbone.Collection) {
             return _begetCollection(collection, id);
-        } 
-	
+        }
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.2.3';
+    Backbone.Facetr.VERSION = '0.2.4';
 
     // facet collections cache
     var _collections = {};
@@ -64,12 +59,12 @@
             return _collections[colid] = new FacetCollection(collection);
         }
     };
-    	
+    
     var _getValue = function(model, attr) {
         var value, tokens = attr.split('.'), len = tokens.length, i = 0;
         // iterate over possible properties of properties in order to allow Property.Property notation
         // if tokens length is 1, just return the Backbone.Model property value if any is found
-    	value = model.get(tokens[i]);
+        value = model.get(tokens[i]);
     
         for(i = 1; i < len; i += 1){
             if(value !== undefined){
@@ -89,7 +84,7 @@
     
         return value;
     };
-    var	Facet = function(facetName, modelsMap, vent, extOperator) {
+    var Facet = function(facetName, modelsMap, vent, extOperator) {
         // give facet instances ability to handle Backbone Events
         _.extend(this, Backbone.Events);
     
@@ -110,7 +105,7 @@
     
         // creates a facetValue with count 1 or increases the count by 1 of an existing faceValue in values 
         _begetFacetValue = function(facetValues, value, cid) {
-            var val = (value != null) ? value : 'undefined', isObj = false;
+            var val = (value !== undefined && value !== null) ? value : 'undefined', isObj = false;
     
             // TODO - find better solution, this is just a quick fix
             // Problem: case of property consisting of Array of Objects was overlooked
@@ -145,7 +140,7 @@
             }
     
             if(isObj) {
-                _valModelMap[val].push(cid);	
+                _valModelMap[val].push(cid);
             }
     
             return val;
@@ -173,7 +168,7 @@
                 }
     
                 val = _begetFacetValue(_values, value);
-                _valModelMap[val].push(model.cid);			
+                _valModelMap[val].push(model.cid);
             }
         },
         // reads model.get(facetName) from the models in the collection and populates the array of values
@@ -183,7 +178,7 @@
             });
         },
         // sort method sorts the facet values according to the given sortBy and sortDirection
-        _sort = function() {		
+        _sort = function() {        
             _values.sort(function(v1,v2) {
                 if(_sortBy === 'value') {
                     // note that facet values are always unique, so v1.value === v2.value is never true
@@ -191,16 +186,16 @@
                 } else if(_sortBy === 'activeCount') {
                     if(_sortDirection === 'asc')  {
                         if(v1.activeCount < v2.activeCount) {
-                            return -1;	
+                            return -1;  
                         } else if(v1.activeCount > v2.activeCount) {
                             return 1;
                         } else {
-    		                // if both facet values have same activeCount, sort by value
-    		                return ((v1.value > v2.value)-(v1.value < v2.value));
+                            // if both facet values have same activeCount, sort by value
+                            return ((v1.value > v2.value)-(v1.value < v2.value));
                         }
                     } else {
                         if(v1.activeCount < v2.activeCount) {
-                            return 1;		
+                            return 1;
                         } else if(v1.activeCount > v2.activeCount) {
                             return -1;
                         } else {
@@ -210,7 +205,7 @@
                 } else {
                     if(_sortDirection === 'asc')  {
                         if(v1.count < v2.count) {
-                            return -1;	
+                            return -1;
                         } else if(v1.count > v2.count) {
                             return 1;
                         } else {
@@ -219,7 +214,7 @@
                         }
                     } else {
                         if(v1.count < v2.count) {
-                            return 1;		
+                            return 1;
                         } else if(v1.count > v2.count) {
                             return -1;
                         } else {
@@ -234,7 +229,7 @@
             return _activeValues.length !== 0;
         },
         // compute active facet values count
-        _computeActiveValuesCount = function(filteredModels) {			
+        _computeActiveValuesCount = function(filteredModels) {
             for(var i = 0, len = _values.length; i < len; i += 1) {
                 // if(filteredModels.length !== 0) {
                 // compute intersection of value models and filtered models and store the length
@@ -249,402 +244,402 @@
                     // then the value active count is equal 0
                     _values[i].activeCount = 0;
                 }
-            }		
+            }
         },
-    	// invoked whenever a Backbone collection is reset
-    	_resetFacet = function(modelsMap) {
-    		// empty current select values and copy them in a new array
-    		var activeValCopy = _activeValues.splice(0, _activeValues.length);
-    		
-    		// empty _values and_activeModels arrays
-    		_values.splice(0, _values.length);
-    		_activeModels.splice(0, _activeModels.length);
-    		
-    		// reset _valModelMap
-    		_valModelMap = {};
-    		
-    		// recompute values
-    		_computeValues(modelsMap);
+        // invoked whenever a Backbone collection is reset
+        _resetFacet = function(modelsMap) {
+            // empty current select values and copy them in a new array
+            var activeValCopy = _activeValues.splice(0, _activeValues.length);
     
-    		// readd each value which was selected before the reset to the facet
-    		for(var i = 0, len = activeValCopy.length; i < len; i += 1) {
-    			_self.value(activeValCopy[i]);
-    		}
-    	},
-    	// invoked whenever a new Model instance is added to the Backbone collection
-    	_addModel = function(model) {
-    		// parse the new model properties to update _values and other local data structures
-    		_parseModel(model);
-    		
-    		// reapply active values to account the new model
-    		for(var i = 0, len = _activeValues.length; i < len; i += 1) {
-    			_self.value(_activeValues[i]);
-    		}
-    	},
-    	// invoked whenever a model is removed to the Backbone collection
-    	_removeModel = function(model) {
-    		var cid = model.cid, 
-    			modelJSON = model.toJSON(), 
-    			index, 
-    			value, 
-    		    decrementValue = function(value) {
-    		    	index = _values.length-1;
-    				while(index !== -1) {
-    					var v = _values[index], found = false;
-    					
-    					if(v.value === value) {
-    						// update count and activeCount
-    						v.count -= 1;
-    						v.activeCount -= 1;
-    						
-    						// remove value if count is 0 meaning no models have this value anymore
-    						if(v.count === 0) {
-    							_values.splice(index,1);
-    							// remove the value from active values
-    							var j = _.indexOf(_activeValues,v.value);
-    							if(j !== -1) {
-    								_activeValues.splice(j,1);
-    								
-    								// check if facet is still selected after removing the value
-    								_selected = _isSelected();
-    							}
-    						}
-    						
-    						// stop the loop as the value was already found
-    						break;
-    					}
-    					
-    					index -= 1;
-    				}
-    		    };
+            // empty _values and_activeModels arrays
+            _values.splice(0, _values.length);
+            _activeModels.splice(0, _activeModels.length);
     
-    		// remove model cid from val to model map
-    		for(var val in _valModelMap) {
-    			if(_valModelMap.hasOwnProperty(val)) {
-    				index = _.indexOf(_valModelMap[val], cid);
-    				if(index !== -1) {
-    					_valModelMap[val].splice(index, 1);
-    				}
-    			}
-    		}
-    		
-    		value = _getValue(model, _name);
-    		
-    		// decrement count and active count for the value
-    		if(value) {
-    			if(value instanceof Array) {
-    				for(var i = 0, len = value.length; i < len; i++) {
-    					decrementValue(value[i]);
-    				}
-    			} else {
-    				decrementValue(value);
-    			}
-    		}
-    		
-    		// remove model from active models
-    		index = _.indexOf(_activeModels, cid);
-    		if(index !== -1) {
-    			_activeModels.splice(index,1);
-    		}
-    	},
-    	// invoked whenever a model is changed
-    	_changeModel = function(model) {
-    		var prev, prevVal;
-    		// check if the value changed was a value of this facet, if not nothing needs to be done
-    		if(_getValue(new Backbone.Model(model.changedAttributes()), _name)) {
-    			// create a clone of model previous state
-    			prev = new Backbone.Model(model.previousAttributes());
-    			prevVal = _getValue(prev, _name);
-    			prev.cid = model.cid;
-    			// remove the old state of the model
-    			_removeModel(prev);
-    			// add the new state of the model
-    			_addModel(model);
-    		}
-    	},
-    	// a FacetExp object is returned by the Facet.value method to enable logical filters chaining
-    	FacetExp = function() {
-    		// and method
-    		this.and = function(facetValue) {
-    			_operator = 'and';
-    			_self.value(facetValue);
-    			
-    			return this;	
-    		};
-    		
-    		// or method
-    		this.or = function(facetValue) {
-    			_operator = 'or';
-    			_self.value(facetValue);
-    			return this;
-    		};
-    	};
-    	
-    	// setters return always this Facet instance for method chaining
-    	this.label 			= function(label) { _label = label; return this; }; 				// sets the label to the given string
-    	this.asc 			= function() { _sortDirection = 'asc'; _sort(); return this; }; 	// sets sort direction to asc
-    	this.desc 			= function() { _sortDirection = 'desc'; _sort(); return this; };	// sets sort direction to desc
-    	this.sortByValue 	= function() { _sortBy = 'value'; _sort(); return this; };			// sets sortBy facet  name
-    	this.sortByCount 	= function() { _sortBy = 'count'; _sort(); return this; };			// sets sortBy facet value count
-    	this.sortByActiveCount = function() { _sortBy = 'activeCount'; _sort(); return this; };
-    	
-    	// returns a JSON object containing this Facet instance info and values
-    	this.toJSON = function() {
-    		return {
-    			'data' : {
-    				'name' : _name,
-    				'label' : _label,
-    				'extOperator' : _extOperator,
-    				'intOperator' : _operator,
-    				'sort' : {
-    					'by' : _sortBy,
-    					'direction' : _sortDirection
-    				},
-    				'selected' : _selected,
-    				'customData' : _customData
-    			},
-    			'values' : _values
-    		};
-    	};
-    	
-    	// removes this facet from the FacetCollection, by delegating removal operations to the FacetCollection instance
-    	this.remove = function() {
-    		// detach event listeners from collection vent object
-    		vent.off('resetCollection', _computeActiveValuesCount);
-    	
-    		vent.off('resetOrigCollection', _resetFacet);
-    		
-    		vent.off('addModel', _addModel);
-    		vent.off('removeModel', _removeModel);
-    		vent.off('changeModel', _changeModel);
-    	
-    		// trigger an event to notify the FacetCollection instance of the change
-    		// which will then remove the facet from the facets object
-    		vent.trigger('removeFacet', _name); 
-    	};
-    	
-    	// adds the given value
-    	// returns a FacetExp object, which can be used to chain facet value selectors with
-    	// logical operators
-    	this.value = function(facetValue, operator) {
-    		if(operator) {
-    			_operator = operator;
-    		}
-    		
-    		// get the index of the value in the _values array
-    		var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(), 
-    			value;
-    		
-    		// continue only if value exists, otherwise throw an error	
-    		if(valueIndex !== -1) {
-    			value = _values[valueIndex];
-    			
-    			// set the facet value to active only if it is not already so 
-    			if(!value.active) {
-    				value.active = true;
-    				_activeValues.push(value.value);
-    			}
-    			
-    			// depending on the operator
-    			if(_operator === 'or' || _activeModels.length === 0) {
-    				// compute active models as the union of existing active models and facet value models
-    				_activeModels = _.union(_activeModels, _valModelMap[facetValue]);	
-    			} else {
-    				// or compute the intersection of the two sets
-    				_activeModels = _.intersection(_activeModels, _valModelMap[facetValue]);	
-    			}
-    			
-    			// update is local _selected value
-    			_selected = _isSelected();
+            // reset _valModelMap
+            _valModelMap = {};
     
-    			// trigger a value event to notify the FacetCollection about the change
-    			vent.trigger('value', _name, facetValue, _activeModels);
-    			
-    			// return a FacetExp object to allow Facetr expression chain
-    			return new FacetExp(this, _operator);
-    		}
-    	};
-    	
-    	// removes the given value
-    	this.removeValue = function(facetValue) {
-    		var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(),
-    			value, modelsToAdd, modelsToRemove;
-    		
-    		// check if was exists	
-    		if(valueIndex !== -1) {
-    			value = _values[valueIndex]; 
-    			
-    			// if value is active
-    			if(value.active) {
-    				// set value to inactive
-    				value.active = false;
-    				// remove value from active values array
-    				_activeValues.splice(_.indexOf(_activeValues, value.value), 1);
-    				
-    				// compute models to remove from the active models due to facet value deselection
-    				// need to filter out models which are included in active models due to another
-    				// facet value being selected (thing that can happen on model properties which are of type Array)
-    				modelsToRemove = _.filter(_valModelMap[facetValue], function(cid) {
-    					for(var value in _valModelMap) {
-    						if(_valModelMap.hasOwnProperty(value)) {
-    							// check if any other active value has a model which is also in the facet value being removed
-    							// if yes, the model cannot be removed from the result set 
-    							if(_.indexOf(_activeValues, value) !== -1 && _.indexOf(_valModelMap[value], cid) !== -1) {
-    								return false;
-    							}
-    						}
-    					}
-    					
-    					// if the model is only in the facet value being removed, then it can be removed
-    					return true;
-    				});
-    				
-    				// remove inactive models from the active models list
-    				_activeModels = _.difference(_activeModels, modelsToRemove);
-    					
-    				if(_operator === 'and') {
-    					modelsToAdd = [];
-    					for(var i = 0, len = _activeValues.length; i < len; i += 1) {
-    						if(modelsToAdd.length === 0) {
-    							modelsToAdd = _.union(modelsToAdd, _valModelMap[_activeValues[i]]);
-    						} else {
-    							modelsToAdd = _.intersection(modelsToAdd, _valModelMap[_activeValues[i]]);
-    						}
-    					}
-    					_activeModels = _.union(_activeModels, modelsToAdd);
-    				}
-    					
-    				// update is local _selected value								
-    				_selected = _isSelected();
+            // recompute values
+            _computeValues(modelsMap);
     
-    				// notify the FacetCollection to update this facet values
-    				vent.trigger('removeValue', _name, facetValue, _activeModels);
-    			}
-    			
-    			return this;
-    		} else {
-    			throw new Error('Value "'+facetValue+'" does not exist for facet '+_name);
-    		}
-    	};
-    	
-    	// removes all selected values
-    	this.clear = function() {
-    		// empty active models list
-    		// _activeModels.splice(0, _activeModels.length);
-    		// _activeValues.splice(0, _activeValues.length);
+            // readd each value which was selected before the reset to the facet
+            for(var i = 0, len = activeValCopy.length; i < len; i += 1) {
+                _self.value(activeValCopy[i]);
+            }
+        },
+        // invoked whenever a new Model instance is added to the Backbone collection
+        _addModel = function(model) {
+            // parse the new model properties to update _values and other local data structures
+            _parseModel(model);
     
-    		// trigger clear event to notify the FacetCollection about the change
-    		// vent.trigger('clear', _name, _activeModels);
+            // reapply active values to account the new model
+            for(var i = 0, len = _activeValues.length; i < len; i += 1) {
+                _self.value(_activeValues[i]);
+            }
+        },
+        // invoked whenever a model is removed to the Backbone collection
+        _removeModel = function(model) {
+            var cid = model.cid,
+                modelJSON = model.toJSON(),
+                index,
+                value,
+                decrementValue = function(value) {
+                    index = _values.length-1;
+                    while(index !== -1) {
+                        var v = _values[index], found = false;
+                        
+                        if(v.value === value) {
+                            // update count and activeCount
+                            v.count -= 1;
+                            v.activeCount -= 1;
+                            
+                            // remove value if count is 0 meaning no models have this value anymore
+                            if(v.count === 0) {
+                                _values.splice(index,1);
+                                // remove the value from active values
+                                var j = _.indexOf(_activeValues,v.value);
+                                if(j !== -1) {
+                                    _activeValues.splice(j,1);
+                                    
+                                    // check if facet is still selected after removing the value
+                                    _selected = _isSelected();
+                                }
+                            }
+                            
+                            // stop the loop as the value was already found
+                            break;
+                        }
+                        
+                        index -= 1;
+                    }
+                };
     
-    		// TODO - this is a quick fix, think of a better way
-    		while(_activeValues.length > 0) {
-    			this.removeValue(_activeValues[0]);
-    		}
-    	};
-    	
-    	this.customData = function(key, value) {
-    		if(value !== undefined) {
-    			_customData[key] = value;
-    			return this;
-    		}
+            // remove model cid from val to model map
+            for(var val in _valModelMap) {
+                if(_valModelMap.hasOwnProperty(val)) {
+                    index = _.indexOf(_valModelMap[val], cid);
+                    if(index !== -1) {
+                        _valModelMap[val].splice(index, 1);
+                    }
+                }
+            }
+            
+            value = _getValue(model, _name);
+            
+            // decrement count and active count for the value
+            if(value) {
+                if(value instanceof Array) {
+                    for(var i = 0, len = value.length; i < len; i++) {
+                        decrementValue(value[i]);
+                    }
+                } else {
+                    decrementValue(value);
+                }
+            }
+            
+            // remove model from active models
+            index = _.indexOf(_activeModels, cid);
+            if(index !== -1) {
+                _activeModels.splice(index,1);
+            }
+        },
+        // invoked whenever a model is changed
+        _changeModel = function(model) {
+            var prev, prevVal;
+            // check if the value changed was a value of this facet, if not nothing needs to be done
+            if(_getValue(new Backbone.Model(model.changedAttributes()), _name)) {
+                // create a clone of model previous state
+                prev = new Backbone.Model(model.previousAttributes());
+                prevVal = _getValue(prev, _name);
+                prev.cid = model.cid;
+                // remove the old state of the model
+                _removeModel(prev);
+                // add the new state of the model
+                _addModel(model);
+            }
+        },
+        // a FacetExp object is returned by the Facet.value method to enable logical filters chaining
+        FacetExp = function() {
+            // and method
+            this.and = function(facetValue) {
+                _operator = 'and';
+                _self.value(facetValue);
+                
+                return this;
+            };
+            
+            // or method
+            this.or = function(facetValue) {
+                _operator = 'or';
+                _self.value(facetValue);
+                return this;
+            };
+        };
+        
+        // setters return always this Facet instance for method chaining
+        this.label          = function(label) { _label = label; return this; };                 // sets the label to the given string
+        this.asc            = function() { _sortDirection = 'asc'; _sort(); return this; };     // sets sort direction to asc
+        this.desc           = function() { _sortDirection = 'desc'; _sort(); return this; };    // sets sort direction to desc
+        this.sortByValue    = function() { _sortBy = 'value'; _sort(); return this; };          // sets sortBy facet  name
+        this.sortByCount    = function() { _sortBy = 'count'; _sort(); return this; };          // sets sortBy facet value count
+        this.sortByActiveCount = function() { _sortBy = 'activeCount'; _sort(); return this; };
+        
+        // returns a JSON object containing this Facet instance info and values
+        this.toJSON = function() {
+            return {
+                'data' : {
+                    'name' : _name,
+                    'label' : _label,
+                    'extOperator' : _extOperator,
+                    'intOperator' : _operator,
+                    'sort' : {
+                        'by' : _sortBy,
+                        'direction' : _sortDirection
+                    },
+                    'selected' : _selected,
+                    'customData' : _customData
+                },
+                'values' : _values
+            };
+        };
+        
+        // removes this facet from the FacetCollection, by delegating removal operations to the FacetCollection instance
+        this.remove = function() {
+            // detach event listeners from collection vent object
+            vent.off('resetCollection', _computeActiveValuesCount);
+        
+            vent.off('resetOrigCollection', _resetFacet);
+            
+            vent.off('addModel', _addModel);
+            vent.off('removeModel', _removeModel);
+            vent.off('changeModel', _changeModel);
+        
+            // trigger an event to notify the FacetCollection instance of the change
+            // which will then remove the facet from the facets object
+            vent.trigger('removeFacet', _name); 
+        };
+        
+        // adds the given value
+        // returns a FacetExp object, which can be used to chain facet value selectors with
+        // logical operators
+        this.value = function(facetValue, operator) {
+            if(operator) {
+                _operator = operator;
+            }
+            
+            // get the index of the value in the _values array
+            var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(), 
+                value;
+            
+            // continue only if value exists, otherwise throw an error  
+            if(valueIndex !== -1) {
+                value = _values[valueIndex];
+                
+                // set the facet value to active only if it is not already so 
+                if(!value.active) {
+                    value.active = true;
+                    _activeValues.push(value.value);
+                }
+                
+                // depending on the operator
+                if(_operator === 'or' || _activeModels.length === 0) {
+                    // compute active models as the union of existing active models and facet value models
+                    _activeModels = _.union(_activeModels, _valModelMap[facetValue]);
+                } else {
+                    // or compute the intersection of the two sets
+                    _activeModels = _.intersection(_activeModels, _valModelMap[facetValue]);
+                }
+                
+                // update is local _selected value
+                _selected = _isSelected();
     
-    		return _customData[key];
-    	};
+                // trigger a value event to notify the FacetCollection about the change
+                vent.trigger('value', _name, facetValue, _activeModels);
+                
+                // return a FacetExp object to allow Facetr expression chain
+                return new FacetExp(this, _operator);
+            }
+        };
+        
+        // removes the given value
+        this.removeValue = function(facetValue) {
+            var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(),
+                value, modelsToAdd, modelsToRemove;
+            
+            // check if was exists  
+            if(valueIndex !== -1) {
+                value = _values[valueIndex]; 
+                
+                // if value is active
+                if(value.active) {
+                    // set value to inactive
+                    value.active = false;
+                    // remove value from active values array
+                    _activeValues.splice(_.indexOf(_activeValues, value.value), 1);
+                    
+                    // compute models to remove from the active models due to facet value deselection
+                    // need to filter out models which are included in active models due to another
+                    // facet value being selected (thing that can happen on model properties which are of type Array)
+                    modelsToRemove = _.filter(_valModelMap[facetValue], function(cid) {
+                        for(var value in _valModelMap) {
+                            if(_valModelMap.hasOwnProperty(value)) {
+                                // check if any other active value has a model which is also in the facet value being removed
+                                // if yes, the model cannot be removed from the result set 
+                                if(_.indexOf(_activeValues, value) !== -1 && _.indexOf(_valModelMap[value], cid) !== -1) {
+                                    return false;
+                                }
+                            }
+                        }
+                        
+                        // if the model is only in the facet value being removed, then it can be removed
+                        return true;
+                    });
+                    
+                    // remove inactive models from the active models list
+                    _activeModels = _.difference(_activeModels, modelsToRemove);
+                        
+                    if(_operator === 'and') {
+                        modelsToAdd = [];
+                        for(var i = 0, len = _activeValues.length; i < len; i += 1) {
+                            if(modelsToAdd.length === 0) {
+                                modelsToAdd = _.union(modelsToAdd, _valModelMap[_activeValues[i]]);
+                            } else {
+                                modelsToAdd = _.intersection(modelsToAdd, _valModelMap[_activeValues[i]]);
+                            }
+                        }
+                        _activeModels = _.union(_activeModels, modelsToAdd);
+                    }
+                        
+                    // update is local _selected value                              
+                    _selected = _isSelected();
     
-    	this.isSelected = function(){
-    		return _selected;
-    	};
+                    // notify the FacetCollection to update this facet values
+                    vent.trigger('removeValue', _name, facetValue, _activeModels);
+                }
+                
+                return this;
+            } else {
+                throw new Error('Value "'+facetValue+'" does not exist for facet '+_name);
+            }
+        };
+        
+        // removes all selected values
+        this.clear = function() {
+            // empty active models list
+            // _activeModels.splice(0, _activeModels.length);
+            // _activeValues.splice(0, _activeValues.length);
     
-    	// compute values once the facet is added to the FacetCollection
-    	_computeValues(modelsMap);
-    	
-    	// compute facet values count on collection reset
-    	vent.on('resetCollection', _computeActiveValuesCount);
-    	vent.on('resetCollection', _sort);
-    	
-    	// bind actions on Backbone Collection events, shived by the FacetCollection instance
-    	vent.on('resetOrigCollection', _resetFacet);
-    	vent.on('addModel', _addModel);
-    	vent.on('removeModel', _removeModel);
-    	vent.on('changeModel', _changeModel);
+            // trigger clear event to notify the FacetCollection about the change
+            // vent.trigger('clear', _name, _activeModels);
+    
+            // TODO - this is a quick fix, think of a better way
+            while(_activeValues.length > 0) {
+                this.removeValue(_activeValues[0]);
+            }
+        };
+        
+        this.customData = function(key, value) {
+            if(value !== undefined) {
+                _customData[key] = value;
+                return this;
+            }
+    
+            return _customData[key];
+        };
+    
+        this.isSelected = function(){
+            return _selected;
+        };
+    
+        // compute values once the facet is added to the FacetCollection
+        _computeValues(modelsMap);
+        
+        // compute facet values count on collection reset
+        vent.on('resetCollection', _computeActiveValuesCount);
+        vent.on('resetCollection', _sort);
+        
+        // bind actions on Backbone Collection events, shived by the FacetCollection instance
+        vent.on('resetOrigCollection', _resetFacet);
+        vent.on('addModel', _addModel);
+        vent.on('removeModel', _removeModel);
+        vent.on('changeModel', _changeModel);
     };
     // FacetCollection class 
-    var	FacetCollection = function(collection) {
-    	// give FacetCollection instances ability to handle Backbone Events
-    	_.extend(this, Backbone.Events);
-    	
-    	// init local variables
-    	var _self = this,
-    		_facets = {}, // facets list
-    		_cidModelMap = {}, // an hash containing cid/model pairs used for fast model lookup
-    		_activeModels = {}, // cids of the active models for each facet (a facetName -> [cid] map)
-    		_vent = _.extend({}, Backbone.Events), // a local event handler used for local events
-    		_filters = {}, // an hashmap of custom filters
-    		_sortDir = 'asc', // default sort direction
-    		_sortAttr,
-    		_facetsOrder,
-    		_ownReset = false,
+    var FacetCollection = function(collection) {
+        // give FacetCollection instances ability to handle Backbone Events
+        _.extend(this, Backbone.Events);
+        
+        // init local variables
+        var _self = this,
+            _facets = {}, // facets list
+            _cidModelMap = {}, // an hash containing cid/model pairs used for fast model lookup
+            _activeModels = {}, // cids of the active models for each facet (a facetName -> [cid] map)
+            _vent = _.extend({}, Backbone.Events), // a local event handler used for local events
+            _filters = {}, // an hashmap of custom filters
+            _sortDir = 'asc', // default sort direction
+            _sortAttr,
+            _facetsOrder,
+            _ownReset = false,
     
-    	// inits the models map	
-    	_initModelsMap	= function() {
-    		// clear content of _cidModelMap if any
-    		for(var cid in _cidModelMap) {
-    			if(_cidModelMap.hasOwnProperty(cid)) {
-    				delete _cidModelMap[cid];
-    			}
-    		}
-    		
-    		// generate a clone for each model and add it to the map with the cid as key
-    		collection.each(function(model) {
-    			var clone = model.clone();
-    			clone.cid = model.cid;
-    			_cidModelMap[model.cid] = clone;
-    		});
-    	},
-    	// deletes the entry for the facet with the given name from the facets hash	
-    	_removeFacet = function(facetName) {
-    		delete _facets[facetName];
-    	},
-    	// fetch (or create if not existing) a facetData object from the facets hash
-    	_begetFacet = function(facetName, operator) {
-    		var facetData = _facets[facetName];
-    		
-    		if(facetData && facetData.operator === operator) {
-    			return facetData;
-    		} else {
-    			var facet = new Facet(facetName, _cidModelMap, _vent, operator);
-    			
-    			// create an entry for the new facet in the facet to active models map 
-    			_activeModels[facetName] = [];
-    			
-    			// add operator property to the object along the actual facet reference
-    			return {
-    				facet: facet,
-    				operator : operator
-    			};
-    		}
-    	},
-    	_filter = function(facetName, cids) {
-    		// set active cids for current facet
-    		_activeModels[facetName] = cids;
-    		
-    		// refresh collection according to new facet filters
-    		_resetCollection();
-    	},
-    	_filterBy = function(facetName, facetValue, cids) {
-    		_filter(facetName, cids);
-    		
-    		// expose filter event
-    		this.trigger('filter', facetName, facetValue);
-    	},
-    	_unfilterBy = function(facetName, facetValue, cids) {
-    		_filter(facetName, cids);
-    		
-    		// expose unfilter event
-    		this.trigger('unfilter', facetName, facetValue);
-    	},
+        // inits the models map 
+        _initModelsMap  = function() {
+            // clear content of _cidModelMap if any
+            for(var cid in _cidModelMap) {
+                if(_cidModelMap.hasOwnProperty(cid)) {
+                    delete _cidModelMap[cid];
+                }
+            }
+            
+            // generate a clone for each model and add it to the map with the cid as key
+            collection.each(function(model) {
+                var clone = model.clone();
+                clone.cid = model.cid;
+                _cidModelMap[model.cid] = clone;
+            });
+        },
+        // deletes the entry for the facet with the given name from the facets hash 
+        _removeFacet = function(facetName) {
+            delete _facets[facetName];
+        },
+        // fetch (or create if not existing) a facetData object from the facets hash
+        _begetFacet = function(facetName, operator) {
+            var facetData = _facets[facetName];
+            
+            if(facetData && facetData.operator === operator) {
+                return facetData;
+            } else {
+                var facet = new Facet(facetName, _cidModelMap, _vent, operator);
+                
+                // create an entry for the new facet in the facet to active models map 
+                _activeModels[facetName] = [];
+                
+                // add operator property to the object along the actual facet reference
+                return {
+                    facet: facet,
+                    operator : operator
+                };
+            }
+        },
+        _filter = function(facetName, cids) {
+            // set active cids for current facet
+            _activeModels[facetName] = cids;
+            
+            // refresh collection according to new facet filters
+            _resetCollection();
+        },
+        _filterBy = function(facetName, facetValue, cids) {
+            _filter(facetName, cids);
+            
+            // expose filter event
+            this.trigger('filter', facetName, facetValue);
+        },
+        _unfilterBy = function(facetName, facetValue, cids) {
+            _filter(facetName, cids);
+            
+            // expose unfilter event
+            this.trigger('unfilter', facetName, facetValue);
+        },
         _resetCollection = function(silent) {
-            var modelsCids = [], models = [], cid, key, filterName;
+            var modelsCids = [], models = [], cid, key, filterName, filterFn;
     
             // if no values are selected, return all models
             for(cid in _cidModelMap) {
@@ -653,490 +648,484 @@
                 }
             }
     
-    		// otherwise merge the active models of each facet
-    		for(key in _activeModels) {
-    				if (_activeModels.hasOwnProperty(key)) {
-    					if(_facets[key].facet.toJSON().data.selected) {
-      					if(_facets[key].operator === 'or') {
-    						modelsCids = _.union(modelsCids, _activeModels[key]);
-    					} else {
-    						modelsCids = _.intersection(modelsCids, _activeModels[key]);
-    					}	
-    				}
-    			}
-    		}
-    			
-    		// filter using the added filter functions
-    		for(filterName in _filters) {
-    			if(_filters.hasOwnProperty(filterName)) {
-    				var filter = _filters[filterName];
+            // otherwise merge the active models of each facet
+            for(key in _activeModels) {
+                    if (_activeModels.hasOwnProperty(key)) {
+                        if(_facets[key].facet.toJSON().data.selected) {
+                        if(_facets[key].operator === 'or') {
+                            modelsCids = _.union(modelsCids, _activeModels[key]);
+                        } else {
+                            modelsCids = _.intersection(modelsCids, _activeModels[key]);
+                        }   
+                    }
+                }
+            }
     
-    				if(filter instanceof Function) {
-    					modelsCids = _.filter(modelsCids, function(cid) {
-    						return filter(_cidModelMap[cid]);
-    					});
-    				}
-    			}
-    		}
+            filterFn = function(cid) {
+                return filter(_cidModelMap[cid]);
+            };
     
-    		// sort the models by cid
-    		modelsCids.sort();
-    		
-    		// create active models array retrieving clones from the cid to model hash
-    		for(var i = 0, len = modelsCids.length; i < len; i += 1) {
-    			models.push(_cidModelMap[modelsCids[i]]);
-    		}
-    		
-    		_ownReset = true;
+            // filter using the added filter functions
+            for(filterName in _filters) {
+                if(_filters.hasOwnProperty(filterName)) {
+                    var filter = _filters[filterName];
     
-    		// reset the collecton with the active models
-    		collection.reset(models);
-    		
-    		_ownReset = false;
+                    if(filter instanceof Function) {
+                        modelsCids = _.filter(modelsCids, filterFn);
+                    }
+                }
+            }
     
-    		// notify facets to recompute active facet values count
-    		_vent.trigger('resetCollection', modelsCids);
+            // sort the models by cid
+            modelsCids.sort();
+            
+            // create active models array retrieving clones from the cid to model hash
+            for(var i = 0, len = modelsCids.length; i < len; i += 1) {
+                models.push(_cidModelMap[modelsCids[i]]);
+            }
+            
+            _ownReset = true;
     
-    		if(!silent) {
-    			_self.trigger('reset', models);			
-    		}
-    	},
-    	// triggered whenever the Backbone collection is reset
-    	_resetOrigCollection = function() {
-    		if(_ownReset) return;
+            // reset the collecton with the active models
+            collection.reset(models);
+            
+            _ownReset = false;
     
-    		_initModelsMap();
-    		// notify facets to recompute 
-    		_vent.trigger('resetOrigCollection', _cidModelMap);	
-    	},
-    	// triggered whenever a new Model is added to the Backbone collection
-    	_addModel = function(model) {
-    		// create a clone of the model and add it to the cid to model map
-    		var clone = model.clone();
-    		clone.cid = model.cid;
-    		_cidModelMap[model.cid] = clone;
-    		
-    		// notify facets about the added model
-    		_vent.trigger('addModel', model);
-    		
-    		// expose add event
-    		_self.trigger('add', model);
-    	},
-    	// // triggered whenever a Model instance is removed from the Backbone collection
-    	_removeModel = function(model) {
-    		// delete model clone from the cid to model map
-    		delete _cidModelMap[model.cid];
-    		
-    		// notify facets about the removed model
-    		_vent.trigger('removeModel', model);
-    		
-    		var anyActive = _.any(_facets, function(facetData) {
-    			return facetData.facet.toJSON().data.selected;
-    		});
-    		
-    		if(!anyActive) {
-    			_resetCollection();
-    		}
-    			
-    		// expose remove event
-    		_self.trigger('remove', model);
-    	},
-    	// triggered whenever a model is changed
-    	_modifyModel = function(model) {
-    		// delete old clone from models cache
-    		delete _cidModelMap[model.cid];
-    		// store new model clone with the changes in models cache
-    		var clone = model.clone();
-    		clone.cid = model.cid;
-    		_cidModelMap[model.cid] = clone;
-    		
-    		// notify facets about the changed model
-    		_vent.trigger('changeModel', model);
-    		
-    		var anyActive = _.any(_facets, function(facetData) {
-    			return facetData.facet.toJSON().data.selected;
-    		});
-    		
-    		if(!anyActive) {
-    			_resetCollection();
-    		}
-    		
-    		// expose change event
-    		_self.trigger('change', model);
-    	},
-    	_sort = function(silent) {
-    		collection.comparator = function(m1,m2) {
-    			var v1 = _getValue(m1, _sortAttr),
-    				v2 = _getValue(m2, _sortAttr),
-    				val1,
-    				val2;
-    				
-    			// check if value is a number
-    			if(isNaN(v1) || isNaN(v2)) { 
-    			    val1 = Date.parse(v1);	// check if value is a date
-        			val2 = Date.parse(v2);
+            // notify facets to recompute active facet values count
+            _vent.trigger('resetCollection', modelsCids);
+    
+            if(!silent) {
+                _self.trigger('reset', models);
+            }
+        },
+        // triggered whenever the Backbone collection is reset
+        _resetOrigCollection = function() {
+            if(_ownReset) return;
+    
+            _initModelsMap();
+            // notify facets to recompute 
+            _vent.trigger('resetOrigCollection', _cidModelMap);
+        },
+        // triggered whenever a new Model is added to the Backbone collection
+        _addModel = function(model) {
+            // create a clone of the model and add it to the cid to model map
+            var clone = model.clone();
+            clone.cid = model.cid;
+            _cidModelMap[model.cid] = clone;
+            
+            // notify facets about the added model
+            _vent.trigger('addModel', model);
+            
+            // expose add event
+            _self.trigger('add', model);
+        },
+        // // triggered whenever a Model instance is removed from the Backbone collection
+        _removeModel = function(model) {
+            // delete model clone from the cid to model map
+            delete _cidModelMap[model.cid];
+            
+            // notify facets about the removed model
+            _vent.trigger('removeModel', model);
+            
+            var anyActive = _.any(_facets, function(facetData) {
+                return facetData.facet.toJSON().data.selected;
+            });
+            
+            if(!anyActive) {
+                _resetCollection();
+            }
+                
+            // expose remove event
+            _self.trigger('remove', model);
+        },
+        // triggered whenever a model is changed
+        _modifyModel = function(model) {
+            // delete old clone from models cache
+            delete _cidModelMap[model.cid];
+            // store new model clone with the changes in models cache
+            var clone = model.clone();
+            clone.cid = model.cid;
+            _cidModelMap[model.cid] = clone;
+            
+            // notify facets about the changed model
+            _vent.trigger('changeModel', model);
+            
+            var anyActive = _.any(_facets, function(facetData) {
+                return facetData.facet.toJSON().data.selected;
+            });
+            
+            if(!anyActive) {
+                _resetCollection();
+            }
+            
+            // expose change event
+            _self.trigger('change', model);
+        },
+        _sort = function(silent) {
+            collection.comparator = function(m1,m2) {
+                var v1 = _getValue(m1, _sortAttr),
+                    v2 = _getValue(m2, _sortAttr),
+                    val1,
+                    val2;
+                    
+                // check if value is a number
+                if(isNaN(v1) || isNaN(v2)) { 
+                    val1 = Date.parse(v1);  // check if value is a date
+                    val2 = Date.parse(v2);
+    
+                    if(isNaN(val1) || isNaN(val2)){
+                        val1 = v1;  // otherwise is a string
+                        val2 = v2;
+                    }
+                } else {
+                    val1 = parseFloat(v1, 10); 
+                    val2 = parseFloat(v2, 10);
+                }
+    
+                if(_sortDir === "asc") {
+                    if(val1 && val2) {
+                        return (val1 > val2) - (val1 < val2);
+                    } else {
+                        if(val1) {
+                            return 1;
+                        }
+                        
+                        if(val2) {
+                            return -1;
+                        }
+                    }
+                } else {
+                    if(val1 && val2) {
+                        return (val1 < val2) - (val1 > val2);
+                    } else {
+                        if(val1) {
+                            return -1;
+                        }
+                        
+                        if(val2) {
+                            return 1;
+                        }
+                    }
+                }
+            };
+            
+            collection.sort();
+            
+            if(!silent) {
+                _self.trigger('sort', _sortAttr, _sortDir);
+            }
+        };
+    
+        // creates a Facet or fetches it from the facets map if it was already created before
+        // use the given operator if any is given and it is a valid value, use default ('and') otherwise
+        this.facet = function(facetName, operator) {
+            var op = (operator && (operator === 'and' || operator === 'or')) ? operator : 'and';
+    
+            _facets[facetName] = _begetFacet(facetName, op);
+                
+            this.trigger('facet', facetName);
+                
+            return _facets[facetName].facet;
+        };
+    
+        // returns a JSON array containing facet JSON objects for each facet added to the collection
+        this.toJSON = function() {
+            var key, facet, facetData, facetJSON, facetPos, facets = [], sortedFacets = [];
+            for (key in _facets) {
+                    if (_facets.hasOwnProperty(key)) {
+                        facetData = _facets[key];
+                        facetJSON = facetData.facet.toJSON();
+                        // add information about the type of facet ('or' or 'and' Facet)
+                        facetJSON.data.operator = facetData.operator;
+                        
+                        if(_facetsOrder && _facetsOrder instanceof Array) {
+                            facetPos = _.indexOf(_facetsOrder, facetJSON.data.name);
+                            
+                            if(facetPos !== -1) {
+                                sortedFacets[facetPos] = facetJSON;
+                            } else {
+                                facets.push(facetJSON);
+                            }
+                        } else {
+                            facets.push(facetJSON);
+                        }
+                    }
+            }
+            
+            return sortedFacets.concat(facets);
+        };
+    
+        // removes all the facets assigned to this collection
+        this.clear = function(silent) {
+            var key;
+            for (key in _facets) {
+                    if (_facets.hasOwnProperty(key)) {
+                        _facets[key].facet.remove();
+                    delete _facets[key];
+                    }
+            }
+            
+            // resets original values in the collection
+            var models = [];
+            for (key in _cidModelMap) {
+                    if (_cidModelMap.hasOwnProperty(key)) {
+                        models.push(_cidModelMap[key]);
+                    }
+            }
+            
+            collection.reset(models);
+            
+            // reset active models
+            _activeModels = {};
+    
+            if(!silent) {
+                this.trigger('clear', models);
+            }
+            
+            return this;
+        };
         
-        			if(isNaN(val1) || isNaN(val2)){
-        				val1 = v1;	// otherwise is a string
-        				val2 = v2;
-        			}
-    			} else {
-    			    val1 = parseFloat(v1, 10); 
-    			    val2 = parseFloat(v2, 10);
-    			}
+        // deselect all the values from all the facets
+        this.clearValues = function(silent) {
+            var key;
     
-    			if(_sortDir === "asc") {
-    				if(val1 && val2) {
-    					return (val1 > val2) - (val1 < val2);
-    				} else {
-    					if(val1) {
-    						return 1;
-    					}
-    					
-    					if(val2) {
-    						return -1;
-    					}
-    				}
-    			} else {
-    				if(val1 && val2) {
-    					return (val1 < val2) - (val1 > val2);
-    				} else {
-    					if(val1) {
-    						return -1;
-    					}
-    					
-    					if(val2) {
-    						return 1;
-    					}
-    				}
-    			}
-    		};
-    		
-    		collection.sort();
-    		
-    		if(!silent) {
-    			_self.trigger('sort', _sortAttr, _sortDir);
-    		}
-    	};
+            for (key in _facets) {
+                    if (_facets.hasOwnProperty(key)) {
+                        _facets[key].facet.clear();
+                    }
+            }
     
-    	// creates a Facet or fetches it from the facets map if it was already created before
-    	// use the given operator if any is given and it is a valid value, use default ('and') otherwise
-    	this.facet = function(facetName, operator) {
-    		var op = (operator && (operator === 'and' || operator === 'or')) ? operator : 'and';
+            // resets original values in the collection
+            var models = [];
+            for (key in _cidModelMap) {
+                    if (_cidModelMap.hasOwnProperty(key)) {
+                        models.push(_cidModelMap[key]);
+                    }
+            }
+            
+            collection.reset(models);
+            
+            // reset active models
+            _activeModels = {};
     
-    		_facets[facetName] = _begetFacet(facetName, op);
-    			
-    		this.trigger('facet', facetName);
-    			
-    		return _facets[facetName].facet;
-    	};
-    			
-    	// returns a JSON array containing facet JSON objects for each facet added to the collection
-    	this.toJSON = function() {
-    		var key, facet, facetData, facetJSON, facetPos, facets = [], sortedFacets = [];
-    		for (key in _facets) {
-    				if (_facets.hasOwnProperty(key)) {
-    					facetData = _facets[key];
-    					facetJSON = facetData.facet.toJSON();
-    					// add information about the type of facet ('or' or 'and' Facet)
-    					facetJSON.data.operator = facetData.operator;
-    					
-    					if(_facetsOrder && _facetsOrder instanceof Array) {
-    						facetPos = _.indexOf(_facetsOrder, facetJSON.data.name);
-    						
-    						if(facetPos !== -1) {
-    							sortedFacets[facetPos] = facetJSON;
-    						} else {
-    							facets.push(facetJSON);
-    						}
-    					} else {
-    						facets.push(facetJSON);
-    					}
-    				}
-    		}
-    		
-    		return sortedFacets.concat(facets);
-    	};
-    	
-    	// removes all the facets assigned to this collection
-    	this.clear = function(silent) {
-    		var key;
-    		for (key in _facets) {
-    				if (_facets.hasOwnProperty(key)) {
-    					_facets[key].facet.remove();
-    				delete _facets[key];
-    				}
-    		}
-    		
-    		// resets original values in the collection
-    		var models = [];
-    		for (key in _cidModelMap) {
-    				if (_cidModelMap.hasOwnProperty(key)) {
-    					models.push(_cidModelMap[key]);
-    				}
-    		}
-    		
-    		collection.reset(models);
-    		
-    		// reset active models
-    		_activeModels = {};
+            if(!silent) {
+                this.trigger('clearValues', models);
+            }
     
-    		if(!silent) {
-    			this.trigger('clear', models);
-    		}
-    		
-    		return this;
-    	};
-    	
-    	// deselect all the values from all the facets
-    	this.clearValues = function(silent) {
-    		var key;
+            return this;
+        };
     
-    		for (key in _facets) {
-    				if (_facets.hasOwnProperty(key)) {
-    					_facets[key].facet.clear();
-    				}
-    		}
+        // removes the collection from the _collections cache and
+        // removes the facetrid property from the collection
+        this.remove = function() {
+            var facetrid = collection.facetrid;
+            this.clear(true);
+            
+            // detach event listeners from collection instance
+            collection.off('reset', _resetOrigCollection);
+            collection.off('add', _addModel);
+            collection.off('remove', _removeModel);
+            collection.off('change', _modifyModel);
+        
+            delete collection.facetrid;
+            delete _collections[facetrid];
+        };
     
-    		// resets original values in the collection
-    		var models = [];
-    		for (key in _cidModelMap) {
-    				if (_cidModelMap.hasOwnProperty(key)) {
-    					models.push(_cidModelMap[key]);
-    				}
-    		}
-    		
-    		collection.reset(models);
-    		
-    		// reset active models
-    		_activeModels = {};
+        // reorders facets in the JSON output according to the array of facet names given
+        this.facetsOrder = function(facetNames) {
+            _facetsOrder = facetNames;
+            this.trigger('facetsOrderChange', facetNames);
+            return this;
+        };
     
-    		if(!silent) {
-    			this.trigger('clearValues', models);
-    		}
+        // sorts the collection by the given attribute
+        this.sortBy = function(attrName, silent) {
+            _sortAttr = attrName;
+            _sort(silent);
+            return this;
+        };
     
-    		return this;
-    	};
+        // sorts the collection by ascendent sort direction
+        this.asc = function(silent) {
+            _sortDir = 'asc';
+            _sort(silent);
+            return this;
+        };
     
-    	// removes the collection from the _collections cache and
-    	// removes the facetrid property from the collection
-    	this.remove = function() {
-    		var facetrid = collection.facetrid;
-    		this.clear(true);
-    		
-    		// detach event listeners from collection instance
-    		collection.off('reset', _resetOrigCollection);
-    		collection.off('add', _addModel);
-    		collection.off('remove', _removeModel);
-    		collection.off('change', _modifyModel);
-    	
-    		delete collection.facetrid;
-    		delete _collections[facetrid];
-    	};
-    	
-    	// reorders facets in the JSON output according to the array of facet names given
-    	this.facetsOrder = function(facetNames) {
-    		_facetsOrder = facetNames;
-    		this.trigger('facetsOrderChange', facetNames);
-    		return this;
-    	};
-    	
-    	// sorts the collection by the given attribute
-    	this.sortBy = function(attrName, silent) {
-    		_sortAttr = attrName;
-    		_sort(silent);
-    		return this;
-    	};
-    	
-    	// sorts the collection by ascendent sort direction
-    	this.asc = function(silent) {
-    		_sortDir = 'asc';
-    		_sort(silent);
-    		return this;
-    	};
-    	
-    	// sorts the collection by descendent sort direction
-    	this.desc = function(silent) {
-    		_sortDir = 'desc';
-    		_sort(silent);
-    		return this;
-    	};
-    	
-    	// adds a filter
-    	this.addFilter = function(filterName, filter, silent) {
-    		if(filter && filterName) {
-    			_filters[filterName] = filter;
-    			_resetCollection(silent);
-    		}
+        // sorts the collection by descendent sort direction
+        this.desc = function(silent) {
+            _sortDir = 'desc';
+            _sort(silent);
+            return this;
+        };
     
-    		return this;
-    	};
+        // adds a filter
+        this.addFilter = function(filterName, filter, silent) {
+            if(filter && filterName) {
+                _filters[filterName] = filter;
+                _resetCollection(silent);
+            }
     
-    	// removes a filter
-    	this.removeFilter = function(filterName, silent) {
-    		if(filterName) {
-    			delete _filters[filterName];
-    			_resetCollection(silent);
-    		}
+            return this;
+        };
     
-    		return this;
-    	};
+        // removes a filter
+        this.removeFilter = function(filterName, silent) {
+            if(filterName) {
+                delete _filters[filterName];
+                _resetCollection(silent);
+            }
     
-    	// removes all the filters
-    	this.clearFilters = function(silent) {
-    		for(var filterName in _filters) {
-    			if(_filters.hasOwnProperty(filterName)) {
-    				delete _filters[filterName];
-    			}
-    		}
+            return this;
+        };
     
-    		_resetCollection(silent);
+        // removes all the filters
+        this.clearFilters = function(silent) {
+            for(var filterName in _filters) {
+                if(_filters.hasOwnProperty(filterName)) {
+                    delete _filters[filterName];
+                }
+            }
     
-    		return this;
-    	};
+            _resetCollection(silent);
     
-    	// returns a reference to the Backbone.Collection instance
-    	this.collection = function(){
-    		return collection;
-    	};
+            return this;
+        };
     
-    	// returns the original collection length
-    	this.origLength = function() {
-    		return _.size(_cidModelMap);	
-    	};
-    	
-    	this.initFromSettingsJSON = function(json) {
-    		var Facetr	   = Backbone.Facetr,
-    			facets     = json.facets,
-    			sort       = json.sort,
-    			filter     = json.search;
-    		
-    		// clear current collection facets and filters
-    		this.clear(true);
+        // returns a reference to the Backbone.Collection instance
+        this.collection = function(){
+            return collection;
+        };
+    
+        // returns the original collection length
+        this.origLength = function() {
+            return _.size(_cidModelMap);
+        };
+    
+        this.initFromSettingsJSON = function(json) {
+            var facetr     = Backbone.Facetr,
+                facets     = json.facets,
+                sort       = json.sort,
+                filter     = json.search;
+    
+            // clear current collection facets and filters
+            this.clear(true);
             this.clearFilters(true);
     
-    		for(var i = 0, len = facets.length; i < len; i += 1) {
-    			
-    			var f 		= facets[i],
-    				attr 	= f.attr,
-    				eop     = f.eop,
-    				iop     = f.iop,
-    				fsort   = f.sort,
-    				cust    = f.cust,
-    				values 	= f.vals,
-    				facet;
-    			
-    			facet = Facetr(collection).facet(attr, eop);
+            for(var i = 0, len = facets.length; i < len; i += 1) {
+                
+                var f       = facets[i],
+                    attr    = f.attr,
+                    eop     = f.eop,
+                    iop     = f.iop,
+                    fsort   = f.sort,
+                    cust    = f.cust,
+                    values  = f.vals,
+                    facet;
     
-    			switch(fsort.by){
-    				case 'count' : {
-    					facet.sortByCount();
-    				} break;
-    				case 'activeCount' : {
-    					facet.sortByActiveCount();
-    				} break;
-    				default:{
-    					facet.sortByValue();
-    				}
-    			}
+                facet = facetr(collection).facet(attr, eop);
     
-    			facet[fsort.direction]();
-    			
-    			if(cust){
-    				for(var k in cust){
-    					if(cust.hasOwnProperty(k)){
-    						facet.customData(k, cust[k]);
-    					}
-    				}
-    			}
+                switch(fsort.by){
+                    case 'count' : {
+                        facet.sortByCount();
+                    } break;
+                    case 'activeCount' : {
+                        facet.sortByActiveCount();
+                    } break;
+                    default:{
+                        facet.sortByValue();
+                    }
+                }
     
-    			for(var j = 0, len2 = values.length; j < len2; j += 1) {
-    				facet.value(values[j], iop);
-    			}
-    		}
-    		
-    		if(sort) {
-    			var sattr = sort.by,
-    				sdir  = sort.dir;
-    				
-    			if(sattr) {
-    				Facetr(collection).sortBy(sattr, true);
-    			}
-    			
-    			if(sdir) {
-    				Facetr(collection)[sdir](true);
-    			}
-    		}
-    		
-    		this.trigger('reset');
-    		
-    		return this;
-    	};
-    	
-    	this.settingsJSON = function() {
-    		var json = {};
-    		
-    		if(_sortAttr && _sortDir) {
-    			json.sort = {
-    				'by' : _sortAttr,
-    				'dir' : _sortDir
-    			};
-    		}
-    		
-    		if(_.size(_facets) !== 0) {
-    			json.facets = [];
-    			
-    			for(var facet in _facets) {
-    				if(_facets.hasOwnProperty(facet)) {
-    					var facetJSON= _facets[facet].facet.toJSON(),
-    					    values = _.pluck(facetJSON.values, 'active'), 
-    					    activeValues = [];
-    					
-    					for(var i = 0, len = values.length; i < len; i += 1) {
-    						if(values[i]) {
-    							activeValues.push(facetJSON.values[i].value);
-    						}
-    					}
-    					
-    					json.facets.push({
-    						'attr' : facetJSON.data.name,
-    						'eop'  : facetJSON.data.extOperator,
-    						'iop'  : facetJSON.data.intOperator,
-    						'sort' : facetJSON.data.sort,
-    						'cust' : facetJSON.data.customData,
-    						'vals' : activeValues 
-    					});
-    				}
-    			}
-    		}
-    		
-    		return json;
-    	};
-    	
-    	this.update = function(silent){
-    		_resetOrigCollection();
+                facet[fsort.direction]();
     
-    	}
-    	// init models map
-    	_initModelsMap();
-    	
-    	// remove the facet from the facets hash whenever facet.remove() is invoked
-    	_vent.on('removeFacet', _removeFacet, this);
-    			
-    	// filter collection whenever facet.value(value) and facet.removeValue(value) are invoked
-    	_vent.on('value', _filterBy, this);
-    	_vent.on('removeValue clear', _unfilterBy, this);
-    	
-    	// bind Backbone Collection event listeners	to FacetCollection respective actions
-    	collection.on('reset', _resetOrigCollection);
-    	collection.on('add', _addModel);
-    	collection.on('remove', _removeModel);
-    	collection.on('change', _modifyModel);
+                if(cust){
+                    for(var k in cust){
+                        if(cust.hasOwnProperty(k)){
+                            facet.customData(k, cust[k]);
+                        }
+                    }
+                }
+    
+                for(var j = 0, len2 = values.length; j < len2; j += 1) {
+                    facet.value(values[j], iop);
+                }
+            }
+    
+            if(sort) {
+                var sattr = sort.by,
+                    sdir  = sort.dir;
+                    
+                if(sattr) {
+                    facetr(collection).sortBy(sattr, true);
+                }
+    
+                if(sdir) {
+                    facetr(collection)[sdir](true);
+                }
+            }
+    
+            this.trigger('reset');
+    
+            return this;
+        };
+    
+        this.settingsJSON = function() {
+            var json = {};
+    
+            if(_sortAttr && _sortDir) {
+                json.sort = {
+                    'by' : _sortAttr,
+                    'dir' : _sortDir
+                };
+            }
+    
+            if(_.size(_facets) !== 0) {
+                json.facets = [];
+                
+                for(var facet in _facets) {
+                    if(_facets.hasOwnProperty(facet)) {
+                        var facetJSON= _facets[facet].facet.toJSON(),
+                            values = _.pluck(facetJSON.values, 'active'),
+                            activeValues = [];
+                        
+                        for(var i = 0, len = values.length; i < len; i += 1) {
+                            if(values[i]) {
+                                activeValues.push(facetJSON.values[i].value);
+                            }
+                        }
+    
+                        json.facets.push({
+                            'attr' : facetJSON.data.name,
+                            'eop'  : facetJSON.data.extOperator,
+                            'iop'  : facetJSON.data.intOperator,
+                            'sort' : facetJSON.data.sort,
+                            'cust' : facetJSON.data.customData,
+                            'vals' : activeValues 
+                        });
+                    }
+                }
+            }
+    
+            return json;
+        };
+    
+        // init models map
+        _initModelsMap();
+        
+        // remove the facet from the facets hash whenever facet.remove() is invoked
+        _vent.on('removeFacet', _removeFacet, this);
+    
+        // filter collection whenever facet.value(value) and facet.removeValue(value) are invoked
+        _vent.on('value', _filterBy, this);
+        _vent.on('removeValue clear', _unfilterBy, this);
+    
+        // bind Backbone Collection event listeners to FacetCollection respective actions
+        collection.on('reset', _resetOrigCollection);
+        collection.on('add', _addModel);
+        collection.on('remove', _removeModel);
+        collection.on('change', _modifyModel);
     };
-
-    if(global){
-        global.Facetr = Backbone.Facetr;
-    }
 
     return Backbone.Facetr;
 }));

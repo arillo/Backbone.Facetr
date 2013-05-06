@@ -1,21 +1,17 @@
 (function (root, factory) {
     if (typeof exports === 'object') {
-
+        // node.js
         var underscore = require('underscore');
         var backbone = require('backbone');
 
-        module.exports = factory(root, underscore, backbone);
-
+        module.exports = factory(underscore, backbone);
     } else if (typeof define === 'function' && define.amd) {
-
+        // AMD
         define(['underscore', 'backbone'], factory);
-
     } else {
-
-        factory(root, _, Backbone);
-
+        root.Facetr = factory(_, Backbone);
     }
-}(this, function (global, _, Backbone, undefined) {
+}(this, function (_, Backbone, undefined) {
     "use strict";
 
     // create Facetr function as Backbone property
@@ -26,20 +22,15 @@
     Backbone.Facetr = function(collection, id) {
         if(collection instanceof Backbone.Collection) {
             return _begetCollection(collection, id);
-        } 
-	
+        }
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.2.3';
+    Backbone.Facetr.VERSION = '0.2.4';
 
     //= facetr.helpers.js
     //= facetr.facet.js
     //= facetr.facetcollection.js
-
-    if(global){
-        global.Facetr = Backbone.Facetr;
-    }
 
     return Backbone.Facetr;
 }));
