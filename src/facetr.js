@@ -15,7 +15,6 @@
     "use strict";
 
     // create Facetr function as Backbone property
-    // create a global reference of Facetr for convenience
     // when adding a collection, an id can be associated with it
     // future call to Facetr can use either the Backbone.Collection instance
     // as paramter or the given id to retrieve the FacetCollection

@@ -438,27 +438,30 @@ var FacetCollection = function(collection) {
     };
 
     this.initFromSettingsJSON = function(json) {
-        var facetr     = Backbone.Facetr,
-            facets     = json.facets,
-            sort       = json.sort,
-            filter     = json.search;
+        var facetCollection, facetr, facets, sort, filter, facetData, attr, 
+        label, eop, iop, fsort, cust, values, facet, i, j, k, len, len2;
+
+        facetr = Backbone.Facetr;
+        facetCollection = facetr(collection);
+        facets = json.facets;
+        sort = json.sort;
+        filter = json.search;
 
         // clear current collection facets and filters
         this.clear(true);
         this.clearFilters(true);
 
-        for(var i = 0, len = facets.length; i < len; i += 1) {
-            
-            var f       = facets[i],
-                attr    = f.attr,
-                eop     = f.eop,
-                iop     = f.iop,
-                fsort   = f.sort,
-                cust    = f.cust,
-                values  = f.vals,
-                facet;
+        for(i = 0, len = facets.length; i < len; i += 1) {
+            facetData = facets[i];
+            attr = facetData.attr;
+            label = facetData.label;
+            eop = facetData.eop;
+            iop = facetData.iop;
+            fsort = facetData.sort;
+            cust = facetData.cust;
+            values = facetData.vals;
 
-            facet = facetr(collection).facet(attr, eop);
+            facet = facetCollection.facet(attr, eop);
 
             switch(fsort.by){
                 case 'count' : {
@@ -473,16 +476,17 @@ var FacetCollection = function(collection) {
             }
 
             facet[fsort.direction]();
-
+            facet.label(label);
+            
             if(cust){
-                for(var k in cust){
+                for(k in cust){
                     if(cust.hasOwnProperty(k)){
                         facet.customData(k, cust[k]);
                     }
                 }
             }
 
-            for(var j = 0, len2 = values.length; j < len2; j += 1) {
+            for(j = 0, len2 = values.length; j < len2; j += 1) {
                 facet.value(values[j], iop);
             }
         }
@@ -506,7 +510,9 @@ var FacetCollection = function(collection) {
     };
 
     this.settingsJSON = function() {
-        var json = {};
+        var json, facet, facetJSON, values, activeValues;
+
+        json = {};
 
         if(_sortAttr && _sortDir) {
             json.sort = {
@@ -518,11 +524,11 @@ var FacetCollection = function(collection) {
         if(_.size(_facets) !== 0) {
             json.facets = [];
             
-            for(var facet in _facets) {
+            for(facet in _facets) {
                 if(_facets.hasOwnProperty(facet)) {
-                    var facetJSON= _facets[facet].facet.toJSON(),
-                        values = _.pluck(facetJSON.values, 'active'),
-                        activeValues = [];
+                    facetJSON= _facets[facet].facet.toJSON();
+                    values = _.pluck(facetJSON.values, 'active');
+                    activeValues = [];
                     
                     for(var i = 0, len = values.length; i < len; i += 1) {
                         if(values[i]) {
@@ -532,6 +538,7 @@ var FacetCollection = function(collection) {
 
                     json.facets.push({
                         'attr' : facetJSON.data.name,
+                        'label': facetJSON.data.label,
                         'eop'  : facetJSON.data.extOperator,
                         'iop'  : facetJSON.data.intOperator,
                         'sort' : facetJSON.data.sort,
