@@ -274,17 +274,17 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     // a FacetExp object is returned by the Facet.value method to enable logical filters chaining
     FacetExp = function() {
         // and method
-        this.and = function(facetValue) {
+        this.and = function(facetValue, silent) {
             _operator = 'and';
-            _self.value(facetValue);
+            _self.value(facetValue, silent);
             
             return this;
         };
         
         // or method
-        this.or = function(facetValue) {
+        this.or = function(facetValue, silent) {
             _operator = 'or';
-            _self.value(facetValue);
+            _self.value(facetValue, silent);
             return this;
         };
     };
@@ -335,7 +335,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     // adds the given value
     // returns a FacetExp object, which can be used to chain facet value selectors with
     // logical operators
-    this.value = function(facetValue, operator) {
+    this.value = function(facetValue, operator, silent) {
         if(operator) {
             _operator = operator;
         }
@@ -367,7 +367,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             _selected = _isSelected();
 
             // trigger a value event to notify the FacetCollection about the change
-            vent.trigger('value', _name, facetValue, _activeModels);
+            vent.trigger('value', _name, facetValue, _activeModels, silent);
             
             // return a FacetExp object to allow Facetr expression chain
             return new FacetExp(this, _operator);
@@ -375,7 +375,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     };
     
     // removes the given value
-    this.removeValue = function(facetValue) {
+    this.removeValue = function(facetValue, silent) {
         var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(),
             value, modelsToAdd, modelsToRemove;
         
@@ -427,7 +427,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                 _selected = _isSelected();
 
                 // notify the FacetCollection to update this facet values
-                vent.trigger('removeValue', _name, facetValue, _activeModels);
+                vent.trigger('removeValue', _name, facetValue, _activeModels, silent);
             }
             
             return this;
@@ -438,16 +438,8 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     
     // removes all selected values
     this.clear = function() {
-        // empty active models list
-        // _activeModels.splice(0, _activeModels.length);
-        // _activeValues.splice(0, _activeValues.length);
-
-        // trigger clear event to notify the FacetCollection about the change
-        // vent.trigger('clear', _name, _activeModels);
-
-        // TODO - this is a quick fix, think of a better way
         while(_activeValues.length > 0) {
-            this.removeValue(_activeValues[0]);
+            this.removeValue(_activeValues[0], true);
         }
     };
     

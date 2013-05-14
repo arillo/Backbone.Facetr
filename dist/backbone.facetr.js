@@ -1,4 +1,4 @@
-// backbone.facetr 0.2.4 
+// backbone.facetr 0.2.5 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.2.4';
+    Backbone.Facetr.VERSION = '0.2.5';
 
     // facet collections cache
     var _collections = {};
@@ -359,17 +359,17 @@
         // a FacetExp object is returned by the Facet.value method to enable logical filters chaining
         FacetExp = function() {
             // and method
-            this.and = function(facetValue) {
+            this.and = function(facetValue, silent) {
                 _operator = 'and';
-                _self.value(facetValue);
+                _self.value(facetValue, silent);
                 
                 return this;
             };
             
             // or method
-            this.or = function(facetValue) {
+            this.or = function(facetValue, silent) {
                 _operator = 'or';
-                _self.value(facetValue);
+                _self.value(facetValue, silent);
                 return this;
             };
         };
@@ -420,7 +420,7 @@
         // adds the given value
         // returns a FacetExp object, which can be used to chain facet value selectors with
         // logical operators
-        this.value = function(facetValue, operator) {
+        this.value = function(facetValue, operator, silent) {
             if(operator) {
                 _operator = operator;
             }
@@ -452,7 +452,7 @@
                 _selected = _isSelected();
     
                 // trigger a value event to notify the FacetCollection about the change
-                vent.trigger('value', _name, facetValue, _activeModels);
+                vent.trigger('value', _name, facetValue, _activeModels, silent);
                 
                 // return a FacetExp object to allow Facetr expression chain
                 return new FacetExp(this, _operator);
@@ -460,7 +460,7 @@
         };
         
         // removes the given value
-        this.removeValue = function(facetValue) {
+        this.removeValue = function(facetValue, silent) {
             var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(),
                 value, modelsToAdd, modelsToRemove;
             
@@ -512,7 +512,7 @@
                     _selected = _isSelected();
     
                     // notify the FacetCollection to update this facet values
-                    vent.trigger('removeValue', _name, facetValue, _activeModels);
+                    vent.trigger('removeValue', _name, facetValue, _activeModels, silent);
                 }
                 
                 return this;
@@ -523,16 +523,8 @@
         
         // removes all selected values
         this.clear = function() {
-            // empty active models list
-            // _activeModels.splice(0, _activeModels.length);
-            // _activeValues.splice(0, _activeValues.length);
-    
-            // trigger clear event to notify the FacetCollection about the change
-            // vent.trigger('clear', _name, _activeModels);
-    
-            // TODO - this is a quick fix, think of a better way
             while(_activeValues.length > 0) {
-                this.removeValue(_activeValues[0]);
+                this.removeValue(_activeValues[0], true);
             }
         };
         
@@ -625,17 +617,21 @@
             // refresh collection according to new facet filters
             _resetCollection();
         },
-        _filterBy = function(facetName, facetValue, cids) {
+        _filterBy = function(facetName, facetValue, cids, silent) {
             _filter(facetName, cids);
             
-            // expose filter event
-            this.trigger('filter', facetName, facetValue);
+            if(silent !== true){
+                // expose filter event
+                this.trigger('filter', facetName, facetValue);
+            }
         },
-        _unfilterBy = function(facetName, facetValue, cids) {
+        _unfilterBy = function(facetName, facetValue, cids, silent) {
             _filter(facetName, cids);
             
-            // expose unfilter event
-            this.trigger('unfilter', facetName, facetValue);
+            if(silent !== true){
+                // expose unfilter event
+                this.trigger('unfilter', facetName, facetValue);
+            }
         },
         _resetCollection = function(silent) {
             var modelsCids = [], models = [], cid, key, filterName, filterFn;
@@ -686,16 +682,12 @@
             _ownReset = true;
     
             // reset the collecton with the active models
-            collection.reset(models);
+            collection.reset(models, silent);
             
             _ownReset = false;
     
             // notify facets to recompute active facet values count
             _vent.trigger('resetCollection', modelsCids);
-    
-            if(!silent) {
-                _self.trigger('reset', models);
-            }
         },
         // triggered whenever the Backbone collection is reset
         _resetOrigCollection = function() {
@@ -714,9 +706,6 @@
             
             // notify facets about the added model
             _vent.trigger('addModel', model);
-            
-            // expose add event
-            _self.trigger('add', model);
         },
         // // triggered whenever a Model instance is removed from the Backbone collection
         _removeModel = function(model) {
@@ -733,9 +722,6 @@
             if(!anyActive) {
                 _resetCollection();
             }
-                
-            // expose remove event
-            _self.trigger('remove', model);
         },
         // triggered whenever a model is changed
         _modifyModel = function(model) {
@@ -756,9 +742,6 @@
             if(!anyActive) {
                 _resetCollection();
             }
-            
-            // expose change event
-            _self.trigger('change', model);
         },
         _sort = function(silent) {
             collection.comparator = function(m1,m2) {
@@ -810,20 +793,22 @@
             
             collection.sort();
             
-            if(!silent) {
+            if(silent !== true) {
                 _self.trigger('sort', _sortAttr, _sortDir);
             }
         };
     
         // creates a Facet or fetches it from the facets map if it was already created before
         // use the given operator if any is given and it is a valid value, use default ('and') otherwise
-        this.facet = function(facetName, operator) {
+        this.facet = function(facetName, operator, silent) {
             var op = (operator && (operator === 'and' || operator === 'or')) ? operator : 'and';
     
             _facets[facetName] = _begetFacet(facetName, op);
-                
-            this.trigger('facet', facetName);
-                
+            
+            if(silent !== true){
+                this.trigger('facet', facetName);
+            }
+    
             return _facets[facetName].facet;
         };
     
@@ -872,13 +857,13 @@
                     }
             }
             
-            collection.reset(models);
+            collection.reset(models, silent);
             
             // reset active models
             _activeModels = {};
     
-            if(!silent) {
-                this.trigger('clear', models);
+            if(silent !== true) {
+                this.trigger('clear');
             }
             
             return this;
@@ -902,13 +887,13 @@
                     }
             }
             
-            collection.reset(models);
+            collection.reset(models, silent);
             
             // reset active models
             _activeModels = {};
     
-            if(!silent) {
-                this.trigger('clearValues', models);
+            if(silent !== true) {
+                this.trigger('clearValues');
             }
     
             return this;
@@ -931,9 +916,13 @@
         };
     
         // reorders facets in the JSON output according to the array of facet names given
-        this.facetsOrder = function(facetNames) {
+        this.facetsOrder = function(facetNames, silent) {
             _facetsOrder = facetNames;
-            this.trigger('facetsOrderChange', facetNames);
+    
+            if(silent !== true){
+                this.trigger('facetsOrderChange', facetNames);
+            }
+    
             return this;
         };
     
@@ -1051,7 +1040,7 @@
                 }
     
                 for(j = 0, len2 = values.length; j < len2; j += 1) {
-                    facet.value(values[j], iop);
+                    facet.value(values[j], iop, true);
                 }
             }
     
@@ -1067,8 +1056,6 @@
                     facetr(collection)[sdir](true);
                 }
             }
-    
-            this.trigger('reset');
     
             return this;
         };

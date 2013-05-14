@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.2.4
+VERSION 0.2.5
 
 ### <a name="contents"></a> CONTENTS
 
@@ -225,13 +225,13 @@ example
 ### <a name="facetcollection"></a> FacetCollection
 
 
-##### <a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [operator:string]) : Facet
+##### <a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [operator:string], [silent:boolean]) : Facet
 
 Adds a Facet on the given collection using the property refered to by the
 Dot Notation expression (see [Dot Notation section](#dot-notation) for more details).
 Valid operator values are: 'or' and 'and' (anything else will default to 'and').
 Returns the created Facet instance to allow method chaining.
-Triggers a facet event with the facetName passed to the callback.
+Triggers a facet event with the facetName passed to the callback, unless true is passed as last parameter.
 
 example
 
@@ -349,7 +349,7 @@ example
 
 Sorts the collection according to the given attribute name. By default
 ascendent sort is used. See asc() and desc() methods below to define sort
-direction. Triggers sort event unless true is passed as parameter.
+direction. Triggers sort event unless true is passed as last parameter.
 This method automatically recognizes string, numeric or date values.
 
 example
@@ -391,7 +391,7 @@ example
 ##### <a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection
 
 Adds a filter which is used to filter the collection by testing each model against it. 
-Triggers reset unless true is passed as last parameter. Multiple filters can be added as long as they have
+Triggers Backbone.Collection reset unless true is passed as last parameter. Multiple filters can be added as long as they have
 different names. Adding two filters with the same name will result in the first being overwritten by the second.
 
 example
@@ -432,11 +432,12 @@ example
 	Facetr(collection).clearValues();
 
 
-##### <a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array) : FacetCollection
+##### <a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array, [silent:boolean]) : FacetCollection
 
 Sometimes it is convinient to give the facets list a predefined order. This method
 can be used to achieve this by passing an array of facet names which corresponds to
-the order to be given to the facets in the list.
+the order to be given to the facets in the list. Triggers a 'facetsOrder' event with the facetNames array passed
+to the event handler, unless true is given as last parameter.
 
 example
 
@@ -522,12 +523,13 @@ using the settingsJSON method.
 
 ### <a name="facet"></a> Facet
 
-##### <a name="facet-value"></a> value(value:string, [operator:string]) : FacetExp
+##### <a name="facet-value"></a> value(value:string, [operator:string], [silent:boolean]) : FacetExp
 
 Adds a value to the facet. This will result in the collection being filtered
 by { FacetName : 'Value' }. An operator ('and' or 'or') can be passed to change
 the internal logical operator of the facet.
-Triggers a 'filter' event passing facetName and facetValue to the handler.
+Triggers a 'filter' event passing facetName and facetValue to the handler, unless true is passed
+as last parameter.
 
 example
 	
@@ -540,11 +542,12 @@ example
 	// console output: "filtered by Name.FirstName with value Bob"
 	// collection contains only models with FirstName = 'Bob'
 
-##### <a name="facet-removevalue"></a> removeValue(value:string) : FacetExp
+##### <a name="facet-removevalue"></a> removeValue(value:string, [silent:boolean]) : FacetExp
 
 Removes the given value from the facet and resets the collection to
 the state previous of the filtering caused by the removed value.
-Triggers an 'unfilter' event passing facetName and facetValue to the handler.
+Triggers an 'unfilter' event passing facetName and facetValue to the handler, unless true is passed
+as last parameter.
 
 example
 	
@@ -753,11 +756,11 @@ example
 
 	Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 
-##### <a name="facetexp-and"></a> and(value:string) : Facet
+##### <a name="facetexp-and"></a> and(value:string, [silent:boolean]) : Facet
 
 Equivalent to facet.value('Value', 'and'), but can be used for FacetExp chains.
 
-##### <a name="facetexp-or"></a> or(value:string) : Facet
+##### <a name="facetexp-or"></a> or(value:string, [silent:boolean]) : Facet
 
 Equivalent to facet.value('Value', 'or'), but can be used for FacetExp chains.
 
