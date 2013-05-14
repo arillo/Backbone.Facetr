@@ -1051,6 +1051,8 @@
                 }
             }
     
+            this.trigger('initFromSettingsJSON');
+            
             return this;
         };
     
