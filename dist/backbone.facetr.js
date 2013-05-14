@@ -682,7 +682,7 @@
             _ownReset = true;
     
             // reset the collecton with the active models
-            collection.reset(models, silent);
+            collection.reset(models);
             
             _ownReset = false;
     
@@ -857,7 +857,7 @@
                     }
             }
             
-            collection.reset(models, silent);
+            collection.reset(models);
             
             // reset active models
             _activeModels = {};
@@ -887,7 +887,7 @@
                     }
             }
             
-            collection.reset(models, silent);
+            collection.reset(models);
             
             // reset active models
             _activeModels = {};
@@ -1000,14 +1000,9 @@
             sort = json.sort;
             filter = json.search;
     
-            // clear current collection facets and filters
-            this.clear(true);
-            this.clearFilters(true);
-    
             for(i = 0, len = facets.length; i < len; i += 1) {
                 facetData = facets[i];
                 attr = facetData.attr;
-                label = facetData.label;
                 eop = facetData.eop;
                 iop = facetData.iop;
                 fsort = facetData.sort;
@@ -1029,7 +1024,6 @@
                 }
     
                 facet[fsort.direction]();
-                facet.label(label);
                 
                 if(cust){
                     for(k in cust){
@@ -1089,7 +1083,6 @@
     
                         json.facets.push({
                             'attr' : facetJSON.data.name,
-                            'label': facetJSON.data.label,
                             'eop'  : facetJSON.data.extOperator,
                             'iop'  : facetJSON.data.intOperator,
                             'sort' : facetJSON.data.sort,

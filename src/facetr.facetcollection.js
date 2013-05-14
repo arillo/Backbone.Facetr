@@ -126,7 +126,7 @@ var FacetCollection = function(collection) {
         _ownReset = true;
 
         // reset the collecton with the active models
-        collection.reset(models, silent);
+        collection.reset(models);
         
         _ownReset = false;
 
@@ -301,7 +301,7 @@ var FacetCollection = function(collection) {
                 }
         }
         
-        collection.reset(models, silent);
+        collection.reset(models);
         
         // reset active models
         _activeModels = {};
@@ -331,7 +331,7 @@ var FacetCollection = function(collection) {
                 }
         }
         
-        collection.reset(models, silent);
+        collection.reset(models);
         
         // reset active models
         _activeModels = {};
@@ -444,14 +444,9 @@ var FacetCollection = function(collection) {
         sort = json.sort;
         filter = json.search;
 
-        // clear current collection facets and filters
-        this.clear(true);
-        this.clearFilters(true);
-
         for(i = 0, len = facets.length; i < len; i += 1) {
             facetData = facets[i];
             attr = facetData.attr;
-            label = facetData.label;
             eop = facetData.eop;
             iop = facetData.iop;
             fsort = facetData.sort;
@@ -473,7 +468,6 @@ var FacetCollection = function(collection) {
             }
 
             facet[fsort.direction]();
-            facet.label(label);
             
             if(cust){
                 for(k in cust){
@@ -533,7 +527,6 @@ var FacetCollection = function(collection) {
 
                     json.facets.push({
                         'attr' : facetJSON.data.name,
-                        'label': facetJSON.data.label,
                         'eop'  : facetJSON.data.extOperator,
                         'iop'  : facetJSON.data.intOperator,
                         'sort' : facetJSON.data.sort,
