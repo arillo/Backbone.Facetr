@@ -770,7 +770,7 @@ Equivalent to facet.value('Value', 'or'), but can be used for FacetExp chains.
 This section contains a list of websites / projects using Facetr.
 
 * [terra-vecchia.ch](http://terra-vecchia.ch/sozialtherapie/angebote-und-betriebe)
-
+* [grimselhydro.ch](http://grimselhydro.ch/referenzen)
 
 ### <a name="license"></a> LICENSE
 
