@@ -518,7 +518,7 @@ example
 ##### <a name="facetcollection-initfromsettingsjson"></a> initFromSettingsJSON(json:object) : FacetCollection
 
 Initializes the Facetr collection using a settings object generated
-using the settingsJSON method.
+using the settingsJSON method. Triggers an "initFromSettingsJSON" event.
 
 
 ### <a name="facet"></a> Facet

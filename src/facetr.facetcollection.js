@@ -495,6 +495,8 @@ var FacetCollection = function(collection) {
             }
         }
 
+        this.trigger('initFromSettingsJSON');
+        
         return this;
     };
 
