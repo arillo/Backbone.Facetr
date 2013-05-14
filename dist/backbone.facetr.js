@@ -1034,7 +1034,7 @@
                 }
     
                 for(j = 0, len2 = values.length; j < len2; j += 1) {
-                    facet.value(values[j], iop, true);
+                    facet.value(values[j], iop);
                 }
             }
     
@@ -1043,11 +1043,11 @@
                     sdir  = sort.dir;
                     
                 if(sattr) {
-                    facetr(collection).sortBy(sattr, true);
+                    facetr(collection).sortBy(sattr);
                 }
     
                 if(sdir) {
-                    facetr(collection)[sdir](true);
+                    facetr(collection)[sdir]();
                 }
             }
     
