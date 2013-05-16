@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.2.5
+VERSION 0.2.6
 
 ### <a name="contents"></a> CONTENTS
 
@@ -180,6 +180,7 @@ It cannot be added on properties having the following value / composite types:
     * [facetsOrder](#facetcollection-facetsorder)
     * [collection](#facetcollection-collection)
     * [origLength](#facetcollection-origlength)
+    * [facets](#facetcollection-facets)
     * [settingsJSON](#facetcollection-settingsjson)
     * [initFromSettingsJSON](#facetcollection-initfromsettingsjson)
 
@@ -484,6 +485,9 @@ example
 	collection.length(); // 1
 	Facetr(collection).origLength(); // 2
 
+##### <a name="facetcollection-facets"></a> facets() : Array
+
+Returns an array containing all the Facet instances created on this FacetCollection.
 
 ##### <a name="facetcollection-settingsjson"></a> settingsJSON() : object
 

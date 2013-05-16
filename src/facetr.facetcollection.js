@@ -434,6 +434,11 @@ var FacetCollection = function(collection) {
         return _.size(_cidModelMap);
     };
 
+    // returns the facet list, which can be used for iteration
+    this.facets = function(){
+        return _.pluck(_facets, 'facet');
+    };
+
     this.initFromSettingsJSON = function(json) {
         var facetCollection, facetr, facets, sort, filter, facetData, attr, 
         label, eop, iop, fsort, cust, values, facet, i, j, k, len, len2;

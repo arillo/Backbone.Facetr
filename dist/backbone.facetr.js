@@ -1,4 +1,4 @@
-// backbone.facetr 0.2.5 
+// backbone.facetr 0.2.6 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.2.5';
+    Backbone.Facetr.VERSION = '0.2.6';
 
     // facet collections cache
     var _collections = {};
@@ -988,6 +988,11 @@
         // returns the original collection length
         this.origLength = function() {
             return _.size(_cidModelMap);
+        };
+    
+        // returns the facet list, which can be used for iteration
+        this.facets = function(){
+            return _.pluck(_facets, 'facet');
         };
     
         this.initFromSettingsJSON = function(json) {

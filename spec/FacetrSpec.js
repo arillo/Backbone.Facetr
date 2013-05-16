@@ -355,6 +355,19 @@ describe('Backbone.Facetr', function() {
                 });
             });
             
+            // FacetCollection facets
+            describe('has a facets method', function(){
+                it('that returns the list of Facet instances created for this FacetCollection', function(){
+                    var fc = Facetr(collection);
+                    fc.facet('Age');
+                    fc.facet('Name.FirstName');
+
+                    expect(fc.facets().length).toEqual(2);
+                    expect(fc.facets()[0].toJSON().data.name).toEqual('Age');
+                    expect(fc.facets()[1].toJSON().data.name).toEqual('Name.FirstName');
+                });
+            });
+
             // FacetCollection update on reset
             describe('updates itself on each Backbone Collection reset', function() {
                 it('by reapplying all facets to the new Model instances', function() {
