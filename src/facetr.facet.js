@@ -16,6 +16,10 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
         _operator = 'or', // default internal operator
         _selected = false, // a flag which is set to true if any of the facet values is selected,
         _customData = {}, // a map of custom data which can be added to the facet
+        _isHierarchical = false,
+        _groups = [],
+        _groupedValues = [],
+        _hierarchyNodesDescendants = {},
 
     // creates a facetValue with count 1 or increases the count by 1 of an existing faceValue in values 
     _begetFacetValue = function(facetValues, value, cid) {
@@ -271,6 +275,88 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             _addModel(model);
         }
     },
+    // returns an array with all the values of descendant nodes of the hierarchy node argument
+    _computeHierarchyNodeDescendants = function(hierarchyNode){
+            var values, getDescendants;
+
+            if(_hierarchyNodesDescendants[hierarchyNode.value] == null){
+                _hierarchyNodesDescendants[hierarchyNode.value] = [];
+            }
+
+            values = [];
+
+            getDescendants = function(node){
+                if(node.value !== hierarchyNode.value){
+                    values.push(node.value);
+                }
+
+                if(node.groups){
+                    _.each(node.groups, function(n){
+                        return getDescendants(n);
+                    });
+                }
+            };
+
+            getDescendants(hierarchyNode);
+
+           _hierarchyNodesDescendants[hierarchyNode.value] = _.union(_hierarchyNodesDescendants[hierarchyNode.value], values);
+    },
+    // computes the values for each node in the groups property of the hierarchy node argument
+    _computeHierarchyGroup = function(hierarchyNode){
+        var i, len, root, groups, val;
+
+        groups = hierarchyNode.groups;
+
+        root = {
+            value: hierarchyNode.value,
+            label: hierarchyNode.label,
+            active: false,
+            activeCount: 0,
+            count: 0
+        };
+
+        val = _.find(_values, function(v){
+            return v.value === root.value;
+        });
+
+        if(val){
+            _.extend(root, val);
+        }
+
+        // check if hierarchy node as a groups property
+        if(groups && Object.prototype.toString.call(groups) === "[object Array]" && (len = groups.length) > 0){
+            root.groups = [];
+
+            for(i = 0; i < len; i += 1){
+                root.groups.push(_computeHierarchyGroup(groups[i]));
+            }
+
+            root.activeCount = _.reduce(root.groups, function(memo, num){
+                return memo + num.activeCount;
+            }, root.activeCount);
+
+            root.count = _.reduce(root.groups, function(memo, num){ 
+                return memo + num.count;
+            }, root.count);
+        }
+
+        _computeHierarchyNodeDescendants(root);
+
+        return root;
+    },
+    // compute all hierarchy groups
+    _computeHierarchyGroups = function() {
+        var i, len;
+
+        _groupedValues.length = 0;
+
+        for(i = 0, len = _groups.length; i < len; i += 1){
+            _groupedValues.push(_computeHierarchyGroup(_groups[i]));
+        }
+
+        // console.log('descendants', _hierarchyNodesDescendants);
+        // console.log('ancestors', _hierarchyNodesAncestors);
+    },
     // a FacetExp object is returned by the Facet.value method to enable logical filters chaining
     FacetExp = function() {
         // and method
@@ -299,21 +385,30 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     
     // returns a JSON object containing this Facet instance info and values
     this.toJSON = function() {
-        return {
-            'data' : {
-                'name' : _name,
-                'label' : _label,
-                'extOperator' : _extOperator,
-                'intOperator' : _operator,
-                'sort' : {
-                    'by' : _sortBy,
-                    'direction' : _sortDirection
+        var obj;
+
+        obj = {
+            data : {
+                name : _name,
+                hierarchical: _isHierarchical,
+                label : _label,
+                extOperator : _extOperator,
+                intOperator : _operator,
+                sort : {
+                    by : _sortBy,
+                    direction : _sortDirection
                 },
-                'selected' : _selected,
-                'customData' : _customData
+                selected : _selected,
+                customData : _customData
             },
-            'values' : _values
+            values : _values
         };
+
+        if(_isHierarchical){
+            obj.groupedValues = _groupedValues;
+        }
+
+        return obj;
     };
     
     // removes this facet from the FacetCollection, by delegating removal operations to the FacetCollection instance
@@ -336,15 +431,16 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     // returns a FacetExp object, which can be used to chain facet value selectors with
     // logical operators
     this.value = function(facetValue, operator, silent) {
+        var i, len, setsFn, valueIndex, value, valHierarchy;
+
         if(operator) {
             _operator = operator;
         }
         
         // get the index of the value in the _values array
-        var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(), 
-            value;
+        valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value();
         
-        // continue only if value exists, otherwise throw an error  
+        // continue only if value exists, otherwise do nothing 
         if(valueIndex !== -1) {
             value = _values[valueIndex];
             
@@ -355,14 +451,21 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             }
             
             // depending on the operator
-            if(_operator === 'or' || _activeModels.length === 0) {
-                // compute active models as the union of existing active models and facet value models
-                _activeModels = _.union(_activeModels, _valModelMap[facetValue]);
-            } else {
-                // or compute the intersection of the two sets
-                _activeModels = _.intersection(_activeModels, _valModelMap[facetValue]);
+            setsFn = (_operator === 'or' || _activeModels.length === 0) ? _.union : _.intersection;
+                
+            // compute active models as the union/intersection of existing active models and facet value models
+            _activeModels = setsFn(_activeModels, _valModelMap[facetValue]);
+
+            // in case of hierarchical facet
+            if(_isHierarchical && (valHierarchy = _hierarchyNodesDescendants[value.value]).length > 0){
+                _activeValues.concat(valHierarchy);
+
+                // filter collection also by all values in descendant groups of the current one
+                for(i = 0, len = valHierarchy.length; i < len; i += 1){
+                    _activeModels = setsFn(_activeModels, _valModelMap[valHierarchy[i]]);
+                }
             }
-            
+
             // update is local _selected value
             _selected = _isSelected();
 
@@ -373,7 +476,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             return new FacetExp(this, _operator);
         }
     };
-    
+     
     // removes the given value
     this.removeValue = function(facetValue, silent) {
         var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(),
@@ -410,7 +513,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                 
                 // remove inactive models from the active models list
                 _activeModels = _.difference(_activeModels, modelsToRemove);
-                    
+
                 if(_operator === 'and') {
                     modelsToAdd = [];
                     for(var i = 0, len = _activeValues.length; i < len; i += 1) {
@@ -422,8 +525,12 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                     }
                     _activeModels = _.union(_activeModels, modelsToAdd);
                 }
+
+                if(_isHierarchical){
+
+                }
                     
-                // update is local _selected value                              
+                // update local _selected value
                 _selected = _isSelected();
 
                 // notify the FacetCollection to update this facet values
@@ -443,6 +550,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
         }
     };
     
+    // attaches custom data, which can be retrieved by key
     this.customData = function(key, value) {
         if(value !== undefined) {
             _customData[key] = value;
@@ -452,8 +560,26 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
         return _customData[key];
     };
 
+    // returns true if any value is selected
     this.isSelected = function(){
         return _selected;
+    };
+
+    // creates hierarchical representation of the values based on groups settins
+    this.hierarchy = function(settings){
+        if(Object.prototype.toString.call(settings) !== '[object Array]') {
+            throw new Error('Facet.hierarchy: wrong settings object. Check the documentation for the right format');
+        }
+
+        _groups = settings;
+        _isHierarchical = true;
+        _computeHierarchyGroups();
+
+        vent.on('resetCollection addModel removeModel changeModel', _computeHierarchyGroups);
+
+        this.trigger('hierarchy', _groups);
+
+        return this;
     };
 
     // compute values once the facet is added to the FacetCollection

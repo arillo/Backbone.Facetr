@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.2.6
+VERSION 0.3.0
 
 ### <a name="contents"></a> CONTENTS
 
@@ -25,107 +25,110 @@ If you decide to use Facetr in one of your projects, contact us at &#102;&#097;&
 
 ### <a name="installation"></a> INSTALLATION
 
-	<!DOCTYPE html>
-	<html>
-		....
+    <!DOCTYPE html>
+    <html>
+        ....
 
-		<!-- include Backbone.Facetr dependencies -->
-		<script src="js/lib/underscore.js"></script>
-		<script src="js/lib/backbone.js"></script>
+        <!-- include Backbone.Facetr dependencies -->
+        <script src="js/lib/underscore.js"></script>
+        <script src="js/lib/backbone.js"></script>
 
-		<!-- include Backbone.Facetr code -->
-		<script src="js/code/backbone.facetr.js"></script>
-		<!-- include your js code -->
-	        <script> ..... </script>
-		</body>
-	</html>
+        <!-- include Backbone.Facetr code -->
+        <script src="js/code/backbone.facetr.js"></script>
+        <!-- include your js code -->
+            <script> ..... </script>
+        </body>
+    </html>
 
 #### node.js
 
-	npm install backbone.facetr
+    npm install backbone.facetr
 
-	// then in your code
-	var Facetr = require('backbone.facetr');
+    // then in your code
+    var Facetr = require('backbone.facetr');
 
 ### <a name="basic-usage"></a> BASIC USAGE
 
-	// create a collection with few test items
-	var collection = new Backbone.Collection([
-		{
-			'Name' 		: {
-				'FirstName' : 'Bob',
-				'LastName' : 'Smith'
-			},
-			'Age'  		: 20,
-			'Country' 	: 'Australia',
-			'Hobbies'	: ['fishing','painting','playing the ukulele']
-		},
-		{
-			'Name' 		: {
-				'FirstName' : 'Otto',
-				'LastName' 	: 'Von Braun'
-			},
-			'Age'  		: 35,
-			'Country' 	: 'New Zealand',
-			'Hobbies'	: ['drawing', 'painting', 'shopping']
-		},
-		{
-			'Name' 		: {
-				'FirstName' : 'Sarah',
-				'LastName'	: 'Smith'
-			},
-			'Age'  		: 28,
-			'Country' 	: 'Ireland',
-			'Hobbies'	: ['shopping','painting']
-		}
-	]);
+    // create a collection with few test items
+    var collection = new Backbone.Collection([
+        {
+            'Name'      : {
+                'FirstName' : 'Bob',
+                'LastName' : 'Smith'
+            },
+            'Age'       : 20,
+            'Country'   : 'Australia',
+            'Hobbies'   : ['fishing','painting','playing the ukulele'],
+            'Profession': 'manager'
+        },
+        {
+            'Name'      : {
+                'FirstName' : 'Otto',
+                'LastName'  : 'Von Braun'
+            },
+            'Age'       : 35,
+            'Country'   : 'New Zealand',
+            'Hobbies'   : ['drawing', 'painting', 'shopping'],
+            'Profession': 'team manager'
+        },
+        {
+            'Name'      : {
+                'FirstName' : 'Sarah',
+                'LastName'  : 'Smith'
+            },
+            'Age'       : 28,
+            'Country'   : 'Ireland',
+            'Hobbies'   : ['shopping','painting'],
+            'Profession': 'project manager'
+        }
+    ]);
 
-	Facetr(collection).facet('Name.LastName').value('Smith'); // collection contains 'Sarah Smith' and 'Bob Smith'
-	Facetr(collection).facet('Hobbies').value('shopping'); // contains only 'Sarah Smith' 
-	Facetr(collection).facet('Name.LastName').removeValue('Smith'); // contains 'Sarah Smith' and 'Otto Von Braun'
+    Facetr(collection).facet('Name.LastName').value('Smith'); // collection contains 'Sarah Smith' and 'Bob Smith'
+    Facetr(collection).facet('Hobbies').value('shopping'); // contains only 'Sarah Smith' 
+    Facetr(collection).facet('Name.LastName').removeValue('Smith'); // contains 'Sarah Smith' and 'Otto Von Braun'
 
-	// removes all facet values and restores original collection content
-	Facetr(collection).clearValues() 
+    // removes all facet values and restores original collection content
+    Facetr(collection).clearValues() 
 
-	// if chaining is not your cup of tea, the following is equivalent to the above code
-	var facetCollection = Facetr(collection); // returns a FacetCollection object
-	var lastNameFacet = facetCollection.facet('Name.LastName'); // returns a Facet object
-	var hobbiesFacet = facetCollection.facet('Hobbies');
+    // if chaining is not your cup of tea, the following is equivalent to the above code
+    var facetCollection = Facetr(collection); // returns a FacetCollection object
+    var lastNameFacet = facetCollection.facet('Name.LastName'); // returns a Facet object
+    var hobbiesFacet = facetCollection.facet('Hobbies');
 
-	lastNameFacet.value('Smith');	// returns a FacetExp object
-	hobbiesFacet.value('shopping');
-	lastNameFacet.removeValue('Smith');
+    lastNameFacet.value('Smith');   // returns a FacetExp object
+    hobbiesFacet.value('shopping');
+    lastNameFacet.removeValue('Smith');
 
-	// read the API Reference section for more
-	// most examples will use the above collection reference to illustrate functionalities
+    // read the API Reference section for more
+    // most examples will use the above collection reference to illustrate functionalities
 
 
 ### <a name="dot-notation"></a> DOT NOTATION
 
-	Syntax: PropertyName{1}(.PropertyName)*
+    Syntax: PropertyName{1}(.PropertyName)*
 
 In the context of Facetr, Dot Notation refers to the syntax used to define facets on a collection. Using the 
 Facetr Dot Notation it is possible to define facets on properties of a Model, as well as on properties of its properties.
 
 For example, consider the following model:
 
-	var model = new Backbone.Model({
-		'Name' : {
-			'FirstName' : 'John',
-			'LastName' : ['Smith','White']
-		},
-		'City' : 'London',
-		'Age' : 45,
-		'FamilyMembers' : [
+    var model = new Backbone.Model({
+        'Name' : {
+            'FirstName' : 'John',
+            'LastName' : ['Smith','White']
+        },
+        'City' : 'London',
+        'Age' : 45,
+        'FamilyMembers' : [
             { 'Name' : 'Robert' },
             { 'Name' : 'Margaret' }
         ]
-	});
+    });
 
 To add a facet on property 'FirstName' the following expression in Dot Notation syntax can be used: 'Name.FirstName'.
 
 
-	Facetr(collection).facet('Name.FirstName');
+    Facetr(collection).facet('Name.FirstName');
 
 
 Theoretically there is no depth limit for a Dot Notation expression (e.g. PropertyName1.PropertyName2...PropertyNameN), the only 
@@ -152,13 +155,13 @@ It cannot be added on properties having the following value / composite types:
 
 #### EXAMPLE
 
-	Facetr(collection).facet('City');          		// valid, City is a string
-	Facetr(collection).facet('Age');  	        	// valid, Age is a Number
-	Facetr(collection).facet('Name.LastName');      // valid, LastName is an Array of strings
-	Facetr(collection).facet('FamilyMembers.Name'); // valid, takes value of Name of each object in array FamilyMembers
-	Facetr(collection).facet('Name'); 	        	// error, Name is an object
+    Facetr(collection).facet('City');               // valid, City is a string
+    Facetr(collection).facet('Age');                // valid, Age is a Number
+    Facetr(collection).facet('Name.LastName');      // valid, LastName is an Array of strings
+    Facetr(collection).facet('FamilyMembers.Name'); // valid, takes value of Name of each object in array FamilyMembers
+    Facetr(collection).facet('Name');               // error, Name is an object
 
-	// etc..
+    // etc..
 
 
 ### <a name="api-reference"></a> API Reference
@@ -185,43 +188,44 @@ It cannot be added on properties having the following value / composite types:
     * [initFromSettingsJSON](#facetcollection-initfromsettingsjson)
 
 * [Facet](#facet)
-	* [value](#facet-value)
-	* [removeValue](#facet-removevalue)
-	* [toJSON](#facet-tojson)
-	* [label](#facet-label)
-	* [sortByCount](#facet-sortbycount)
-	* [sortByActiveCount](#facet-sortbyactivecount)
-	* [sortByValue](#facet-sortbyvalue)
-	* [asc](#facet-asc)
-	* [desc](#facet-desc)
-	* [remove](#facet-remove)
-	* [clear](#facet-clear)
-	* [customData](#facet-customdata)
-	* [isSelected](#facet-isselected)
+    * [value](#facet-value)
+    * [removeValue](#facet-removevalue)
+    * [toJSON](#facet-tojson)
+    * [label](#facet-label)
+    * [sortByCount](#facet-sortbycount)
+    * [sortByActiveCount](#facet-sortbyactivecount)
+    * [sortByValue](#facet-sortbyvalue)
+    * [asc](#facet-asc)
+    * [desc](#facet-desc)
+    * [remove](#facet-remove)
+    * [clear](#facet-clear)
+    * [customData](#facet-customdata)
+    * [isSelected](#facet-isselected)
+    * [hierarchy](#facet-hierarchy)
 
 * [FacetExp](#facetexp)
-	* [and](#facetexp-and)
-	* [or](#facetexp-or)
+    * [and](#facetexp-and)
+    * [or](#facetexp-or)
 
 
 ### <a name="facetr"></a> Facetr
-	
+    
 ##### Facetr(collection:Backbone.Collection, [id:string]) : FacetCollection                     
-	
+    
 Initialize a Collection to be used with Facetr. The first building block of
 any Facetr expression. Returns the created FacetCollection instance for
 method chaining. An id can be associated with the collection.
-	
+    
 example                                                                      
                                                                               
-	Facetr(collection);
+    Facetr(collection);
 
-	// or also
-	Facetr(collection, 'myCollection');
-	
-	// which enables the following syntax
-	Facetr('myCollection') === Facetr(collection); // true                                                      
-	
+    // or also
+    Facetr(collection, 'myCollection');
+    
+    // which enables the following syntax
+    Facetr('myCollection') === Facetr(collection); // true                                                      
+    
 
 ### <a name="facetcollection"></a> FacetCollection
 
@@ -236,19 +240,19 @@ Triggers a facet event with the facetName passed to the callback, unless true is
 
 example
 
-	Facetr(collection).on('facet', function(facetName) {
-		console.log(facetName);
-	});
+    Facetr(collection).on('facet', function(facetName) {
+        console.log(facetName);
+    });
 
-	// add facet on property 'Age' using default operator ('and')
-	Facetr(collection).facet('Age');
+    // add facet on property 'Age' using default operator ('and')
+    Facetr(collection).facet('Age');
 
-	// add facet on property 'LastName' of object 'Name' using 'or' operator
-	Facetr(collection).facet('Name.LastName', 'or');
+    // add facet on property 'LastName' of object 'Name' using 'or' operator
+    Facetr(collection).facet('Name.LastName', 'or');
 
-	// console output would be
-	// Age
-	// Name.LastName
+    // console output would be
+    // Age
+    // Name.LastName
 
 
 ##### <a name="facetcollection-tojson"></a> toJSON() : Array
@@ -260,61 +264,61 @@ Each object in the array is the result of invoking toJSON on each Facet
 
 example
 
-	// create a collection with two models
-	var collection = new Backbone.Collection([
-	    {
-	        'Name'      : {
-	            'FirstName' : 'Bob',
-	            'LastName' : 'Smith'
-	        },
-	        'Age'       : 20
-	    },
-		{
-			'Name' 		: {
-				'FirstName' : 'Otto',
-				'LastName' 	: 'Von Braun'
-			},
-			'Age'  		: 35
-		}
-	]);
+    // create a collection with two models
+    var collection = new Backbone.Collection([
+        {
+            'Name'      : {
+                'FirstName' : 'Bob',
+                'LastName' : 'Smith'
+            },
+            'Age'       : 20
+        },
+        {
+            'Name'      : {
+                'FirstName' : 'Otto',
+                'LastName'  : 'Von Braun'
+            },
+            'Age'       : 35
+        }
+    ]);
 
-	Facetr(collection).facet('Name.FirstName').label('First Name');
-	Facetr(collection).facet('Name.FirstName').value('Bob');
+    Facetr(collection).facet('Name.FirstName').label('First Name');
+    Facetr(collection).facet('Name.FirstName').value('Bob');
 
-	var json = Facetr(collection).toJSON();
+    var json = Facetr(collection).toJSON();
 
-	// value of json will be an array of Facet data object with the following format:
-	//
-	// [
-	//		{
-	//			data : {
-	//				extOperator : 'and',
-	//				intOperator : 'or',
-	//				label       : 'First Name',
-	//				name        : 'Name.FirstName',
-	//				selected    : true,
-	//				sort		: {
-	//					by 		  : 'value',
-	//					direction : 'asc'
-	//				}
-	//				customData : {}
-	//			},
-	//			values : [
-	//				{
-	//					active 		: true,
-	//					activeCount : 1,
-	//					count		: 1,
-	//					value		: 'Bob'
-	//				},
-	//				{
-	//					active 		: false,
-	//					activeCount : 0,
-	//					count		: 1,
-	//					value		: 'Otto'
-	//				}
-	//			]
-	//		}
-	// ]
+    // value of json will be an array of Facet data object with the following format:
+    //
+    // [
+    //      {
+    //          data : {
+    //              extOperator : 'and',
+    //              intOperator : 'or',
+    //              label       : 'First Name',
+    //              name        : 'Name.FirstName',
+    //              selected    : true,
+    //              sort        : {
+    //                  by        : 'value',
+    //                  direction : 'asc'
+    //              }
+    //              customData : {}
+    //          },
+    //          values : [
+    //              {
+    //                  active      : true,
+    //                  activeCount : 1,
+    //                  count       : 1,
+    //                  value       : 'Bob'
+    //              },
+    //              {
+    //                  active      : false,
+    //                  activeCount : 0,
+    //                  count       : 1,
+    //                  value       : 'Otto'
+    //              }
+    //          ]
+    //      }
+    // ]
 
 
 ##### <a name="facetcollection-clear"></a> clear([silent:boolean]) : FacetCollection
@@ -325,14 +329,14 @@ Triggers a clear event, unless true is passed as parameter.
 
 example
 
-	Facet(collection).on('clear', function() {
-		console.log('All facets were removed');
-	});
+    Facet(collection).on('clear', function() {
+        console.log('All facets were removed');
+    });
 
-	Facet(collection).clear();
+    Facet(collection).clear();
 
-	// console output
-	All facets were removed
+    // console output
+    All facets were removed
 
 
 ##### <a name="facetcollection-remove"></a> remove() : undefined
@@ -343,7 +347,7 @@ collection.
 
 example
 
-	Facetr(collection).remove()
+    Facetr(collection).remove()
 
 
 ##### <a name="facetcollection-sortby"></a> sortBy(attribute:string, [silent]) : FacetCollection
@@ -355,14 +359,14 @@ This method automatically recognizes string, numeric or date values.
 
 example
 
-	Facetr(collection).on('sort', function(attr, dir) {
-		console.log('Sorting by ' + attr + ' ' + dir);
-	});
+    Facetr(collection).on('sort', function(attr, dir) {
+        console.log('Sorting by ' + attr + ' ' + dir);
+    });
 
-	Facetr(collection).sortBy('Age');
+    Facetr(collection).sortBy('Age');
 
-	// console output
-	Sorting by Age asc
+    // console output
+    Sorting by Age asc
 
 
 ##### <a name="facetcollection-asc"></a> asc([silent:boolean]) : FacetCollection
@@ -374,7 +378,7 @@ event unless true is passed as parameter.
 
 example
 
-	Facetr(collection).sortBy('Age').asc();
+    Facetr(collection).sortBy('Age').asc();
 
 
 ##### <a name="facetcollection-desc"></a> desc([silent:boolean]) : FacetCollection
@@ -386,7 +390,7 @@ event unless true is passed as parameter.
 
 example
 
-	Facetr(collection).sortBy('Age').desc();
+    Facetr(collection).sortBy('Age').desc();
 
 
 ##### <a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection
@@ -397,9 +401,9 @@ different names. Adding two filters with the same name will result in the first 
 
 example
 
-	Facetr(collection).addFilter('AgeFilter', function(model) {
-		return model.get('Age') >= 20 && model.get('Age') < 60; 
-	});
+    Facetr(collection).addFilter('AgeFilter', function(model) {
+        return model.get('Age') >= 20 && model.get('Age') < 60; 
+    });
 
 
 ##### <a name="facetcollection-removefilter"></a> removeFilter(filterName:string, [silent:boolean]) : FacetCollection
@@ -409,8 +413,8 @@ Triggers reset unless true is passed as last parameter.
 
 example
 
-	Facetr(collection).removeFilter('AgeFilter');
-	
+    Facetr(collection).removeFilter('AgeFilter');
+    
 
 ##### <a name="facetcollection-clearfilters"></a> clearFilters([silent:boolean]) : FacetCollection
 
@@ -419,7 +423,7 @@ Triggers reset unless true is passed as parameter.
 
 example
 
-	Facetr(collection).clearFilters();
+    Facetr(collection).clearFilters();
 
 
 ##### <a name="facetcollection-clearvalues"></a> clearValues([silent:boolean]) : FacetCollection
@@ -430,7 +434,7 @@ Triggers a clearValues event unless true is passed as parameter.
 
 example
 
-	Facetr(collection).clearValues();
+    Facetr(collection).clearValues();
 
 
 ##### <a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array, [silent:boolean]) : FacetCollection
@@ -442,14 +446,14 @@ to the event handler, unless true is given as last parameter.
 
 example
 
-	Facetr(collection).facet('Age');
-	Facetr(collection).facet('Name.FirstName');
+    Facetr(collection).facet('Age');
+    Facetr(collection).facet('Name.FirstName');
 
-	// Facetr(collection).toJSON() has facet 'Age' at index 0 and 'Name.FirstName' at index 1
+    // Facetr(collection).toJSON() has facet 'Age' at index 0 and 'Name.FirstName' at index 1
 
-	Facetr(collection).facetsOrder(['Name.FirstName', 'Age']);
+    Facetr(collection).facetsOrder(['Name.FirstName', 'Age']);
 
-	// Facetr(collection).toJSON() has facet 'Name.FirstName' at index 0 and 'Age' at index 1
+    // Facetr(collection).toJSON() has facet 'Name.FirstName' at index 0 and 'Age' at index 1
 
 
 ##### <a name="facetcollection-collection"></a> collection() : Backbone.Collection
@@ -459,7 +463,7 @@ is needed but it was declared in another scope and is no more accessible.
 
 example
 
-	Facetr(collection).collection() === collection; // true
+    Facetr(collection).collection() === collection; // true
 
 ##### <a name="facetcollection-origlength"></a> origLength() : Number
 
@@ -467,23 +471,23 @@ Returns the length of the collection before any faceted filtering was applied.
 
 example
 
-	var collection = new Backbone.Collection([
-		{
-			Name : 'John'
-			Age	 : 19
-		},
-		{
-			Name : 'Sarah',
-			Age  : 35
-		}
-	]);
+    var collection = new Backbone.Collection([
+        {
+            Name : 'John'
+            Age  : 19
+        },
+        {
+            Name : 'Sarah',
+            Age  : 35
+        }
+    ]);
 
-	collection.length() // 2
+    collection.length() // 2
 
-	Facetr(collection).facet('Age').value(35);
+    Facetr(collection).facet('Age').value(35);
 
-	collection.length(); // 1
-	Facetr(collection).origLength(); // 2
+    collection.length(); // 1
+    Facetr(collection).origLength(); // 2
 
 ##### <a name="facetcollection-facets"></a> facets() : Array
 
@@ -495,29 +499,29 @@ Returns an object representation of the current state of the Facetr collection w
 can be used to reload the same state in future using the initFromSettingsJSON method.
 
 example
-	
-	Facetr(collection).facet('Name.FirstName').label('First Name');
-	Facetr(collection).sortBy('Name.FirstName').asc();
-	Facetr(collection).facet('Name.FirstName').value('Bob');
+    
+    Facetr(collection).facet('Name.FirstName').label('First Name');
+    Facetr(collection).sortBy('Name.FirstName').asc();
+    Facetr(collection).facet('Name.FirstName').value('Bob');
 
-	var json = Facetr(collection).settingsJSON();
+    var json = Facetr(collection).settingsJSON();
 
-	// value of json will be the following:
-	//	
-	// {
-	//		sort : {
-	//			by	:	"Name.FirstName",
-	//			dir	:	"asc"
-	//		},
-	//		facets : [
-	//			{
-	//				attr	:	"Name.FirstName",
-	//				eop		:	"and",
-	//				iop		:	"or",
-	//				vals	:	[ "Bob" ]
-	//			}
-	//		]
-	//	}
+    // value of json will be the following:
+    //  
+    // {
+    //      sort : {
+    //          by  :   "Name.FirstName",
+    //          dir :   "asc"
+    //      },
+    //      facets : [
+    //          {
+    //              attr    :   "Name.FirstName",
+    //              eop     :   "and",
+    //              iop     :   "or",
+    //              vals    :   [ "Bob" ]
+    //          }
+    //      ]
+    //  }
 
 ##### <a name="facetcollection-initfromsettingsjson"></a> initFromSettingsJSON(json:object) : FacetCollection
 
@@ -536,15 +540,15 @@ Triggers a 'filter' event passing facetName and facetValue to the handler, unles
 as last parameter.
 
 example
-	
-	Facetr(collection).on('filter', function(facetName, facetValue) {
-		console.log('filtered by '+ facetName + ' with value equal ' + facetValue);
-	});
+    
+    Facetr(collection).on('filter', function(facetName, facetValue) {
+        console.log('filtered by '+ facetName + ' with value equal ' + facetValue);
+    });
 
-	Facetr(collection).facet('Name.FirstName').value('Bob');
+    Facetr(collection).facet('Name.FirstName').value('Bob');
 
-	// console output: "filtered by Name.FirstName with value Bob"
-	// collection contains only models with FirstName = 'Bob'
+    // console output: "filtered by Name.FirstName with value Bob"
+    // collection contains only models with FirstName = 'Bob'
 
 ##### <a name="facet-removevalue"></a> removeValue(value:string, [silent:boolean]) : FacetExp
 
@@ -554,15 +558,15 @@ Triggers an 'unfilter' event passing facetName and facetValue to the handler, un
 as last parameter.
 
 example
-	
-	Facetr(collection).on('unfilter', function(facetName, facetValue) {
-		console.log('unfiltered by '+ facetName + ' with value equal ' + facetValue);
-	});
+    
+    Facetr(collection).on('unfilter', function(facetName, facetValue) {
+        console.log('unfiltered by '+ facetName + ' with value equal ' + facetValue);
+    });
 
-	Facetr(collection).facet('Name.FirstName').removeValue('Bob');
+    Facetr(collection).facet('Name.FirstName').removeValue('Bob');
 
-	// console output: "unfiltered by Name.FirstName with value Bob"
-	// collection contains again also models with FirstName = 'Bob'
+    // console output: "unfiltered by Name.FirstName with value Bob"
+    // collection contains again also models with FirstName = 'Bob'
 
 ##### <a name="facet-tojson"></a> toJSON() : object
 
@@ -571,59 +575,59 @@ Useful for rendering the facet to the page.
 
 example
 
-	// create a collection with two models
-	var collection = new Backbone.Collection([
-	    {
-	        'Name'      : {
-	            'FirstName' : 'Bob',
-	            'LastName' : 'Smith'
-	        },
-	        'Age'       : 20
-	    },
-		{
-			'Name' 		: {
-				'FirstName' : 'Otto',
-				'LastName' 	: 'Von Braun'
-			},
-			'Age'  		: 35
-		}
-	]);
+    // create a collection with two models
+    var collection = new Backbone.Collection([
+        {
+            'Name'      : {
+                'FirstName' : 'Bob',
+                'LastName' : 'Smith'
+            },
+            'Age'       : 20
+        },
+        {
+            'Name'      : {
+                'FirstName' : 'Otto',
+                'LastName'  : 'Von Braun'
+            },
+            'Age'       : 35
+        }
+    ]);
 
-	Facetr(collection).facet('Name.FirstName').label('First Name');
-	Facetr(collection).facet('Name.FirstName').value('Bob');
+    Facetr(collection).facet('Name.FirstName').label('First Name');
+    Facetr(collection).facet('Name.FirstName').value('Bob');
 
-	var json = Facetr(collection).facet('Name.FirstName').toJSON();
+    var json = Facetr(collection).facet('Name.FirstName').toJSON();
 
-	// json is equal to:
-	//
-	//	{
-	//		data : {
-	//			extOperator : 'and',
-	//			intOperator : 'or',
-	//			label       : 'First Name',
-	//			name        : 'Name.FirstName',
-	//			selected    : true,
-	//			sort		: {
-	//				by 		  : 'value',
-	//				direction : 'asc'
-	//			}
-	//			customData : {}
-	//		},
-	//		values : [
-	//			{
-	//				active 		: true,
-	//				activeCount : 1,
-	//				count		: 1,
-	//				value		: 'Bob'
-	//			},
-	//			{
-	//				active 		: false,
-	//				activeCount : 0,
-	//				count		: 1,
-	//				value		: 'Otto'
-	//			}
-	//		]
-	//	}
+    // json is equal to:
+    //
+    //  {
+    //      data : {
+    //          extOperator : 'and',
+    //          intOperator : 'or',
+    //          label       : 'First Name',
+    //          name        : 'Name.FirstName',
+    //          selected    : true,
+    //          sort        : {
+    //              by        : 'value',
+    //              direction : 'asc'
+    //          }
+    //          customData : {}
+    //      },
+    //      values : [
+    //          {
+    //              active      : true,
+    //              activeCount : 1,
+    //              count       : 1,
+    //              value       : 'Bob'
+    //          },
+    //          {
+    //              active      : false,
+    //              activeCount : 0,
+    //              count       : 1,
+    //              value       : 'Otto'
+    //          }
+    //      ]
+    //  }
 
 ##### <a name="facet-label"></a> label(label:string) : Facet
 
@@ -631,13 +635,13 @@ Use this method to set a human readable label for the facet.
 This can be used when rendering the facet on the page.
 
 example:
-	
-	Facetr(collection).facet('Name.FirstName').label('First Name');
+    
+    Facetr(collection).facet('Name.FirstName').label('First Name');
 
-	Facetr(collection).facet('Name.FirstName').toJSON();
+    Facetr(collection).facet('Name.FirstName').toJSON();
 
-	// the property data.label has value 'First Name'
-	// while the property data.name stays 'Name.FirstName'
+    // the property data.label has value 'First Name'
+    // while the property data.name stays 'Name.FirstName'
 
 ##### <a name="facet-sortbycount"></a> sortByCount() : Facet
 
@@ -647,19 +651,19 @@ the facet name and value the given value.
 
 example
 
-	// we use the colleciton defined in Basic Usage section
-	var facet = Facetr(collection).facet('Hobbies');
-	
-	facet.value('painting'); // painting count = 3  
-	facet.value('drawing');  // drawing count = 1
+    // we use the colleciton defined in Basic Usage section
+    var facet = Facetr(collection).facet('Hobbies');
+    
+    facet.value('painting'); // painting count = 3  
+    facet.value('drawing');  // drawing count = 1
 
-	// facet.toJSON().data.values[0] = 'drawing'
-	// facet.toJSON().data.values[1] = 'painting'
+    // facet.toJSON().data.values[0] = 'drawing'
+    // facet.toJSON().data.values[1] = 'painting'
 
-	facet.sortByCount();
+    facet.sortByCount();
 
-	// facet.toJSON().data.values[0] = 'painting'
-	// facet.toJSON().data.values[1] = 'drawing'
+    // facet.toJSON().data.values[0] = 'painting'
+    // facet.toJSON().data.values[1] = 'drawing'
 
 ##### <a name="facet-sortbyactivecount"></a> sortByActiveCount() : Facet
 
@@ -669,21 +673,21 @@ the facet name and value the given value.
 
 example
 
-	var facet = Facetr(collection).facet('Hobbies');
-	
-	facet.value('fishing');   
-	facet.value('shopping');  
+    var facet = Facetr(collection).facet('Hobbies');
+    
+    facet.value('fishing');   
+    facet.value('shopping');  
 
-	// fishing active count = 1
-	// shopping active count = 2
+    // fishing active count = 1
+    // shopping active count = 2
 
-	// facet.toJSON().data.values[0] = 'fishing'
-	// facet.toJSON().data.values[1] = 'shopping'
+    // facet.toJSON().data.values[0] = 'fishing'
+    // facet.toJSON().data.values[1] = 'shopping'
 
-	facet.sortByActiveCount();
+    facet.sortByActiveCount();
 
-	// facet.toJSON().data.values[0] = 'shopping'
-	// facet.toJSON().data.values[1] = 'fishing' 
+    // facet.toJSON().data.values[0] = 'shopping'
+    // facet.toJSON().data.values[1] = 'fishing' 
 
 ##### <a name="facet-sortbyvalue"></a> sortByValue() : Facet
 
@@ -695,7 +699,7 @@ Sets the direction of the values sort to ascendent.
 
 example
 
-	Facetr(collection).facet('Name.FirstName').asc();
+    Facetr(collection).facet('Name.FirstName').asc();
 
 ##### <a name="facet-desc"></a> desc() : Facet
 
@@ -703,7 +707,7 @@ Sets the direction of the values sort to descendant.
 
 example
 
-	Facetr(collection).facet('Name.FirstName').sortByCount().desc();
+    Facetr(collection).facet('Name.FirstName').sortByCount().desc();
 
 ##### <a name="facet-remove"></a> remove() : undefined
 
@@ -722,10 +726,10 @@ To retrieve previously set data, just pass the key parameter without any value.
 
 example
 
-	var facet = Facetr('myCollection').facet('Hobbies').customData('sublabel', 'Available hobbies');
+    var facet = Facetr('myCollection').facet('Hobbies').customData('sublabel', 'Available hobbies');
 
-	// facet.customData('sublabel') returns 'Available hobbies'
-	// facet.toJSON().data.customData = { sublabel : 'Available hobbies' }
+    // facet.customData('sublabel') returns 'Available hobbies'
+    // facet.toJSON().data.customData = { sublabel : 'Available hobbies' }
 
 ##### <a name="facet-isselected"></a> isSelected : Boolean
 
@@ -733,16 +737,134 @@ Returns true if any value is selected from this facet, false otherwise.
 
 example
 
-	var facet = Facetr('myCollection').facet('Hobbies');
+    var facet = Facetr('myCollection').facet('Hobbies');
 
-	facet.value('fishing');
+    facet.value('fishing');
 
-	// facet.isSelected() returns true
+    // facet.isSelected() returns true
 
-	facet.clear(); // remove all selected values
+    facet.clear(); // remove all selected values
 
-	// facet.isSelected() returns false
+    // facet.isSelected() returns false
 
+##### <a name="facet-hierarchy"></a> hierarchy(hierarchySettings:Array) : Facet
+
+This method creates a hierarchical representation of facet values, based on the settings
+object given as parameter. Once this method is used, the facet becomes a "hierarchical" facet.
+You can then use the facet as you usually would, with the following differences:
+
+* the data section of the object resulting from invoking the toJSON method will also
+  contain a "hierarchical" property with value true and a "groupedValues" array, with the following format:
+
+groupedValues
+
+    [
+        {
+            value: "manager",
+            label: "Manager",
+            active: false,
+            activeCount: 7,
+            count: 7,
+            groups: [
+                {
+                    value: "team manager",
+                    label: "Team Manager",
+                    active: false,
+                    activeCount: 5,
+                    count: 5,
+                    groups: [
+                        { ... other groups values ... }
+                    ]
+                },
+                 {
+                    value: "manager",
+                    label: "Manager",
+                    active: false,
+                    activeCount: 5,
+                    count: 5 // no groups property means that this value has no children groups
+                },
+            ]
+        }
+    ]
+
+* when a value from the facet is selected, also the models resulting from selecting its descendents values are
+  included in the result set
+
+* the count includes both the count of the value itself and that of its descendants values
+
+The hierarchySettings argument is an array with different "hierarchical value" objects, where it is possible
+to specify the hierarchy of values along with a label. See the example below to understand the hierarchySettings format.
+
+example
+
+    var hierarchySettings = [
+        {               
+            value: "manager",
+            label: "Manager",
+            groups: [
+                {
+                    value: "project manager",
+                    label: "Project Manager",
+                    groups: [
+                        {
+                            value: "team manager",
+                            label: "Team Manager"
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+
+    var profession = Facetr(collection).facet('Profession').hierarchy(hierarchySettings);
+
+    var json = profession.toJSON();
+
+    // value of json variable would be:
+    //
+    // {
+    //  "data": {
+    //      "name":"Profession",
+    //      "hierarchical":true,
+    //      "label":"Profession",
+    //      "extOperator":"and",
+    //      "intOperator":"or",
+    //      "sort":{
+    //          "by":"activeCount",
+    //          "direction":"desc"
+    //      },
+    //      "selected":false,
+    //      "customData":{}
+    //  },
+    //  "values": [ ... stays as the normal facets ... ],
+    //  "groupedValues":[
+    //      {
+    //          "value":"manager",
+    //          "label":"Manager",
+    //          "active":false,
+    //          "activeCount":3,
+    //          "count":3,
+    //          "groups":[
+    //              {
+    //                  "value":"project manager",
+    //                  "label":"Project Manager",
+    //                  "active":false,
+    //                  "activeCount":2,
+    //                  "count":2,
+    //                  "groups":[
+    //                      {
+    //                          "value":"team manager",
+    //                          "label":"Team Manager",
+    //                          "active":false,
+    //                          "activeCount":1,
+    //                          "count":1
+    //                      }
+    //                  ]
+    //              }
+    //          ]
+    //      }
+    //  ]
+    // }
 
 ### <a name="facetexp"></a> FacetExp
 
@@ -752,13 +874,13 @@ different operators.
 
 example
 
-	Facetr(collection).facet('Age').value(12, 'and');
-	Facetr(collection).facet('Age').value(15, 'or');
-	Facetr(collection).facet('Age').value(39, 'and');
+    Facetr(collection).facet('Age').value(12, 'and');
+    Facetr(collection).facet('Age').value(15, 'or');
+    Facetr(collection).facet('Age').value(39, 'and');
 
-	// can also be expressed with the following syntax
+    // can also be expressed with the following syntax
 
-	Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
+    Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 
 ##### <a name="facetexp-and"></a> and(value:string, [silent:boolean]) : Facet
 

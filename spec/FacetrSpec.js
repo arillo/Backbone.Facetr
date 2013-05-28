@@ -8,7 +8,8 @@ describe('Backbone.Facetr', function() {
             },
             'Age'       : 20,
             'Country'   : 'Australia',
-            'Hobbies'   : ['fishing','painting','playing the ukulele']
+            'Hobbies'   : ['fishing','painting','playing the ukulele'],
+            'Profession': 'manager'
         },
         {
             'Name'      : {
@@ -17,7 +18,8 @@ describe('Backbone.Facetr', function() {
             },
             'Age'       : 35,
             'Country'   : 'New Zealand',
-            'Hobbies'   : ['drawing', 'painting']
+            'Hobbies'   : ['drawing', 'painting'],
+            'Profession': 'team manager'
         },
         {
             'Name'      : {
@@ -26,7 +28,8 @@ describe('Backbone.Facetr', function() {
             },
             'Age'       : 28,
             'Country'   : 'Ireland',
-            'Hobbies'   : ['shopping','painting']
+            'Hobbies'   : ['shopping','painting'],
+            'Profession': 'project manager'
         },
         {
             'Name'      : {
@@ -35,7 +38,8 @@ describe('Backbone.Facetr', function() {
             },
             'Age'       : 28,
             'Country'   : 'Australia',
-            'Hobbies'   : ['shopping']
+            'Hobbies'   : ['shopping'],
+            'Profession': 'project manager'
         }
     ],
     dataset2 = [ 
@@ -316,6 +320,55 @@ describe('Backbone.Facetr', function() {
                             expect(facet.isSelected()).toBeFalsy();
                         });
                     });
+
+                    describe('has a hierarchy method that', function(){
+                        it('generates a hierarchical representation of facet values based on the given hierarchy settings parameter', function(){
+                            var hierarchySettings = [
+                                {               
+                                    value: "manager",
+                                    label: "Manager",
+                                    groups: [
+                                        {
+                                            value: "project manager",
+                                            label: "Project Manager",
+                                            groups: [
+                                                {
+                                                    value: "team manager",
+                                                    label: "Team Manager"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ];
+
+                            var profession = Facetr(collection).facet('Profession').hierarchy(hierarchySettings);
+
+                            var groupedValues = profession.toJSON().groupedValues;
+
+                            expect(groupedValues).toBeDefined();
+                            expect(groupedValues instanceof Array).toBeTruthy();
+                            expect(groupedValues.length).toBe(1);
+
+                            expect(groupedValues[0].value).toBe('manager');
+                            expect(groupedValues[0].label).toBe('Manager');
+                            expect(groupedValues[0].count).toBe(4);
+
+                            profession.value('project manager');
+
+                            groupedValues = profession.toJSON().groupedValues;
+
+                            expect(groupedValues[0].activeCount).toBe(3);
+                            expect(groupedValues[0].groups[0].activeCount).toBe(3);
+                            expect(groupedValues[0].groups[0].groups[0].activeCount).toBe(1);
+
+                            profession.removeValue('project manager');
+
+                            expect(groupedValues[0].activeCount).toBe(4);
+                            expect(groupedValues[0].groups[0].activeCount).toBe(3);
+                            expect(groupedValues[0].groups[0].groups[0].activeCount).toBe(1);
+                        });
+                    });
                 });
             });
             
@@ -403,15 +456,15 @@ describe('Backbone.Facetr', function() {
                         //'Age'         : 45, // remove a property to check for this case
                         'Country'   : 'Wales',
                         'Hobbies'   : ['fishing', 'hunting'],
-                        'Profession': 'blacksmith' // add a property to check for this case
+                        'Residence': 'Liverpool' // add a property to check for this case
                     });
                     
-                    Facetr(collection).facet('Profession');
+                    Facetr(collection).facet('Residence');
 
                     var toJSON = Facetr(collection).toJSON();
 
                     expect(toJSON[1].values.length).toBe(4); // check that Age values are 4 (3 + the 'undefined' of the last added model)
-                    expect(toJSON[2].values.length).toBe(2); // check that Profession has 2 values (the one of the last added model + 'undefined' with cound 4 from the previous models)
+                    expect(toJSON[2].values.length).toBe(2); // check that Residence has 2 values (the one of the last added model + 'undefined' with cound 4 from the previous models)
                 });
             });
             
