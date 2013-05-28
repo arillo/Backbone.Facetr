@@ -1,39 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Backbone.facetr : A library to perform faceted search on Backbone collections" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Backbone.facetr by arillo</title>
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Backbone.facetr</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
-
   <body>
+    <div class="wrapper">
+      <header>
+        <h1>Backbone.facetr</h1>
+        <p>A library to perform faceted search on Backbone collections</p>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/arillo/Backbone.Facetr">View on GitHub</a>
+        <p class="view"><a href="https://github.com/arillo/Backbone.Facetr">View the Project on GitHub <small>arillo/Backbone.Facetr</small></a></p>
 
-          <h1 id="project_title">Backbone.facetr</h1>
-          <h2 id="project_tagline">A library to perform faceted search on Backbone collections</h2>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/arillo/Backbone.Facetr/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/arillo/Backbone.Facetr/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
+        <ul>
+          <li><a href="https://github.com/arillo/Backbone.Facetr/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/arillo/Backbone.Facetr/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/arillo/Backbone.Facetr">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
         <h1>Backbone.Facetr</h1>
 
-<p>VERSION 0.2.3</p>
+<p>VERSION 0.2.6</p>
 
 <h3>
 <a name="contents"></a> CONTENTS</h3>
@@ -222,6 +219,7 @@ Facetr(collection).facet('Name');               // error, Name is an object
 <li><a href="#facetcollection-facetsorder">facetsOrder</a></li>
 <li><a href="#facetcollection-collection">collection</a></li>
 <li><a href="#facetcollection-origlength">origLength</a></li>
+<li><a href="#facetcollection-facets">facets</a></li>
 <li><a href="#facetcollection-settingsjson">settingsJSON</a></li>
 <li><a href="#facetcollection-initfromsettingsjson">initFromSettingsJSON</a></li>
 </ul>
@@ -277,13 +275,13 @@ Facetr('myCollection') === Facetr(collection); // true
 <a name="facetcollection"></a> FacetCollection</h3>
 
 <h5>
-<a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [operator:string]) : Facet</h5>
+<a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [operator:string], [silent:boolean]) : Facet</h5>
 
 <p>Adds a Facet on the given collection using the property refered to by the
 Dot Notation expression (see <a href="#dot-notation">Dot Notation section</a> for more details).
 Valid operator values are: 'or' and 'and' (anything else will default to 'and').
 Returns the created Facet instance to allow method chaining.
-Triggers a facet event with the facetName passed to the callback.</p>
+Triggers a facet event with the facetName passed to the callback, unless true is passed as last parameter.</p>
 
 <p>example</p>
 
@@ -405,7 +403,7 @@ collection.</p>
 
 <p>Sorts the collection according to the given attribute name. By default
 ascendent sort is used. See asc() and desc() methods below to define sort
-direction. Triggers sort event unless true is passed as parameter.
+direction. Triggers sort event unless true is passed as last parameter.
 This method automatically recognizes string, numeric or date values.</p>
 
 <p>example</p>
@@ -450,7 +448,7 @@ event unless true is passed as parameter.</p>
 <a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection</h5>
 
 <p>Adds a filter which is used to filter the collection by testing each model against it. 
-Triggers reset unless true is passed as last parameter. Multiple filters can be added as long as they have
+Triggers Backbone.Collection reset unless true is passed as last parameter. Multiple filters can be added as long as they have
 different names. Adding two filters with the same name will result in the first being overwritten by the second.</p>
 
 <p>example</p>
@@ -495,11 +493,12 @@ Triggers a clearValues event unless true is passed as parameter.</p>
 </code></pre>
 
 <h5>
-<a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array) : FacetCollection</h5>
+<a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array, [silent:boolean]) : FacetCollection</h5>
 
 <p>Sometimes it is convinient to give the facets list a predefined order. This method
 can be used to achieve this by passing an array of facet names which corresponds to
-the order to be given to the facets in the list.</p>
+the order to be given to the facets in the list. Triggers a 'facetsOrder' event with the facetNames array passed
+to the event handler, unless true is given as last parameter.</p>
 
 <p>example</p>
 
@@ -551,6 +550,11 @@ Facetr(collection).origLength(); // 2
 </code></pre>
 
 <h5>
+<a name="facetcollection-facets"></a> facets() : Array</h5>
+
+<p>Returns an array containing all the Facet instances created on this FacetCollection.</p>
+
+<h5>
 <a name="facetcollection-settingsjson"></a> settingsJSON() : object</h5>
 
 <p>Returns an object representation of the current state of the Facetr collection which
@@ -586,18 +590,19 @@ var json = Facetr(collection).settingsJSON();
 <a name="facetcollection-initfromsettingsjson"></a> initFromSettingsJSON(json:object) : FacetCollection</h5>
 
 <p>Initializes the Facetr collection using a settings object generated
-using the settingsJSON method.</p>
+using the settingsJSON method. Triggers an "initFromSettingsJSON" event.</p>
 
 <h3>
 <a name="facet"></a> Facet</h3>
 
 <h5>
-<a name="facet-value"></a> value(value:string, [operator:string]) : FacetExp</h5>
+<a name="facet-value"></a> value(value:string, [operator:string], [silent:boolean]) : FacetExp</h5>
 
 <p>Adds a value to the facet. This will result in the collection being filtered
 by { FacetName : 'Value' }. An operator ('and' or 'or') can be passed to change
 the internal logical operator of the facet.
-Triggers a 'filter' event passing facetName and facetValue to the handler.</p>
+Triggers a 'filter' event passing facetName and facetValue to the handler, unless true is passed
+as last parameter.</p>
 
 <p>example</p>
 
@@ -612,11 +617,12 @@ Facetr(collection).facet('Name.FirstName').value('Bob');
 </code></pre>
 
 <h5>
-<a name="facet-removevalue"></a> removeValue(value:string) : FacetExp</h5>
+<a name="facet-removevalue"></a> removeValue(value:string, [silent:boolean]) : FacetExp</h5>
 
 <p>Removes the given value from the facet and resets the collection to
 the state previous of the filtering caused by the removed value.
-Triggers an 'unfilter' event passing facetName and facetValue to the handler.</p>
+Triggers an 'unfilter' event passing facetName and facetValue to the handler, unless true is passed
+as last parameter.</p>
 
 <p>example</p>
 
@@ -847,12 +853,12 @@ Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 </code></pre>
 
 <h5>
-<a name="facetexp-and"></a> and(value:string) : Facet</h5>
+<a name="facetexp-and"></a> and(value:string, [silent:boolean]) : Facet</h5>
 
 <p>Equivalent to facet.value('Value', 'and'), but can be used for FacetExp chains.</p>
 
 <h5>
-<a name="facetexp-or"></a> or(value:string) : Facet</h5>
+<a name="facetexp-or"></a> or(value:string, [silent:boolean]) : Facet</h5>
 
 <p>Equivalent to facet.value('Value', 'or'), but can be used for FacetExp chains.</p>
 
@@ -863,6 +869,7 @@ Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 
 <ul>
 <li><a href="http://terra-vecchia.ch/sozialtherapie/angebote-und-betriebe">terra-vecchia.ch</a></li>
+<li><a href="http://grimselhydro.ch/referenzen">grimselhydro.ch</a></li>
 </ul><h3>
 <a name="license"></a> LICENSE</h3>
 
@@ -887,16 +894,12 @@ FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TOR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
 DEALINGS IN THE SOFTWARE.</p>
       </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Backbone.facetr maintained by <a href="https://github.com/arillo">arillo</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/arillo">arillo</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
       </footer>
     </div>
-
+    <script src="javascripts/scale.fix.js"></script>
               <script type="text/javascript">
             var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
             document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
@@ -907,7 +910,6 @@ DEALINGS IN THE SOFTWARE.</p>
             pageTracker._trackPageview();
             } catch(err) {}
           </script>
-
 
   </body>
 </html>
