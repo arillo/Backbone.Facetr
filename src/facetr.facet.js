@@ -473,7 +473,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             _activeModels = setsFn(_activeModels, _valModelMap[facetValue]);
 
             // in case of hierarchical facet
-            if(_isHierarchical && (valHierarchy = _hierarchyNodesDescendants[value.value]).length > 0){
+            if(_isHierarchical && _hierarchyNodesDescendants[value.value] != null && (valHierarchy = _hierarchyNodesDescendants[value.value]).length > 0){
                 _activeValues.concat(valHierarchy);
 
                 // filter collection also by all values in descendant groups of the current one
@@ -543,7 +543,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                 }
 
                 // if facet is hierarchical
-                if(_isHierarchical){
+                if(_isHierarchical && _hierarchyNodesAncestors[facetValue] != null){
                     // check if a parent of the value being removed is selected 
                     var ancestors = _.intersection(_hierarchyNodesAncestors[facetValue], _activeValues);
 

@@ -9,7 +9,7 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     meta: {
-      banner: '// <%= pkg.name %> <%= pkg.version %> \n' +
+      banner: '// <%= pkg.name %> <%= pkg.version %> \n' + 
               '// Copyright (c)2012-2013 <%= pkg.author.company %> \n' +
               '// Author <%= pkg.author.name %> \n' +
               '// Distributed under MIT license \n' +
@@ -36,7 +36,7 @@ module.exports = function(grunt) {
     },
     jshint: {
       options: {
-        unused:true, 
+        unused:true,
         eqnull:true
       },
       all: ['Gruntfile.js', 'dist/backbone.facetr.js']
