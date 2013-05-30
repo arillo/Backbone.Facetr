@@ -77,7 +77,7 @@ var FacetCollection = function(collection) {
             this.trigger('unfilter', facetName, facetValue);
         }
     },
-    _resetCollection = function(silent) {
+    _resetCollection = function() {
         var modelsCids = [], models = [], cid, key, filterName, filterFn;
 
         // if no values are selected, return all models
@@ -258,7 +258,7 @@ var FacetCollection = function(collection) {
 
     // returns a JSON array containing facet JSON objects for each facet added to the collection
     this.toJSON = function() {
-        var key, facet, facetData, facetJSON, facetPos, facets = [], sortedFacets = [];
+        var key, facetData, facetJSON, facetPos, facets = [], sortedFacets = [];
         for (key in _facets) {
                 if (_facets.hasOwnProperty(key)) {
                     facetData = _facets[key];
@@ -441,7 +441,7 @@ var FacetCollection = function(collection) {
 
     this.initFromSettingsJSON = function(json) {
         var facetCollection, facetr, facets, sort, filter, facetData, attr, 
-        label, eop, iop, fsort, cust, values, facet, i, j, k, len, len2;
+        eop, iop, fsort, cust, values, facet, i, j, k, len, len2;
 
         facetr = Backbone.Facetr;
         facetCollection = facetr(collection);

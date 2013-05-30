@@ -20,6 +20,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
         _groups = [],
         _groupedValues = [],
         _hierarchyNodesDescendants = {},
+        _hierarchyNodesAncestors = {},
 
     // creates a facetValue with count 1 or increases the count by 1 of an existing faceValue in values 
     _begetFacetValue = function(facetValues, value, cid) {
@@ -197,13 +198,12 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     // invoked whenever a model is removed to the Backbone collection
     _removeModel = function(model) {
         var cid = model.cid,
-            modelJSON = model.toJSON(),
             index,
             value,
             decrementValue = function(value) {
                 index = _values.length-1;
                 while(index !== -1) {
-                    var v = _values[index], found = false;
+                    var v = _values[index];
                     
                     if(v.value === value) {
                         // update count and activeCount
@@ -291,15 +291,33 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                 }
 
                 if(node.groups){
-                    _.each(node.groups, function(n){
-                        return getDescendants(n);
-                    });
+                    _.each(node.groups, getDescendants);
                 }
             };
 
             getDescendants(hierarchyNode);
 
            _hierarchyNodesDescendants[hierarchyNode.value] = _.union(_hierarchyNodesDescendants[hierarchyNode.value], values);
+    },
+    _computeHierarchyNodeAncestors = function(hierarchyNode){
+        var populate = function(values, parent, node){
+            if(_hierarchyNodesAncestors[node.value] == null){
+                _hierarchyNodesAncestors[node.value] = [];
+            }
+
+            if(parent){
+                values.push(parent.value);
+                _hierarchyNodesAncestors[node.value] = _.union(_hierarchyNodesAncestors[node.value], values);
+            }
+
+            if(node.groups){
+                _.each(node.groups, function(n){
+                    return populate(values, node, n);
+                });
+            }
+        };
+
+        populate([], undefined, hierarchyNode);
     },
     // computes the values for each node in the groups property of the hierarchy node argument
     _computeHierarchyGroup = function(hierarchyNode){
@@ -352,10 +370,8 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
 
         for(i = 0, len = _groups.length; i < len; i += 1){
             _groupedValues.push(_computeHierarchyGroup(_groups[i]));
+            _computeHierarchyNodeAncestors(_groups[i]);
         }
-
-        // console.log('descendants', _hierarchyNodesDescendants);
-        // console.log('ancestors', _hierarchyNodesAncestors);
     },
     // a FacetExp object is returned by the Facet.value method to enable logical filters chaining
     FacetExp = function() {
@@ -526,8 +542,15 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                     _activeModels = _.union(_activeModels, modelsToAdd);
                 }
 
+                // if facet is hierarchical
                 if(_isHierarchical){
+                    // check if a parent of the value being removed is selected 
+                    var ancestors = _.intersection(_hierarchyNodesAncestors[facetValue], _activeValues);
 
+                    if(ancestors.length > 0){
+                        // if yes, need to readd value models 
+                        _activeModels = _.union(_activeModels, _valModelMap[facetValue]);
+                    }
                 }
                     
                 // update local _selected value

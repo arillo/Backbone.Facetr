@@ -35,6 +35,10 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
+      options: {
+        unused:true, 
+        eqnull:true
+      },
       all: ['Gruntfile.js', 'dist/backbone.facetr.js']
     },
     jasmine : {

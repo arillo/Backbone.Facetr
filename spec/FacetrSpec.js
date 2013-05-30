@@ -329,12 +329,12 @@ describe('Backbone.Facetr', function() {
                                     label: "Manager",
                                     groups: [
                                         {
-                                            value: "project manager",
-                                            label: "Project Manager",
+                                            value: "team manager",
+                                            label: "Team Manager",
                                             groups: [
                                                 {
-                                                    value: "team manager",
-                                                    label: "Team Manager"
+                                                    value: "project manager",
+                                                    label: "Project Manager"
                                                 }
                                             ]
                                         }
@@ -354,19 +354,22 @@ describe('Backbone.Facetr', function() {
                             expect(groupedValues[0].label).toBe('Manager');
                             expect(groupedValues[0].count).toBe(4);
 
+                            profession.value('team manager')
                             profession.value('project manager');
 
                             groupedValues = profession.toJSON().groupedValues;
 
                             expect(groupedValues[0].activeCount).toBe(3);
                             expect(groupedValues[0].groups[0].activeCount).toBe(3);
-                            expect(groupedValues[0].groups[0].groups[0].activeCount).toBe(1);
+                            expect(groupedValues[0].groups[0].groups[0].activeCount).toBe(2);
 
                             profession.removeValue('project manager');
 
-                            expect(groupedValues[0].activeCount).toBe(4);
+                            groupedValues = profession.toJSON().groupedValues;
+                            
+                            expect(groupedValues[0].activeCount).toBe(3);
                             expect(groupedValues[0].groups[0].activeCount).toBe(3);
-                            expect(groupedValues[0].groups[0].groups[0].activeCount).toBe(1);
+                            expect(groupedValues[0].groups[0].groups[0].activeCount).toBe(2);
                         });
                     });
                 });
