@@ -11,7 +11,7 @@ module.exports = function(grunt) {
     meta: {
       banner: '// <%= pkg.name %> <%= pkg.version %> \n' + 
               '// Copyright (c)2012-2013 <%= pkg.author.company %> \n' +
-              '// Author <%= pkg.author.name %> \n' +
+              '// Author: <%= pkg.author.name %> \n' +
               '// Distributed under MIT license \n' +
               '// <%= pkg.homepage %> \n'
     },

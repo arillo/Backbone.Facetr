@@ -123,15 +123,15 @@ var FacetCollection = function(collection) {
             models.push(_cidModelMap[modelsCids[i]]);
         }
         
+        // notify facets to recompute active facet values count
+        _vent.trigger('resetCollection', modelsCids);
+
         _ownReset = true;
 
         // reset the collecton with the active models
         collection.reset(models);
         
         _ownReset = false;
-
-        // notify facets to recompute active facet values count
-        _vent.trigger('resetCollection', modelsCids);
     },
     // triggered whenever the Backbone collection is reset
     _resetOrigCollection = function() {
