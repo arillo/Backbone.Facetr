@@ -571,6 +571,8 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
         while(_activeValues.length > 0) {
             this.removeValue(_activeValues[0], true);
         }
+
+        return this;
     };
     
     // attaches custom data, which can be retrieved by key
