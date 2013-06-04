@@ -96,52 +96,57 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             _parseModel(model);
         });
     },
-    // sort method sorts the facet values according to the given sortBy and sortDirection
-    _sort = function() {        
-        _values.sort(function(v1,v2) {
-            if(_sortBy === 'value') {
-                // note that facet values are always unique, so v1.value === v2.value is never true
-                return (_sortDirection === 'asc') ? ((v1.value > v2.value)-(v1.value < v2.value)) : ((v1.value < v2.value)-(v1.value > v2.value)); 
-            } else if(_sortBy === 'activeCount') {
-                if(_sortDirection === 'asc')  {
-                    if(v1.activeCount < v2.activeCount) {
-                        return -1;  
-                    } else if(v1.activeCount > v2.activeCount) {
-                        return 1;
-                    } else {
-                        // if both facet values have same activeCount, sort by value
-                        return ((v1.value > v2.value)-(v1.value < v2.value));
-                    }
+    _sortFn = function(v1,v2) {
+        if(_sortBy === 'value') {
+            // note that facet values are always unique, so v1.value === v2.value is never true
+            return (_sortDirection === 'asc') ? ((v1.value > v2.value)-(v1.value < v2.value)) : ((v1.value < v2.value)-(v1.value > v2.value)); 
+        } else if(_sortBy === 'activeCount') {
+            if(_sortDirection === 'asc')  {
+                if(v1.activeCount < v2.activeCount) {
+                    return -1;  
+                } else if(v1.activeCount > v2.activeCount) {
+                    return 1;
                 } else {
-                    if(v1.activeCount < v2.activeCount) {
-                        return 1;
-                    } else if(v1.activeCount > v2.activeCount) {
-                        return -1;
-                    } else {
-                        return ((v1.value < v2.value)-(v1.value > v2.value));
-                    }
+                    // if both facet values have same activeCount, sort by value
+                    return ((v1.value > v2.value)-(v1.value < v2.value));
                 }
             } else {
-                if(_sortDirection === 'asc')  {
-                    if(v1.count < v2.count) {
-                        return -1;
-                    } else if(v1.count > v2.count) {
-                        return 1;
-                    } else {
-                        // if both facet values have same count, sort by value
-                        return ((v1.value > v2.value)-(v1.value < v2.value));
-                    }
+                if(v1.activeCount < v2.activeCount) {
+                    return 1;
+                } else if(v1.activeCount > v2.activeCount) {
+                    return -1;
                 } else {
-                    if(v1.count < v2.count) {
-                        return 1;
-                    } else if(v1.count > v2.count) {
-                        return -1;
-                    } else {
-                        return ((v1.value < v2.value)-(v1.value > v2.value));
-                    }
+                    return ((v1.value < v2.value)-(v1.value > v2.value));
                 }
             }
-        });
+        } else {
+            if(_sortDirection === 'asc')  {
+                if(v1.count < v2.count) {
+                    return -1;
+                } else if(v1.count > v2.count) {
+                    return 1;
+                } else {
+                    // if both facet values have same count, sort by value
+                    return ((v1.value > v2.value)-(v1.value < v2.value));
+                }
+            } else {
+                if(v1.count < v2.count) {
+                    return 1;
+                } else if(v1.count > v2.count) {
+                    return -1;
+                } else {
+                    return ((v1.value < v2.value)-(v1.value > v2.value));
+                }
+            }
+        }
+    },
+    // sort method sorts the facet values according to the given sortBy and sortDirection
+    _sort = function() {        
+        _values.sort(_sortFn);
+
+        if(_isHierarchical){
+            _groupedValues.sort(_sortFn);
+        }
     },
     // checks if any of the facet values is currently selected by testing if _activeValues is empty
     _isSelected = function() {
@@ -372,6 +377,8 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             _groupedValues.push(_computeHierarchyGroup(_groups[i]));
             _computeHierarchyNodeAncestors(_groups[i]);
         }
+
+        _groupedValues.sort(_sortFn);
     },
     // a FacetExp object is returned by the Facet.value method to enable logical filters chaining
     FacetExp = function() {
