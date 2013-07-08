@@ -1,7 +1,7 @@
 {
   "name": "backbone.facetr",
   "description": "A library to perform faceted search on Backbone collections",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "homepage": "https://github.com/arillo/Backbone.Facetr",
   "keywords": [
     "backbone",

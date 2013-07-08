@@ -574,11 +574,15 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     };
     
     // removes all selected values
-    this.clear = function() {
+    this.clear = function(silent) {
         while(_activeValues.length > 0) {
             this.removeValue(_activeValues[0], true);
         }
 
+        if(!silent){
+            this.trigger('clear');
+        }
+        
         return this;
     };
     

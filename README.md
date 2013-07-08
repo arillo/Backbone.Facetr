@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.3.1
+VERSION 0.3.2
 
 ### <a name="contents"></a> CONTENTS
 
@@ -88,14 +88,14 @@ If you decide to use Facetr in one of your projects, contact us at &#102;&#097;&
     Facetr(collection).facet('Name.LastName').removeValue('Smith'); // contains 'Sarah Smith' and 'Otto Von Braun'
 
     // removes all facet values and restores original collection content
-    Facetr(collection).clearValues() 
+    Facetr(collection).clearValues();
 
     // if chaining is not your cup of tea, the following is equivalent to the above code
     var facetCollection = Facetr(collection); // returns a FacetCollection object
     var lastNameFacet = facetCollection.facet('Name.LastName'); // returns a Facet object
     var hobbiesFacet = facetCollection.facet('Hobbies');
 
-    lastNameFacet.value('Smith');   // returns a FacetExp object
+    lastNameFacet.value('Smith'); // returns a FacetExp object
     hobbiesFacet.value('shopping');
     lastNameFacet.removeValue('Smith');
 
@@ -713,9 +713,9 @@ example
 
 Removes the facet and all its values and unfilters the collection accordingly.
 
-##### <a name="facet-clear"></a> clear() : Facet
+##### <a name="facet-clear"></a> clear([silent:boolean]) : Facet
 
-Unselects all the values from the facet. It triggers a 'unfilter' event for each removed value.
+Unselects all the values from the facet. It triggers a 'clear' event unless true is passed as parameter.
 
 ##### <a name="facet-customdata"></a> customData(key:string, [value:object]) : Facet
 
