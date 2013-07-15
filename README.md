@@ -897,6 +897,7 @@ This section contains a list of websites / projects using Facetr.
 
 * [terra-vecchia.ch](http://terra-vecchia.ch/sozialtherapie/angebote-und-betriebe)
 * [grimselhydro.ch](http://grimselhydro.ch/referenzen)
+* [redbullalpenbrevet.ch](http://www.redbullalpenbrevet.ch/helden)
 
 ### <a name="license"></a> LICENSE
 
