@@ -495,6 +495,10 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             // trigger a value event to notify the FacetCollection about the change
             vent.trigger('value', _name, facetValue, _activeModels, silent);
             
+            if(!silent){
+                this.trigger('value', facetValue);
+            }
+
             // return a FacetExp object to allow Facetr expression chain
             return new FacetExp(this, _operator);
         }
@@ -565,6 +569,10 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
 
                 // notify the FacetCollection to update this facet values
                 vent.trigger('removeValue', _name, facetValue, _activeModels, silent);
+
+                if(!silent){
+                    this.trigger('removeValue', facetValue);
+                }
             }
             
             return this;

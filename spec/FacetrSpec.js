@@ -268,6 +268,19 @@ describe('Backbone.Facetr', function() {
                             expect(collection.at(0).get('Country')).toBe('Australia')
                         });
 
+                        it('triggers a value event', function() {
+                            var facet = Facetr(collection).facet('Country');
+                            var flag = false;
+
+                            facet.on('value', function(){
+                                flag = true;
+                            });
+
+                            facet.value('Australia');
+
+                            expect(flag).toBeTruthy();
+                        });
+
                         describe('returns a FacetExp that', function() {
                             describe('has an and method that', function() {
                                 it('can be used for "and" chaining of facet values', function() {
@@ -296,6 +309,20 @@ describe('Backbone.Facetr', function() {
                             expect(collection.length).toEqual(2);
                             Facetr(collection).facet('Name.LastName').removeValue('Smith');
                             expect(collection.length).toEqual(4);
+                        });
+
+                        it('triggers a removeValue event', function() {
+                            var facet = Facetr(collection).facet('Country');
+                            var flag = false;
+
+                            facet.on('removeValue', function(){
+                                flag = true;
+                            });
+
+                            facet.value('Australia');
+                            facet.removeValue('Australia');
+                            
+                            expect(flag).toBeTruthy();
                         });
                     });
 

@@ -1,4 +1,4 @@
-// backbone.facetr 0.3.2 
+// backbone.facetr 0.3.3 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.3.2';
+    Backbone.Facetr.VERSION = '0.3.3';
 
     // facet collections cache
     var _collections = {};
@@ -580,6 +580,10 @@
                 // trigger a value event to notify the FacetCollection about the change
                 vent.trigger('value', _name, facetValue, _activeModels, silent);
                 
+                if(!silent){
+                    this.trigger('value', facetValue);
+                }
+    
                 // return a FacetExp object to allow Facetr expression chain
                 return new FacetExp(this, _operator);
             }
@@ -650,6 +654,10 @@
     
                     // notify the FacetCollection to update this facet values
                     vent.trigger('removeValue', _name, facetValue, _activeModels, silent);
+    
+                    if(!silent){
+                        this.trigger('removeValue', facetValue);
+                    }
                 }
                 
                 return this;

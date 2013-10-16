@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.3.2
+VERSION 0.3.3
 
 ### <a name="contents"></a> CONTENTS
 
@@ -536,7 +536,8 @@ using the settingsJSON method. Triggers an "initFromSettingsJSON" event.
 Adds a value to the facet. This will result in the collection being filtered
 by { FacetName : 'Value' }. An operator ('and' or 'or') can be passed to change
 the internal logical operator of the facet.
-Triggers a 'filter' event passing facetName and facetValue to the handler, unless true is passed
+Triggers a 'filter' event on the FacetCollection passing facetName and facetValue to the handler and 
+a 'value' event on the Facet passing the facetValue to the handler, unless true is passed
 as last parameter.
 
 example
@@ -545,7 +546,13 @@ example
         console.log('filtered by '+ facetName + ' with value equal ' + facetValue);
     });
 
-    Facetr(collection).facet('Name.FirstName').value('Bob');
+    var facet = Facetr(collection).facet('Name.FirstName');
+
+    facet.on('value', function(facetValue){
+        console.log('the following value was added to the facet: ' + facetValue);
+    });
+
+    facet.value('Bob');
 
     // console output: "filtered by Name.FirstName with value Bob"
     // collection contains only models with FirstName = 'Bob'
@@ -563,7 +570,13 @@ example
         console.log('unfiltered by '+ facetName + ' with value equal ' + facetValue);
     });
 
-    Facetr(collection).facet('Name.FirstName').removeValue('Bob');
+    var facet = Facetr(collection).facet('Name.FirstName');
+
+    facet.on('removeValue', function(value){
+        console.log('the following value was removed from the facet: ' + value);
+    });
+
+    facet.removeValue('Bob');
 
     // console output: "unfiltered by Name.FirstName with value Bob"
     // collection contains again also models with FirstName = 'Bob'
