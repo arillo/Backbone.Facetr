@@ -561,7 +561,8 @@ example
 
 Removes the given value from the facet and resets the collection to
 the state previous of the filtering caused by the removed value.
-Triggers an 'unfilter' event passing facetName and facetValue to the handler, unless true is passed
+Triggers a 'unfilter' event on the FacetCollection passing facetName and facetValue to the handler and 
+a 'removeValue' event on the Facet passing the facetValue to the handler, unless true is passed
 as last parameter.
 
 example
