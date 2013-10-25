@@ -31,7 +31,7 @@
         <h1>
 <a name="backbonefacetr" class="anchor" href="#backbonefacetr"><span class="octicon octicon-link"></span></a>Backbone.Facetr</h1>
 
-<p>VERSION 0.3.1</p>
+<p>VERSION 0.3.3</p>
 
 <h3>
 <a name="-contents" class="anchor" href="#-contents"><span class="octicon octicon-link"></span></a><a name="contents"></a> CONTENTS</h3>
@@ -124,14 +124,14 @@ Facetr(collection).facet('Hobbies').value('shopping'); // contains only 'Sarah S
 Facetr(collection).facet('Name.LastName').removeValue('Smith'); // contains 'Sarah Smith' and 'Otto Von Braun'
 
 // removes all facet values and restores original collection content
-Facetr(collection).clearValues() 
+Facetr(collection).clearValues();
 
 // if chaining is not your cup of tea, the following is equivalent to the above code
 var facetCollection = Facetr(collection); // returns a FacetCollection object
 var lastNameFacet = facetCollection.facet('Name.LastName'); // returns a Facet object
 var hobbiesFacet = facetCollection.facet('Hobbies');
 
-lastNameFacet.value('Smith');   // returns a FacetExp object
+lastNameFacet.value('Smith'); // returns a FacetExp object
 hobbiesFacet.value('shopping');
 lastNameFacet.removeValue('Smith');
 
@@ -609,7 +609,8 @@ using the settingsJSON method. Triggers an "initFromSettingsJSON" event.</p>
 <p>Adds a value to the facet. This will result in the collection being filtered
 by { FacetName : 'Value' }. An operator ('and' or 'or') can be passed to change
 the internal logical operator of the facet.
-Triggers a 'filter' event passing facetName and facetValue to the handler, unless true is passed
+Triggers a 'filter' event on the FacetCollection passing facetName and facetValue to the handler and 
+a 'value' event on the Facet passing the facetValue to the handler, unless true is passed
 as last parameter.</p>
 
 <p>example</p>
@@ -618,7 +619,13 @@ as last parameter.</p>
     console.log('filtered by '+ facetName + ' with value equal ' + facetValue);
 });
 
-Facetr(collection).facet('Name.FirstName').value('Bob');
+var facet = Facetr(collection).facet('Name.FirstName');
+
+facet.on('value', function(facetValue){
+    console.log('the following value was added to the facet: ' + facetValue);
+});
+
+facet.value('Bob');
 
 // console output: "filtered by Name.FirstName with value Bob"
 // collection contains only models with FirstName = 'Bob'
@@ -629,7 +636,8 @@ Facetr(collection).facet('Name.FirstName').value('Bob');
 
 <p>Removes the given value from the facet and resets the collection to
 the state previous of the filtering caused by the removed value.
-Triggers an 'unfilter' event passing facetName and facetValue to the handler, unless true is passed
+Triggers a 'unfilter' event on the FacetCollection passing facetName and facetValue to the handler and 
+a 'removeValue' event on the Facet passing the facetValue to the handler, unless true is passed
 as last parameter.</p>
 
 <p>example</p>
@@ -638,7 +646,13 @@ as last parameter.</p>
     console.log('unfiltered by '+ facetName + ' with value equal ' + facetValue);
 });
 
-Facetr(collection).facet('Name.FirstName').removeValue('Bob');
+var facet = Facetr(collection).facet('Name.FirstName');
+
+facet.on('removeValue', function(value){
+    console.log('the following value was removed from the facet: ' + value);
+});
+
+facet.removeValue('Bob');
 
 // console output: "unfiltered by Name.FirstName with value Bob"
 // collection contains again also models with FirstName = 'Bob'
@@ -804,9 +818,9 @@ facet.sortByActiveCount();
 <p>Removes the facet and all its values and unfilters the collection accordingly.</p>
 
 <h5>
-<a name="-clear--facet" class="anchor" href="#-clear--facet"><span class="octicon octicon-link"></span></a><a name="facet-clear"></a> clear() : Facet</h5>
+<a name="-clearsilentboolean--facet" class="anchor" href="#-clearsilentboolean--facet"><span class="octicon octicon-link"></span></a><a name="facet-clear"></a> clear([silent:boolean]) : Facet</h5>
 
-<p>Unselects all the values from the facet. It triggers a 'unfilter' event for each removed value.</p>
+<p>Unselects all the values from the facet. It triggers a 'clear' event unless true is passed as parameter.</p>
 
 <h5>
 <a name="-customdatakeystring-valueobject--facet" class="anchor" href="#-customdatakeystring-valueobject--facet"><span class="octicon octicon-link"></span></a><a name="facet-customdata"></a> customData(key:string, [value:object]) : Facet</h5>
@@ -999,6 +1013,7 @@ Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 <ul>
 <li><a href="http://terra-vecchia.ch/sozialtherapie/angebote-und-betriebe">terra-vecchia.ch</a></li>
 <li><a href="http://grimselhydro.ch/referenzen">grimselhydro.ch</a></li>
+<li><a href="http://www.redbullalpenbrevet.ch/helden">redbullalpenbrevet.ch</a></li>
 </ul><h3>
 <a name="-license" class="anchor" href="#-license"><span class="octicon octicon-link"></span></a><a name="license"></a> LICENSE</h3>
 
