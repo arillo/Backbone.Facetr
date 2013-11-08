@@ -1,4 +1,4 @@
-// backbone.facetr 0.3.3 
+// backbone.facetr 0.3.4 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.3.3';
+    Backbone.Facetr.VERSION = '0.3.4';
 
     // facet collections cache
     var _collections = {};
@@ -114,7 +114,7 @@
             // TODO - find better solution, this is just a quick fix
             // Problem: case of property consisting of Array of Objects was overlooked
             // in original implementation of Dot Notation
-            if(Object.prototype.toString.call(val) === '[object Object]') {
+            if(typeof val != null && typeof val === 'object') {
                 var attr = _name.split('.')[1];
                 val = attr && (val instanceof Backbone.Model && val.get(attr) || val[attr]) || 'undefined';
                 isObj = true; 
@@ -166,7 +166,7 @@
                     });
                 }
             } else {
-                if(Object.prototype.toString.call(value) === '[object Object]') {
+                if(typeof value != null && typeof value === 'object') {
                     _self.remove();
                     throw new Error('Model property can only be a value (string,number,boolean) or Array of values, not an object');
                 }

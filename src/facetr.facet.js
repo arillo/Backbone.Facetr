@@ -29,7 +29,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
         // TODO - find better solution, this is just a quick fix
         // Problem: case of property consisting of Array of Objects was overlooked
         // in original implementation of Dot Notation
-        if(Object.prototype.toString.call(val) === '[object Object]') {
+        if(typeof val != null && typeof val === 'object') {
             var attr = _name.split('.')[1];
             val = attr && (val instanceof Backbone.Model && val.get(attr) || val[attr]) || 'undefined';
             isObj = true; 
@@ -81,7 +81,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                 });
             }
         } else {
-            if(Object.prototype.toString.call(value) === '[object Object]') {
+            if(typeof value != null && typeof value === 'object') {
                 _self.remove();
                 throw new Error('Model property can only be a value (string,number,boolean) or Array of values, not an object');
             }
