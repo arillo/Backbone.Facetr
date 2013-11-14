@@ -15,7 +15,8 @@ VERSION 0.3.4
 
 ### <a name="introduction"></a> INTRODUCTION
 
-Backbone.Facetr is a plugin which enables filtering of Backbone collections through facets, using an elegant API and with fast performance time.
+Backbone.Facetr is an utility which enables filtering of Backbone collections through facets. It can be used to implement faceted search, which follows the
+[faceted classification system](http://en.wikipedia.org/wiki/Faceted_classification).
 
 It works flawlessly up to 2500 items; computation starts getting slower with 5000 - 10000 items. This is however an 
 early version; optimizations may improve performance in future realeases.
