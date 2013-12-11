@@ -1,4 +1,4 @@
-// backbone.facetr 0.3.4 
+// backbone.facetr 0.3.5 
 // Copyright (c)2012-2013 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.3.4';
+    Backbone.Facetr.VERSION = '0.3.5';
 
     // facet collections cache
     var _collections = {};
@@ -166,7 +166,7 @@
                     });
                 }
             } else {
-                if(typeof value != null && typeof value === 'object') {
+                if(value != null && typeof value === 'object') {
                     _self.remove();
                     throw new Error('Model property can only be a value (string,number,boolean) or Array of values, not an object');
                 }

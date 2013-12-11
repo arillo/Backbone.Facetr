@@ -81,7 +81,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                 });
             }
         } else {
-            if(typeof value != null && typeof value === 'object') {
+            if(value != null && typeof value === 'object') {
                 _self.remove();
                 throw new Error('Model property can only be a value (string,number,boolean) or Array of values, not an object');
             }
