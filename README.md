@@ -918,7 +918,7 @@ This section contains a list of websites / projects using Facetr.
 
 Backbone.Facetr may be freely distributed under the MIT license.
 
-Copyright (C) 2012-2013 Arillo GmbH http://arillo.net
+Copyright (C) 2012-2014 Arillo GmbH http://arillo.net
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

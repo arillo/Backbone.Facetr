@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     meta: {
       banner: '// <%= pkg.name %> <%= pkg.version %> \n' + 
-              '// Copyright (c)2012-2013 <%= pkg.author.company %> \n' +
+              '// Copyright (c)2012-2014 <%= pkg.author.company %> \n' +
               '// Author: <%= pkg.author.name %> \n' +
               '// Distributed under MIT license \n' +
               '// <%= pkg.homepage %> \n'
