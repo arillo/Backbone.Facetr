@@ -1,5 +1,5 @@
 // backbone.facetr 0.3.5 
-// Copyright (c)2012-2013 Arillo GmbH 
+// Copyright (c)2012-2014 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
 // https://github.com/arillo/Backbone.Facetr 
