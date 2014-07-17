@@ -219,9 +219,6 @@
                             collection: new Backbone.Collection(),
                             initialize: function() {
                                 this.$ul = this.$('ul');
-                                this.collection.on('add', this.addOne, this);
-                                this.collection.on('reset', this.addAll, this);
-                                Facetr(this.collection).on('reset clear change remove sort', this.addAll, this);
 
                                 this.collection.reset(items);
                                 
@@ -238,6 +235,17 @@
 
                                 this.timeout = undefined;
                                 this.origLen = false;
+
+                                this.collection.on('add', this.addOne, this);
+                                this.collection.on('reset', this.addAll, this);
+                                Facetr(this.collection).on('clear change remove sort', this.addAll, this);
+
+                                this.addAll();
+                            },
+                            showRenderTime: function(){
+                                renderTime = (new Date().getTime()) - renderTime;
+                                $els.render.span.html(renderTime);
+                                $els.render.img.attr('src', images.done);
                             },
                             addOne: function(model) {
                                 var itemHTML = _.template($('#Item_template').html(), model.toJSON());
@@ -263,7 +271,8 @@
                                             self.addOne(model);
                                         }
                                         
-                                        i = i+1;
+                                        i = i + 1;
+
                                         if(i < len) {
                                             if(i % 50 === 0) {
                                                 self.timeout = setTimeout(loop, 1);
@@ -272,9 +281,7 @@
                                             }
                                         } else {
                                             self.$el.append(self.$ul);
-                                            renderTime = (new Date().getTime()) - renderTime;
-                                            $els.render.span.html(renderTime);
-                                            $els.render.img.attr('src', images.done);
+                                            self.showRenderTime();
                                             
                                             $('#Items h2 span').html(Facetr(self.collection).origLength());
                                         }
@@ -336,7 +343,10 @@
                                 Facetr(this.collection).facet('Profession').hierarchy(hierarchySettings);
 
                                 this.collection.on('reset change add remove', this.render, this);
+
                                 Facetr(this.collection).on('filter unfilter facetsOrderChange', this.render, this);
+
+                                Facetr(this.collection).on('filter unfilter facetsOrderChange', this.showExecTime, this);
                                 
                                 execTime = new Date().getTime();
                                 $els.exec.span.html('');
@@ -367,6 +377,8 @@
                                 _.bind(search, searchEl);
                                 
                                 searchEl.on("keyup", searchDeb);
+
+                                this.showExecTime();
                             },
                             sort: function() {
                                 this.sortBy($("select#SortAttr").find("option:selected").text(), $("select#SortDir").find("option:selected").text());
@@ -390,17 +402,19 @@
                                     Facetr(this.collection).facet(facet).value(value);  
                                 } else if($target.hasClass('active')) {
                                     Facetr(this.collection).facet(facet).removeValue(value);
-                                }                                   
+                                }
                             },
-                            render: function(facetName, facetValue) {                               
+                            showExecTime: function(){
                                 execTime = (new Date().getTime()) - execTime;
                                 $els.exec.span.html(execTime);
                                 $els.exec.img.attr('src', images.done);
-                                execTime = false;
+                            },
+                            render: function(facetName, facetValue) {
                                 var facetsHTML = _.template($('#Facets_template').html(), {
                                     facets : Facetr(this.collection).toJSON(),
                                     valueTemplate : _.template($('#FacetValue_template').html())
                                 });
+
                                 this.$el.html(facetsHTML);
                             }
                         }))({
