@@ -46,7 +46,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             // use sort index to get index where value should be put in order to keep values sorted
             var sortedIndex = _.sortedIndex(_.pluck(_values, 'value'), val);
 
-            // note that at init values are sorted by the default sort property and direction, ie. 'value' and 'asc'
+            // note that at init values are sorted by the default sort property and direction, i.e. 'value' and 'asc'
             _values.splice(sortedIndex, 0, {
                 value : val,
                 count : 1,
@@ -463,7 +463,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
         // get the index of the value in the _values array
         valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value();
         
-        // continue only if value exists, otherwise do nothing 
+        // check value exists
         if(valueIndex !== -1) {
             value = _values[valueIndex];
             
@@ -488,20 +488,26 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
                     _activeModels = setsFn(_activeModels, _valModelMap[valHierarchy[i]]);
                 }
             }
-
-            // update is local _selected value
-            _selected = _isSelected();
-
-            // trigger a value event to notify the FacetCollection about the change
-            vent.trigger('value', _name, facetValue, _activeModels, silent);
-            
-            if(!silent){
-                this.trigger('value', facetValue);
+        } else {
+            // no value found, add one with no models associated only if not already present
+            if(_activeValues.indexOf(facetValue) === -1){
+                _activeValues.push(facetValue);
+                _activeModels = [];
             }
-
-            // return a FacetExp object to allow Facetr expression chain
-            return new FacetExp(this, _operator);
         }
+
+        // update is local _selected value
+        _selected = _isSelected();
+
+        // trigger a value event to notify the FacetCollection about the change
+        vent.trigger('value', _name, facetValue, _activeModels, silent);
+        
+        if(!silent){
+            this.trigger('value', facetValue);
+        }
+
+        // return a FacetExp object to allow Facetr expression chain
+        return new FacetExp(this, _operator);
     };
      
     // removes the given value
@@ -509,76 +515,70 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
         var valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value(),
             value, modelsToAdd, modelsToRemove;
         
-        // check if was exists  
+        // check if value exists  
         if(valueIndex !== -1) {
-            value = _values[valueIndex]; 
+            value = _values[valueIndex];
+            value.active = false;
+        }
             
-            // if value is active
-            if(value.active) {
-                // set value to inactive
-                value.active = false;
-                // remove value from active values array
-                _activeValues.splice(_.indexOf(_activeValues, value.value), 1);
-                
-                // compute models to remove from the active models due to facet value deselection
-                // need to filter out models which are included in active models due to another
-                // facet value being selected (thing that can happen on model properties which are of type Array)
-                modelsToRemove = _.filter(_valModelMap[facetValue], function(cid) {
-                    for(var value in _valModelMap) {
-                        if(_valModelMap.hasOwnProperty(value)) {
-                            // check if any other active value has a model which is also in the facet value being removed
-                            // if yes, the model cannot be removed from the result set 
-                            if(_.indexOf(_activeValues, value) !== -1 && _.indexOf(_valModelMap[value], cid) !== -1) {
-                                return false;
-                            }
-                        }
+        // remove value from active values array
+        _activeValues.splice(_.indexOf(_activeValues, value && value.value || facetValue), 1);
+        
+        // compute models to remove from the active models due to facet value deselection
+        // need to filter out models which are included in active models due to another
+        // facet value being selected (thing that can happen on model properties which are of type Array)
+        modelsToRemove = _.filter(_valModelMap[facetValue], function(cid) {
+            for(var value in _valModelMap) {
+                if(_valModelMap.hasOwnProperty(value)) {
+                    // check if any other active value has a model which is also in the facet value being removed
+                    // if yes, the model cannot be removed from the result set 
+                    if(_.indexOf(_activeValues, value) !== -1 && _.indexOf(_valModelMap[value], cid) !== -1) {
+                        return false;
                     }
-                    
-                    // if the model is only in the facet value being removed, then it can be removed
-                    return true;
-                });
-                
-                // remove inactive models from the active models list
-                _activeModels = _.difference(_activeModels, modelsToRemove);
-
-                if(_operator === 'and') {
-                    modelsToAdd = [];
-                    for(var i = 0, len = _activeValues.length; i < len; i += 1) {
-                        if(modelsToAdd.length === 0) {
-                            modelsToAdd = _.union(modelsToAdd, _valModelMap[_activeValues[i]]);
-                        } else {
-                            modelsToAdd = _.intersection(modelsToAdd, _valModelMap[_activeValues[i]]);
-                        }
-                    }
-                    _activeModels = _.union(_activeModels, modelsToAdd);
-                }
-
-                // if facet is hierarchical
-                if(_isHierarchical && _hierarchyNodesAncestors[facetValue] != null){
-                    // check if a parent of the value being removed is selected 
-                    var ancestors = _.intersection(_hierarchyNodesAncestors[facetValue], _activeValues);
-
-                    if(ancestors.length > 0){
-                        // if yes, need to readd value models 
-                        _activeModels = _.union(_activeModels, _valModelMap[facetValue]);
-                    }
-                }
-                    
-                // update local _selected value
-                _selected = _isSelected();
-
-                // notify the FacetCollection to update this facet values
-                vent.trigger('removeValue', _name, facetValue, _activeModels, silent);
-
-                if(!silent){
-                    this.trigger('removeValue', facetValue);
                 }
             }
             
-            return this;
-        } else {
-            throw new Error('Value "'+facetValue+'" does not exist for facet '+_name);
+            // if the model is only in the facet value being removed, then it can be removed
+            return true;
+        });
+        
+        // remove inactive models from the active models list
+        _activeModels = _.difference(_activeModels, modelsToRemove);
+
+        if(_operator === 'and') {
+            modelsToAdd = [];
+            for(var i = 0, len = _activeValues.length; i < len; i += 1) {
+                if(modelsToAdd.length === 0) {
+                    modelsToAdd = _.union(modelsToAdd, _valModelMap[_activeValues[i]]);
+                } else {
+                    modelsToAdd = _.intersection(modelsToAdd, _valModelMap[_activeValues[i]]);
+                }
+            }
+            _activeModels = _.union(_activeModels, modelsToAdd);
         }
+
+        // if facet is hierarchical
+        if(_isHierarchical && _hierarchyNodesAncestors[facetValue] != null){
+            // check if a parent of the value being removed is selected 
+            var ancestors = _.intersection(_hierarchyNodesAncestors[facetValue], _activeValues);
+
+            if(ancestors.length > 0){
+                // if yes, need to readd value models 
+                _activeModels = _.union(_activeModels, _valModelMap[facetValue]);
+            }
+        }
+
+        // update local _selected value
+        _selected = _isSelected();
+
+        // notify the FacetCollection to update this facet values
+        vent.trigger('removeValue', _name, facetValue, _activeModels, silent);
+
+        if(!silent){
+            this.trigger('removeValue', facetValue);
+        }
+
+        return this;
     };
     
     // removes all selected values

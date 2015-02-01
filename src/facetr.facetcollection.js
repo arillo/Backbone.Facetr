@@ -34,6 +34,8 @@ var FacetCollection = function(collection) {
     // deletes the entry for the facet with the given name from the facets hash 
     _removeFacet = function(facetName) {
         delete _facets[facetName];
+        delete _activeModels[facetName];
+        _resetCollection();
     },
     // fetch (or create if not existing) a facetData object from the facets hash
     _begetFacet = function(facetName, operator) {
@@ -89,8 +91,8 @@ var FacetCollection = function(collection) {
 
         // otherwise merge the active models of each facet
         for(key in _activeModels) {
-                if (_activeModels.hasOwnProperty(key)) {
-                    if(_facets[key].facet.toJSON().data.selected) {
+            if (_activeModels.hasOwnProperty(key)) {
+                if(_facets[key].facet.toJSON().data.selected) {
                     if(_facets[key].operator === 'or') {
                         modelsCids = _.union(modelsCids, _activeModels[key]);
                     } else {

@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.3.5
+VERSION 0.3.6
 
 ### <a name="contents"></a> CONTENTS
 

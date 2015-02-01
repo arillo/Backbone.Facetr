@@ -281,6 +281,45 @@ describe('Backbone.Facetr', function() {
                             expect(flag).toBeTruthy();
                         });
 
+                        it('empties the collection if the given value doesn\' exist', function(){
+                            var facetedCollection = Facetr(collection);
+                            var facetCountry = facetedCollection.facet('Country');
+                            facetCountry.value('Canada');
+                            expect(facetCountry.isSelected()).toBeTruthy();
+                            expect(collection.length).toEqual(0);
+                            facetCountry.removeValue('Canada');
+                            expect(facetCountry.isSelected()).toBeFalsy();
+                            expect(collection.length).toEqual(facetedCollection.origLength());
+                            var facetAge = facetedCollection.facet('Age');
+                            facetAge.value(35);
+                            expect(collection.length).toEqual(1);
+                            facetCountry.value('Canada');
+                            expect(collection.length).toEqual(0);
+                            facetCountry.remove();
+                            expect(collection.length).toEqual(1);
+                            facetAge.remove();
+                            expect(collection.length).toEqual(facetedCollection.origLength());
+                        });
+
+                        it('allows filtering by existing or non-existing values', function(){
+                            var facetedCollection = Facetr(collection);
+                            var facet = facetedCollection.facet('Country');
+                            facet.value('Canada').or('Australia');
+                            expect(collection.length).toEqual(2);
+                            facet.removeValue('Australia');
+                            expect(collection.length).toEqual(0);
+                            facet.removeValue('Canada');
+                            expect(collection.length).toEqual(facetedCollection.origLength());
+                            facet.value('Ireland').and('Canada');
+                            expect(collection.length).toEqual(0);
+                            facet.removeValue('Canada');
+                            expect(collection.length).toEqual(1);
+                            facet.value('Ireland').and('Canada').or('Australia');
+                            expect(collection.length).toEqual(2);
+                            facet.clear();
+                            expect(collection.length).toEqual(facetedCollection.origLength());
+                        });
+
                         describe('returns a FacetExp that', function() {
                             describe('has an and method that', function() {
                                 it('can be used for "and" chaining of facet values', function() {
