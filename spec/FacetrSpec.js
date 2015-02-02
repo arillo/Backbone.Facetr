@@ -281,7 +281,7 @@ describe('Backbone.Facetr', function() {
                             expect(flag).toBeTruthy();
                         });
 
-                        it('empties the collection if the given value doesn\' exist', function(){
+                        it('empties the collection if the given value doesn\'t exist', function(){
                             var facetedCollection = Facetr(collection);
                             var facetCountry = facetedCollection.facet('Country');
                             facetCountry.value('Canada');

@@ -548,7 +548,7 @@
             // get the index of the value in the _values array
             valueIndex = _.chain(_values).pluck('value').indexOf(facetValue).value();
             
-            // check value exists
+            // check if value exists
             if(valueIndex !== -1) {
                 value = _values[valueIndex];
                 
