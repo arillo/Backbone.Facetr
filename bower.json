@@ -1,6 +1,6 @@
 {
   "name": "Backbone.Facetr",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "main": "dist/backbone.facetr.js",
   "ignore": [
     "**/.*",

@@ -492,7 +492,10 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
             // no value found, add one with no models associated only if not already present
             if(_activeValues.indexOf(facetValue) === -1){
                 _activeValues.push(facetValue);
-                _activeModels = [];
+                
+                if(_operator === 'and'){
+                    _activeModels = [];
+                }
             }
         }
 

@@ -191,6 +191,38 @@ describe('Backbone.Facetr', function() {
                     expect(facetCollection.trigger.calls.length).toEqual(1);
                 });
 
+                it('defaults facet external operator to and', function(){
+                    var facetedCollection = Facetr(collection);
+                    var facetCountry = facetedCollection.facet('Country');
+                    var facetLastName = facetedCollection.facet('Name.LastName');
+                    facetCountry.value('Australia');
+                    facetLastName.value('Smith');
+                    expect(collection.length).toEqual(1);
+                    facetedCollection.clear();
+                    facetCountry = facetedCollection.facet('Country', 'or');
+                    facetLastName = facetedCollection.facet('Name.LastName');
+                    facetCountry.value('Australia');
+                    facetLastName.value('Smith');
+                    expect(collection.length).toEqual(2);
+                });
+
+                it('defaults facet internal operator to or', function(){
+                    var facetedCollection = Facetr(collection);
+                    var facet = facetedCollection.facet('Country');
+                    facet.value('Australia');
+                    expect(collection.length).toEqual(2);
+                    facet.value('Canada');
+                    expect(collection.length).toEqual(2);
+                    facet.value('Ireland');
+                    expect(collection.length).toEqual(3);
+                    facet.removeValue('Australia');
+                    expect(collection.length).toEqual(1);
+                    facet.removeValue('Ireland');
+                    expect(collection.length).toEqual(0);
+                    facet.removeValue('Canada');
+                    expect(collection.length).toEqual(4);
+                });
+
                 // Facet
                 describe('returns a Facet that', function() {
                     // Facet toJSON

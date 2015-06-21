@@ -1,7 +1,7 @@
 
 # Backbone.Facetr
 
-VERSION 0.3.6
+VERSION 0.3.7
 
 ### <a name="contents"></a> CONTENTS
 
@@ -9,6 +9,7 @@ VERSION 0.3.6
 * [INSTALLATION](#installation)
 * [BASIC USAGE](#basic-usage)
 * [DOT NOTATION](#dot-notation)
+* [OPERATORS](#operators)
 * [API REFERENCE](#api-reference)
 * [EXAMPLES](#examples)
 * [LICENSE](#license)
@@ -24,27 +25,32 @@ early version; optimizations may improve performance in future realeases.
 
 ### <a name="installation"></a> INSTALLATION
 
-    <!DOCTYPE html>
-    <html>
-        ....
+Production bundles can be found in the dist folder. Facetr is distributed via bower and npm.
+Both AMD and CommonJS are supported.
 
-        <!-- include Backbone.Facetr dependencies -->
-        <script src="js/lib/underscore.js"></script>
-        <script src="js/lib/backbone.js"></script>
+#### bower
 
-        <!-- include Backbone.Facetr code -->
-        <script src="js/code/backbone.facetr.js"></script>
-        <!-- include your js code -->
-            <script> ..... </script>
-        </body>
-    </html>
+    bower install backbone.facetr --save
 
-#### node.js
+#### npm
 
-    npm install backbone.facetr
+    npm install backbone.facetr --save
 
-    // then in your code
+Include then in your code using any of the following methods
+
+#### AMD
+
+    define('yourmodule', ['backbone.facetr'], function(Facetr){
+        // ... 
+    });
+
+#### CommonJS
+
     var Facetr = require('backbone.facetr');
+
+#### script tag
+
+    <script src="path/to/libs/backbone.facetr.js"></script>
 
 ### <a name="basic-usage"></a> BASIC USAGE
 
@@ -163,6 +169,37 @@ It cannot be added on properties having the following value / composite types:
     // etc..
 
 
+### <a name="operators"></a> OPERATORS
+
+Facets filtering can be combined using logical operators 'or' and 'and', both between different facets (external operator, see [FacetCollection.facet method](#facetcollection-facet)) and between values of one facet (internal operator, see [Facet.value method](#facet-value) and [FacetExp](#facetexp)).
+
+#### External Operator
+
+    // create a facet with default external operator 'and'
+    var facetCountry = Facetr(collection).facet('Country');
+
+    // or set the external operator explicitly
+    var facetLastName = Facetr(collection).facet('Name.LastName', 'and');
+
+    // when filtering, such operator will be used to combine filters of the two facets
+    facetCountry.value('Australia');
+    facetLastName.value('Smith');
+
+    // collection contains all models with Country equal 'Australia' and LastName equal 'Smith'
+
+#### Internal
+
+    // add a value with default internal operator 'or'
+    facetCountry.value('Australia');
+
+    // or set the internal operator explicitly
+    facetCountry.value('Ireland', 'or');
+
+    // it is possible to use chaining syntax to combine values
+    facetCountry.value('Australia').or('Ireland');
+
+    // collection contains all models with Country equal either 'Australia' or 'Ireland'
+
 ### <a name="api-reference"></a> API Reference
 
 * [Facetr](#facetr)
@@ -229,11 +266,11 @@ example
 ### <a name="facetcollection"></a> FacetCollection
 
 
-##### <a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [operator:string], [silent:boolean]) : Facet
+##### <a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [externalOperator:string], [silent:boolean]) : Facet
 
 Adds a Facet on the given collection using the property refered to by the
 Dot Notation expression (see [Dot Notation section](#dot-notation) for more details).
-Valid operator values are: 'or' and 'and' (anything else will default to 'and').
+Valid [external operator](#operators) values are: 'or' and 'and' (default is 'and').
 Returns the created Facet instance to allow method chaining.
 Triggers a facet event with the facetName passed to the callback, unless true is passed as last parameter.
 
@@ -530,11 +567,10 @@ using the settingsJSON method. Triggers an "initFromSettingsJSON" event.
 
 ### <a name="facet"></a> Facet
 
-##### <a name="facet-value"></a> value(value:string, [operator:string], [silent:boolean]) : FacetExp
+##### <a name="facet-value"></a> value(value:string, [internalOperator:string], [silent:boolean]) : FacetExp
 
 Adds a value to the facet. This will result in the collection being filtered
-by { FacetName : 'Value' }. An operator ('and' or 'or') can be passed to change
-the internal logical operator of the facet.
+by { FacetName : 'Value' }. Valid [internal operator](#operators) values are: 'or' and 'and' (default is 'or').
 Triggers a 'filter' event on the FacetCollection passing facetName and facetValue to the handler and 
 a 'value' event on the Facet passing the facetValue to the handler, unless true is passed
 as last parameter.
@@ -917,7 +953,7 @@ This section contains a list of websites / projects using Facetr.
 
 Backbone.Facetr may be freely distributed under the MIT license.
 
-Copyright (C) 2012-2014 Arillo GmbH http://arillo.net
+Copyright (C) 2012 Arillo GmbH http://arillo.net
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

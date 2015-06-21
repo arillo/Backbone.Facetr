@@ -1,4 +1,4 @@
-// backbone.facetr 0.3.6 
+// backbone.facetr 0.3.7 
 // Copyright (c)2012 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.3.6';
+    Backbone.Facetr.VERSION = '0.3.7';
 
     // facet collections cache
     var _collections = {};
@@ -577,7 +577,10 @@
                 // no value found, add one with no models associated only if not already present
                 if(_activeValues.indexOf(facetValue) === -1){
                     _activeValues.push(facetValue);
-                    _activeModels = [];
+                    
+                    if(_operator === 'and'){
+                        _activeModels = [];
+                    }
                 }
             }
     
@@ -988,24 +991,24 @@
         this.toJSON = function() {
             var key, facetData, facetJSON, facetPos, facets = [], sortedFacets = [];
             for (key in _facets) {
-                    if (_facets.hasOwnProperty(key)) {
-                        facetData = _facets[key];
-                        facetJSON = facetData.facet.toJSON();
-                        // add information about the type of facet ('or' or 'and' Facet)
-                        facetJSON.data.operator = facetData.operator;
+                if (_facets.hasOwnProperty(key)) {
+                    facetData = _facets[key];
+                    facetJSON = facetData.facet.toJSON();
+                    // add information about the type of facet ('or' or 'and' Facet)
+                    facetJSON.data.operator = facetData.operator;
+                    
+                    if(_facetsOrder && _facetsOrder instanceof Array) {
+                        facetPos = _.indexOf(_facetsOrder, facetJSON.data.name);
                         
-                        if(_facetsOrder && _facetsOrder instanceof Array) {
-                            facetPos = _.indexOf(_facetsOrder, facetJSON.data.name);
-                            
-                            if(facetPos !== -1) {
-                                sortedFacets[facetPos] = facetJSON;
-                            } else {
-                                facets.push(facetJSON);
-                            }
+                        if(facetPos !== -1) {
+                            sortedFacets[facetPos] = facetJSON;
                         } else {
                             facets.push(facetJSON);
                         }
+                    } else {
+                        facets.push(facetJSON);
                     }
+                }
             }
             
             return sortedFacets.concat(facets);
@@ -1015,18 +1018,18 @@
         this.clear = function(silent) {
             var key;
             for (key in _facets) {
-                    if (_facets.hasOwnProperty(key)) {
-                        _facets[key].facet.remove();
-                    delete _facets[key];
-                    }
+                if (_facets.hasOwnProperty(key)) {
+                    _facets[key].facet.remove();
+                delete _facets[key];
+                }
             }
             
             // resets original values in the collection
             var models = [];
             for (key in _cidModelMap) {
-                    if (_cidModelMap.hasOwnProperty(key)) {
-                        models.push(_cidModelMap[key]);
-                    }
+                if (_cidModelMap.hasOwnProperty(key)) {
+                    models.push(_cidModelMap[key]);
+                }
             }
             
             collection.reset(models);
@@ -1046,17 +1049,17 @@
             var key;
     
             for (key in _facets) {
-                    if (_facets.hasOwnProperty(key)) {
-                        _facets[key].facet.clear();
-                    }
+                if (_facets.hasOwnProperty(key)) {
+                    _facets[key].facet.clear();
+                }
             }
     
             // resets original values in the collection
             var models = [];
             for (key in _cidModelMap) {
-                    if (_cidModelMap.hasOwnProperty(key)) {
-                        models.push(_cidModelMap[key]);
-                    }
+                if (_cidModelMap.hasOwnProperty(key)) {
+                    models.push(_cidModelMap[key]);
+                }
             }
             
             collection.reset(models);
