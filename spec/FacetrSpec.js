@@ -220,7 +220,7 @@ describe('Backbone.Facetr', function() {
                     facet.removeValue('Ireland');
                     expect(collection.length).toEqual(0);
                     facet.removeValue('Canada');
-                    expect(collection.length).toEqual(4);
+                    expect(collection.length).toEqual(facetedCollection.origLength());
                 });
 
                 // Facet
