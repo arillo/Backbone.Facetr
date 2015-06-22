@@ -187,7 +187,7 @@ Facets filtering can be combined using logical operators 'or' and 'and', both be
 
     // collection contains all models with Country equal 'Australia' and LastName equal 'Smith'
 
-#### Internal
+#### Internal Operator
 
     // add a value with default internal operator 'or'
     facetCountry.value('Australia');
