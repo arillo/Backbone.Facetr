@@ -3,6 +3,7 @@
   "description": "A library to perform faceted search on Backbone collections",
   "version": "0.3.7",
   "homepage": "https://github.com/arillo/Backbone.Facetr",
+  "license": "MIT",
   "keywords": [
     "backbone",
     "collection",
