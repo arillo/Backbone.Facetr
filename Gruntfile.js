@@ -55,7 +55,7 @@ module.exports = function(grunt) {
   });
 
   // Default task(s).
-  grunt.registerTask('default', ['rig', 'jasmine', 'lint', 'uglify']);
+  grunt.registerTask('default', ['rig', 'jshint', 'jasmine', 'uglify']);
   grunt.registerTask('test', ['jasmine']);
   grunt.registerTask('lint', ['jshint']);
 };

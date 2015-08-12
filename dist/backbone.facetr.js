@@ -347,7 +347,7 @@
             // remove model from active models
             index = _.indexOf(_activeModels, cid);
             if(index !== -1) {
-                _activeModels.splice(index,1);
+                _activeModels.splice(index, 1);
             }
         },
         // invoked whenever a model is changed
