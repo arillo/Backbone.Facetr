@@ -1,7 +1,9 @@
 
 # Backbone.Facetr
 
-VERSION 0.3.7
+[![npm](https://img.shields.io/npm/v/backbone.facetr.svg)](https://www.npmjs.com/package/backbone.facetr)
+[![Bower](https://img.shields.io/bower/v/Backbone.Facetr.svg)](https://github.com/arillo/Backbone.Facetr)
+[![Build Status](https://travis-ci.org/arillo/Backbone.Facetr.svg?branch=master)](https://travis-ci.org/arillo/Backbone.Facetr)
 
 ### <a name="contents"></a> CONTENTS
 
@@ -36,7 +38,15 @@ Both AMD and CommonJS are supported.
 
     npm install backbone.facetr --save
 
-Include then in your code using any of the following methods
+#### build from source
+
+    git clone git@github.com:arillo/Backbone.Facetr.git # clone repo
+    cd Backbone.Facetr # navigate to local repo
+    npm install -g grunt-cli # install grunt globally
+    npm install # install dependencies
+    grunt # build to dist folder
+
+Include in your code using any of the following methods
 
 #### AMD
 
@@ -51,6 +61,7 @@ Include then in your code using any of the following methods
 #### script tag
 
     <script src="path/to/libs/backbone.facetr.js"></script>
+
 
 ### <a name="basic-usage"></a> BASIC USAGE
 
