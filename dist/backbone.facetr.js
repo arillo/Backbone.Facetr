@@ -1,4 +1,4 @@
-// backbone.facetr 0.3.7 
+// backbone.facetr 0.3.8 
 // Copyright (c)2012 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.3.7';
+    Backbone.Facetr.VERSION = '0.3.8';
 
     // facet collections cache
     var _collections = {};
