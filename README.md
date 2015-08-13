@@ -1,9 +1,11 @@
 
 # Backbone.Facetr
 
+[![npm](https://img.shields.io/npm/l/backbone.facetr.svg)](https://www.npmjs.com/package/backbone.facetr)
 [![npm](https://img.shields.io/npm/v/backbone.facetr.svg)](https://www.npmjs.com/package/backbone.facetr)
 [![Bower](https://img.shields.io/bower/v/Backbone.Facetr.svg)](https://github.com/arillo/Backbone.Facetr)
 [![Build Status](https://travis-ci.org/arillo/Backbone.Facetr.svg?branch=master)](https://travis-ci.org/arillo/Backbone.Facetr)
+[![Coverage Status](https://coveralls.io/repos/arillo/Backbone.Facetr/badge.svg?branch=master&service=github)](https://coveralls.io/github/arillo/Backbone.Facetr?branch=master)
 
 ### <a name="contents"></a> CONTENTS
 
@@ -30,13 +32,13 @@ early version; optimizations may improve performance in future realeases.
 Production bundles can be found in the dist folder. Facetr is distributed via bower and npm.
 Both AMD and CommonJS are supported.
 
-#### bower
-
-    bower install backbone.facetr --save
-
 #### npm
 
     npm install backbone.facetr --save
+
+#### bower
+
+    bower install Backbone.Facetr --save
 
 #### build from source
 

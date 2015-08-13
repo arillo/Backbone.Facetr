@@ -137,7 +137,9 @@ var FacetCollection = function(collection) {
     },
     // triggered whenever the Backbone collection is reset
     _resetOrigCollection = function() {
-        if(_ownReset) return;
+        if(_ownReset) {
+            return;
+        }
 
         _initModelsMap();
         // notify facets to recompute 

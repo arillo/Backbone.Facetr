@@ -1,0 +1,14 @@
+{
+  "curly": true,
+  "unused": true,
+  "eqnull": true,
+  "eqeqeq": true,
+  "undef": true,
+  "globals": {
+    "module": true,
+    "require": true,
+    "define": true,
+    "_": true,
+    "Backbone": true
+  }
+}

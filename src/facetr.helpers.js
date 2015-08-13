@@ -21,7 +21,8 @@ var _begetCollection = function(collection, id) {
         return coll;
     } else {
         collection.facetrid = colid;
-        return _collections[colid] = new FacetCollection(collection);
+        _collections[colid] = new FacetCollection(collection);
+        return _collections[colid];
     }
 };
 

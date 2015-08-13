@@ -169,7 +169,7 @@ describe('Backbone.Facetr', function() {
                     facetCollection.facet('Age');
                     expect(facetCollection.trigger).toHaveBeenCalledWith('facet', 'Age');
                     facetCollection.facet('Age', 'and', true);
-                    expect(facetCollection.trigger.calls.length).toEqual(1);
+                    expect(facetCollection.trigger.calls.count()).toEqual(1);
                 });
 
                 it('triggers a "filter" event whenever a value is added to a facet, unless true (silent) is passed as last parameter. The event passes the facetName and the value to the event handler', function(){
@@ -178,7 +178,7 @@ describe('Backbone.Facetr', function() {
                     facetCollection.facet('Age', 'and', true).value(20);
                     expect(facetCollection.trigger).toHaveBeenCalledWith('filter', 'Age', 20);
                     facetCollection.facet('Age', 'and', true).value(20, 'and', true);
-                    expect(facetCollection.trigger.calls.length).toEqual(1);
+                    expect(facetCollection.trigger.calls.count()).toEqual(1);
                 });
 
                 it('triggers an "unfilter" event whenever a value is removed from a facet, unless true (silent) is passed as last parameter. The event passes the facetName and the value to the event handler', function(){
@@ -188,7 +188,7 @@ describe('Backbone.Facetr', function() {
                     facetCollection.facet('Age', 'and', true).removeValue(20);
                     expect(facetCollection.trigger).toHaveBeenCalledWith('unfilter', 'Age', 20);
                     facetCollection.facet('Age', 'and', true).removeValue(20, true);
-                    expect(facetCollection.trigger.calls.length).toEqual(1);
+                    expect(facetCollection.trigger.calls.count()).toEqual(1);
                 });
 
                 it('defaults facet external operator to and', function(){
@@ -494,7 +494,7 @@ describe('Backbone.Facetr', function() {
                     facetCollection.clear();
                     expect(facetCollection.trigger).toHaveBeenCalledWith('clear');
                     facetCollection.clear(true);
-                    expect(facetCollection.trigger.calls.length).toEqual(1);
+                    expect(facetCollection.trigger.calls.count()).toEqual(1);
                 });
             });
             
@@ -675,7 +675,7 @@ describe('Backbone.Facetr', function() {
                     facetCollection.sortBy('Name');
                     expect(facetCollection.trigger).toHaveBeenCalledWith('sort', 'Name', 'asc');
                     facetCollection.sortBy('Name', true);
-                    expect(facetCollection.trigger.calls.length).toEqual(1);
+                    expect(facetCollection.trigger.calls.count()).toEqual(1);
                 });
             });
 

@@ -1,4 +1,4 @@
-// backbone.facetr 0.3.8 
+// backbone.facetr 0.3.9 
 // Copyright (c)2012 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.3.8';
+    Backbone.Facetr.VERSION = '0.3.9';
 
     // facet collections cache
     var _collections = {};
@@ -55,7 +55,8 @@
             return coll;
         } else {
             collection.facetrid = colid;
-            return _collections[colid] = new FacetCollection(collection);
+            _collections[colid] = new FacetCollection(collection);
+            return _collections[colid];
         }
     };
     
@@ -866,7 +867,9 @@
         },
         // triggered whenever the Backbone collection is reset
         _resetOrigCollection = function() {
-            if(_ownReset) return;
+            if(_ownReset) {
+                return;
+            }
     
             _initModelsMap();
             // notify facets to recompute 

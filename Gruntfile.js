@@ -5,6 +5,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-jasmine');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-karma-coveralls');
 
   // Project configuration.
   grunt.initConfig({
@@ -37,19 +39,34 @@ module.exports = function(grunt) {
     },
     jshint: {
       options: {
-        unused:true,
-        eqnull:true
+        jshintrc: '.jshintrc'
       },
       all: ['Gruntfile.js', 'dist/backbone.facetr.js']
     },
-    jasmine : {
+    jasmine: {
       src : 'dist/backbone.facetr.js',
       options : {
         specs : 'spec/*.js',
         vendor : [
-          'node_modules/lodash/dist/lodash.underscore.js',
+          'node_modules/underscore/underscore.js',
           'node_modules/backbone/backbone.js'
         ]
+      }
+    },
+    karma: {
+      continuous: {
+        configFile: 'karma.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      }
+    },
+    coveralls: {
+      options: {
+          debug: true,
+          coverageDir: 'coverage',
+          dryRun: false,
+          force: true,
+          recursive: true
       }
     }
   });
@@ -58,4 +75,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['rig', 'jshint', 'jasmine', 'uglify']);
   grunt.registerTask('test', ['jasmine']);
   grunt.registerTask('lint', ['jshint']);
+  grunt.registerTask('ci', ['rig', 'jshint', 'karma']);
+  grunt.registerTask('coverage', ['coveralls']);
 };
