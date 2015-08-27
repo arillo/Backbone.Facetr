@@ -5,7 +5,7 @@
     <title>Backbone.facetr by arillo</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
@@ -22,11 +22,14 @@
       <h1>
 <a id="backbonefacetr" class="anchor" href="#backbonefacetr" aria-hidden="true"><span class="octicon octicon-link"></span></a>Backbone.Facetr</h1>
 
-<p>VERSION 0.3.7</p>
+<p><a href="https://www.npmjs.com/package/backbone.facetr"><img src="https://img.shields.io/npm/l/backbone.facetr.svg" alt="npm"></a>
+<a href="https://www.npmjs.com/package/backbone.facetr"><img src="https://img.shields.io/npm/v/backbone.facetr.svg" alt="npm"></a>
+<a href="https://github.com/arillo/Backbone.Facetr"><img src="https://img.shields.io/bower/v/Backbone.Facetr.svg" alt="Bower"></a>
+<a href="https://travis-ci.org/arillo/Backbone.Facetr"><img src="https://travis-ci.org/arillo/Backbone.Facetr.svg?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/github/arillo/Backbone.Facetr?branch=master"><img src="https://coveralls.io/repos/arillo/Backbone.Facetr/badge.svg?branch=master&amp;service=github" alt="Coverage Status"></a></p>
 
 <h3>
-<a id="-contents" class="anchor" href="#-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="contents"></a> CONTENTS</h3>
+<a id="-contents" class="anchor" href="#-contents" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="contents"></a> CONTENTS</h3>
 
 <ul>
 <li><a href="#introduction">INTRODUCTION</a></li>
@@ -40,8 +43,7 @@
 </ul>
 
 <h3>
-<a id="-introduction" class="anchor" href="#-introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="introduction"></a> INTRODUCTION</h3>
+<a id="-introduction" class="anchor" href="#-introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="introduction"></a> INTRODUCTION</h3>
 
 <p>Backbone.Facetr is an utility which enables filtering of Backbone collections through facets. It can be used to implement faceted search, which follows the
 <a href="http://en.wikipedia.org/wiki/Faceted_classification">faceted classification system</a>.</p>
@@ -50,17 +52,10 @@
 early version; optimizations may improve performance in future realeases.</p>
 
 <h3>
-<a id="-installation" class="anchor" href="#-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="installation"></a> INSTALLATION</h3>
+<a id="-installation" class="anchor" href="#-installation" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="installation"></a> INSTALLATION</h3>
 
 <p>Production bundles can be found in the dist folder. Facetr is distributed via bower and npm.
 Both AMD and CommonJS are supported.</p>
-
-<h4>
-<a id="bower" class="anchor" href="#bower" aria-hidden="true"><span class="octicon octicon-link"></span></a>bower</h4>
-
-<pre><code>bower install backbone.facetr --save
-</code></pre>
 
 <h4>
 <a id="npm" class="anchor" href="#npm" aria-hidden="true"><span class="octicon octicon-link"></span></a>npm</h4>
@@ -68,7 +63,23 @@ Both AMD and CommonJS are supported.</p>
 <pre><code>npm install backbone.facetr --save
 </code></pre>
 
-<p>Include then in your code using any of the following methods</p>
+<h4>
+<a id="bower" class="anchor" href="#bower" aria-hidden="true"><span class="octicon octicon-link"></span></a>bower</h4>
+
+<pre><code>bower install Backbone.Facetr --save
+</code></pre>
+
+<h4>
+<a id="build-from-source" class="anchor" href="#build-from-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>build from source</h4>
+
+<pre><code>git clone git@github.com:arillo/Backbone.Facetr.git # clone repo
+cd Backbone.Facetr # navigate to local repo
+npm install -g grunt-cli # install grunt globally
+npm install # install dependencies
+grunt # build to dist folder
+</code></pre>
+
+<p>Include in your code using any of the following methods</p>
 
 <h4>
 <a id="amd" class="anchor" href="#amd" aria-hidden="true"><span class="octicon octicon-link"></span></a>AMD</h4>
@@ -91,8 +102,7 @@ Both AMD and CommonJS are supported.</p>
 </code></pre>
 
 <h3>
-<a id="-basic-usage" class="anchor" href="#-basic-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="basic-usage"></a> BASIC USAGE</h3>
+<a id="-basic-usage" class="anchor" href="#-basic-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="basic-usage"></a> BASIC USAGE</h3>
 
 <pre><code>// create a collection with few test items
 var collection = new Backbone.Collection([
@@ -149,8 +159,7 @@ lastNameFacet.removeValue('Smith');
 </code></pre>
 
 <h3>
-<a id="-dot-notation" class="anchor" href="#-dot-notation" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="dot-notation"></a> DOT NOTATION</h3>
+<a id="-dot-notation" class="anchor" href="#-dot-notation" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="dot-notation"></a> DOT NOTATION</h3>
 
 <pre><code>Syntax: PropertyName{1}(.PropertyName)*
 </code></pre>
@@ -217,8 +226,7 @@ Facetr(collection).facet('Name');               // error, Name is an object
 </code></pre>
 
 <h3>
-<a id="-operators" class="anchor" href="#-operators" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="operators"></a> OPERATORS</h3>
+<a id="-operators" class="anchor" href="#-operators" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="operators"></a> OPERATORS</h3>
 
 <p>Facets filtering can be combined using logical operators 'or' and 'and', both between different facets (external operator, see <a href="#facetcollection-facet">FacetCollection.facet method</a>) and between values of one facet (internal operator, see <a href="#facet-value">Facet.value method</a> and <a href="#facetexp">FacetExp</a>).</p>
 
@@ -254,8 +262,7 @@ facetCountry.value('Australia').or('Ireland');
 </code></pre>
 
 <h3>
-<a id="-api-reference" class="anchor" href="#-api-reference" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="api-reference"></a> API Reference</h3>
+<a id="-api-reference" class="anchor" href="#-api-reference" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="api-reference"></a> API Reference</h3>
 
 <ul>
 <li><p><a href="#facetr">Facetr</a></p></li>
@@ -313,8 +320,7 @@ facetCountry.value('Australia').or('Ireland');
 </ul>
 
 <h3>
-<a id="-facetr" class="anchor" href="#-facetr" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetr"></a> Facetr</h3>
+<a id="-facetr" class="anchor" href="#-facetr" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetr"></a> Facetr</h3>
 
 <h5>
 <a id="facetrcollectionbackbonecollection-idstring--facetcollection" class="anchor" href="#facetrcollectionbackbonecollection-idstring--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>Facetr(collection:Backbone.Collection, [id:string]) : FacetCollection</h5>
@@ -335,12 +341,10 @@ Facetr('myCollection') === Facetr(collection); // true
 </code></pre>
 
 <h3>
-<a id="-facetcollection" class="anchor" href="#-facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection"></a> FacetCollection</h3>
+<a id="-facetcollection" class="anchor" href="#-facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection"></a> FacetCollection</h3>
 
 <h5>
-<a id="-facetdotnotationexprstring-externaloperatorstring-silentboolean--facet" class="anchor" href="#-facetdotnotationexprstring-externaloperatorstring-silentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [externalOperator:string], [silent:boolean]) : Facet</h5>
+<a id="-facetdotnotationexprstring-externaloperatorstring-silentboolean--facet" class="anchor" href="#-facetdotnotationexprstring-externaloperatorstring-silentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-facet"></a> facet(dotNotationExpr:string, [externalOperator:string], [silent:boolean]) : Facet</h5>
 
 <p>Adds a Facet on the given collection using the property refered to by the
 Dot Notation expression (see <a href="#dot-notation">Dot Notation section</a> for more details).
@@ -366,8 +370,7 @@ Facetr(collection).facet('Name.LastName', 'or');
 </code></pre>
 
 <h5>
-<a id="-tojson--array" class="anchor" href="#-tojson--array" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-tojson"></a> toJSON() : Array</h5>
+<a id="-tojson--array" class="anchor" href="#-tojson--array" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-tojson"></a> toJSON() : Array</h5>
 
 <p>Returns an array containing objects representing the status of the facets
 added to the collection. Useful for rendering out facets lists.
@@ -434,8 +437,7 @@ var json = Facetr(collection).toJSON();
 </code></pre>
 
 <h5>
-<a id="-clearsilentboolean--facetcollection" class="anchor" href="#-clearsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-clear"></a> clear([silent:boolean]) : FacetCollection</h5>
+<a id="-clearsilentboolean--facetcollection" class="anchor" href="#-clearsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-clear"></a> clear([silent:boolean]) : FacetCollection</h5>
 
 <p>Removes all the facets added to the collection and unfilters it accordingly.
 Use this method to reset the original models in the collection.
@@ -454,8 +456,7 @@ All facets were removed
 </code></pre>
 
 <h5>
-<a id="-remove--undefined" class="anchor" href="#-remove--undefined" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-remove"></a> remove() : undefined</h5>
+<a id="-remove--undefined" class="anchor" href="#-remove--undefined" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-remove"></a> remove() : undefined</h5>
 
 <p>Removes all the facets and the facetrid added on the collection id upon
 Facetr(collection) initialization. Resets the original items in the
@@ -467,8 +468,7 @@ collection.</p>
 </code></pre>
 
 <h5>
-<a id="-sortbyattributestring-silent--facetcollection" class="anchor" href="#-sortbyattributestring-silent--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-sortby"></a> sortBy(attribute:string, [silent]) : FacetCollection</h5>
+<a id="-sortbyattributestring-silent--facetcollection" class="anchor" href="#-sortbyattributestring-silent--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-sortby"></a> sortBy(attribute:string, [silent]) : FacetCollection</h5>
 
 <p>Sorts the collection according to the given attribute name. By default
 ascendent sort is used. See asc() and desc() methods below to define sort
@@ -488,8 +488,7 @@ Sorting by Age asc
 </code></pre>
 
 <h5>
-<a id="-ascsilentboolean--facetcollection" class="anchor" href="#-ascsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-asc"></a> asc([silent:boolean]) : FacetCollection</h5>
+<a id="-ascsilentboolean--facetcollection" class="anchor" href="#-ascsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-asc"></a> asc([silent:boolean]) : FacetCollection</h5>
 
 <p>Sorts the collection in ascendent order by the attribute selected using
 sortBy method.
@@ -502,8 +501,7 @@ event unless true is passed as parameter.</p>
 </code></pre>
 
 <h5>
-<a id="-descsilentboolean--facetcollection" class="anchor" href="#-descsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-desc"></a> desc([silent:boolean]) : FacetCollection</h5>
+<a id="-descsilentboolean--facetcollection" class="anchor" href="#-descsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-desc"></a> desc([silent:boolean]) : FacetCollection</h5>
 
 <p>Sorts the collection in descendent order by the attribute selected using
 sortBy method.
@@ -516,8 +514,7 @@ event unless true is passed as parameter.</p>
 </code></pre>
 
 <h5>
-<a id="-addfilterfilternamestring-filterfunction-silentboolean--facetcollection" class="anchor" href="#-addfilterfilternamestring-filterfunction-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection</h5>
+<a id="-addfilterfilternamestring-filterfunction-silentboolean--facetcollection" class="anchor" href="#-addfilterfilternamestring-filterfunction-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection</h5>
 
 <p>Adds a filter which is used to filter the collection by testing each model against it. 
 Triggers Backbone.Collection reset unless true is passed as last parameter. Multiple filters can be added as long as they have
@@ -531,8 +528,7 @@ different names. Adding two filters with the same name will result in the first 
 </code></pre>
 
 <h5>
-<a id="-removefilterfilternamestring-silentboolean--facetcollection" class="anchor" href="#-removefilterfilternamestring-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-removefilter"></a> removeFilter(filterName:string, [silent:boolean]) : FacetCollection</h5>
+<a id="-removefilterfilternamestring-silentboolean--facetcollection" class="anchor" href="#-removefilterfilternamestring-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-removefilter"></a> removeFilter(filterName:string, [silent:boolean]) : FacetCollection</h5>
 
 <p>Removes the filter with the given name from the collection and unfilters it accordingly. 
 Triggers reset unless true is passed as last parameter.</p>
@@ -543,8 +539,7 @@ Triggers reset unless true is passed as last parameter.</p>
 </code></pre>
 
 <h5>
-<a id="-clearfilterssilentboolean--facetcollection" class="anchor" href="#-clearfilterssilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-clearfilters"></a> clearFilters([silent:boolean]) : FacetCollection</h5>
+<a id="-clearfilterssilentboolean--facetcollection" class="anchor" href="#-clearfilterssilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-clearfilters"></a> clearFilters([silent:boolean]) : FacetCollection</h5>
 
 <p>Removes all the filters previously added to the collection and unfilters it accordingly. 
 Triggers reset unless true is passed as parameter.</p>
@@ -555,8 +550,7 @@ Triggers reset unless true is passed as parameter.</p>
 </code></pre>
 
 <h5>
-<a id="-clearvaluessilentboolean--facetcollection" class="anchor" href="#-clearvaluessilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-clearvalues"></a> clearValues([silent:boolean]) : FacetCollection</h5>
+<a id="-clearvaluessilentboolean--facetcollection" class="anchor" href="#-clearvaluessilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-clearvalues"></a> clearValues([silent:boolean]) : FacetCollection</h5>
 
 <p>Removes all the currently selected values from all the facets, bringing
 the collection to its initial state.
@@ -568,8 +562,7 @@ Triggers a clearValues event unless true is passed as parameter.</p>
 </code></pre>
 
 <h5>
-<a id="-facetsorderfacetnamesarray-silentboolean--facetcollection" class="anchor" href="#-facetsorderfacetnamesarray-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array, [silent:boolean]) : FacetCollection</h5>
+<a id="-facetsorderfacetnamesarray-silentboolean--facetcollection" class="anchor" href="#-facetsorderfacetnamesarray-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array, [silent:boolean]) : FacetCollection</h5>
 
 <p>Sometimes it is convinient to give the facets list a predefined order. This method
 can be used to achieve this by passing an array of facet names which corresponds to
@@ -589,8 +582,7 @@ Facetr(collection).facetsOrder(['Name.FirstName', 'Age']);
 </code></pre>
 
 <h5>
-<a id="-collection--backbonecollection" class="anchor" href="#-collection--backbonecollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-collection"></a> collection() : Backbone.Collection</h5>
+<a id="-collection--backbonecollection" class="anchor" href="#-collection--backbonecollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-collection"></a> collection() : Backbone.Collection</h5>
 
 <p>Returns the reference to the Backbone.Collection. Useful for cases where the reference
 is needed but it was declared in another scope and is no more accessible.</p>
@@ -601,8 +593,7 @@ is needed but it was declared in another scope and is no more accessible.</p>
 </code></pre>
 
 <h5>
-<a id="-origlength--number" class="anchor" href="#-origlength--number" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-origlength"></a> origLength() : Number</h5>
+<a id="-origlength--number" class="anchor" href="#-origlength--number" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-origlength"></a> origLength() : Number</h5>
 
 <p>Returns the length of the collection before any faceted filtering was applied.</p>
 
@@ -628,14 +619,12 @@ Facetr(collection).origLength(); // 2
 </code></pre>
 
 <h5>
-<a id="-facets--array" class="anchor" href="#-facets--array" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-facets"></a> facets() : Array</h5>
+<a id="-facets--array" class="anchor" href="#-facets--array" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-facets"></a> facets() : Array</h5>
 
 <p>Returns an array containing all the Facet instances created on this FacetCollection.</p>
 
 <h5>
-<a id="-settingsjson--object" class="anchor" href="#-settingsjson--object" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-settingsjson"></a> settingsJSON() : object</h5>
+<a id="-settingsjson--object" class="anchor" href="#-settingsjson--object" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-settingsjson"></a> settingsJSON() : object</h5>
 
 <p>Returns an object representation of the current state of the Facetr collection which
 can be used to reload the same state in future using the initFromSettingsJSON method.</p>
@@ -667,19 +656,16 @@ var json = Facetr(collection).settingsJSON();
 </code></pre>
 
 <h5>
-<a id="-initfromsettingsjsonjsonobject--facetcollection" class="anchor" href="#-initfromsettingsjsonjsonobject--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetcollection-initfromsettingsjson"></a> initFromSettingsJSON(json:object) : FacetCollection</h5>
+<a id="-initfromsettingsjsonjsonobject--facetcollection" class="anchor" href="#-initfromsettingsjsonjsonobject--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-initfromsettingsjson"></a> initFromSettingsJSON(json:object) : FacetCollection</h5>
 
 <p>Initializes the Facetr collection using a settings object generated
 using the settingsJSON method. Triggers an "initFromSettingsJSON" event.</p>
 
 <h3>
-<a id="-facet" class="anchor" href="#-facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet"></a> Facet</h3>
+<a id="-facet" class="anchor" href="#-facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet"></a> Facet</h3>
 
 <h5>
-<a id="-valuevaluestring-internaloperatorstring-silentboolean--facetexp" class="anchor" href="#-valuevaluestring-internaloperatorstring-silentboolean--facetexp" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-value"></a> value(value:string, [internalOperator:string], [silent:boolean]) : FacetExp</h5>
+<a id="-valuevaluestring-internaloperatorstring-silentboolean--facetexp" class="anchor" href="#-valuevaluestring-internaloperatorstring-silentboolean--facetexp" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-value"></a> value(value:string, [internalOperator:string], [silent:boolean]) : FacetExp</h5>
 
 <p>Adds a value to the facet. This will result in the collection being filtered
 by { FacetName : 'Value' }. Valid <a href="#operators">internal operator</a> values are: 'or' and 'and' (default is 'or').
@@ -706,8 +692,7 @@ facet.value('Bob');
 </code></pre>
 
 <h5>
-<a id="-removevaluevaluestring-silentboolean--facetexp" class="anchor" href="#-removevaluevaluestring-silentboolean--facetexp" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-removevalue"></a> removeValue(value:string, [silent:boolean]) : FacetExp</h5>
+<a id="-removevaluevaluestring-silentboolean--facetexp" class="anchor" href="#-removevaluevaluestring-silentboolean--facetexp" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-removevalue"></a> removeValue(value:string, [silent:boolean]) : FacetExp</h5>
 
 <p>Removes the given value from the facet and resets the collection to
 the state previous of the filtering caused by the removed value.
@@ -734,8 +719,7 @@ facet.removeValue('Bob');
 </code></pre>
 
 <h5>
-<a id="-tojson--object" class="anchor" href="#-tojson--object" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-tojson"></a> toJSON() : object</h5>
+<a id="-tojson--object" class="anchor" href="#-tojson--object" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-tojson"></a> toJSON() : object</h5>
 
 <p>Returns an object representation of the current facet data and values.
 Useful for rendering the facet to the page.</p>
@@ -798,8 +782,7 @@ var json = Facetr(collection).facet('Name.FirstName').toJSON();
 </code></pre>
 
 <h5>
-<a id="-labellabelstring--facet" class="anchor" href="#-labellabelstring--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-label"></a> label(label:string) : Facet</h5>
+<a id="-labellabelstring--facet" class="anchor" href="#-labellabelstring--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-label"></a> label(label:string) : Facet</h5>
 
 <p>Use this method to set a human readable label for the facet.
 This can be used when rendering the facet on the page.</p>
@@ -815,8 +798,7 @@ Facetr(collection).facet('Name.FirstName').toJSON();
 </code></pre>
 
 <h5>
-<a id="-sortbycount--facet" class="anchor" href="#-sortbycount--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-sortbycount"></a> sortByCount() : Facet</h5>
+<a id="-sortbycount--facet" class="anchor" href="#-sortbycount--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-sortbycount"></a> sortByCount() : Facet</h5>
 
 <p>Sorts the facet values by their count. The count is the number 
 of models in the original collection with an attribute having as name 
@@ -840,8 +822,7 @@ facet.sortByCount();
 </code></pre>
 
 <h5>
-<a id="-sortbyactivecount--facet" class="anchor" href="#-sortbyactivecount--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-sortbyactivecount"></a> sortByActiveCount() : Facet</h5>
+<a id="-sortbyactivecount--facet" class="anchor" href="#-sortbyactivecount--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-sortbyactivecount"></a> sortByActiveCount() : Facet</h5>
 
 <p>Sorts the facet values by their active count. The active count is the number
 of models in the current filtered collection with an attribute having as name
@@ -867,14 +848,12 @@ facet.sortByActiveCount();
 </code></pre>
 
 <h5>
-<a id="-sortbyvalue--facet" class="anchor" href="#-sortbyvalue--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-sortbyvalue"></a> sortByValue() : Facet</h5>
+<a id="-sortbyvalue--facet" class="anchor" href="#-sortbyvalue--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-sortbyvalue"></a> sortByValue() : Facet</h5>
 
 <p>Sorts the facet values by their value. This is the default sort.</p>
 
 <h5>
-<a id="-asc--facet" class="anchor" href="#-asc--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-asc"></a> asc() : Facet</h5>
+<a id="-asc--facet" class="anchor" href="#-asc--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-asc"></a> asc() : Facet</h5>
 
 <p>Sets the direction of the values sort to ascendent.</p>
 
@@ -884,8 +863,7 @@ facet.sortByActiveCount();
 </code></pre>
 
 <h5>
-<a id="-desc--facet" class="anchor" href="#-desc--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-desc"></a> desc() : Facet</h5>
+<a id="-desc--facet" class="anchor" href="#-desc--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-desc"></a> desc() : Facet</h5>
 
 <p>Sets the direction of the values sort to descendant.</p>
 
@@ -895,20 +873,17 @@ facet.sortByActiveCount();
 </code></pre>
 
 <h5>
-<a id="-remove--undefined-1" class="anchor" href="#-remove--undefined-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-remove"></a> remove() : undefined</h5>
+<a id="-remove--undefined-1" class="anchor" href="#-remove--undefined-1" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-remove"></a> remove() : undefined</h5>
 
 <p>Removes the facet and all its values and unfilters the collection accordingly.</p>
 
 <h5>
-<a id="-clearsilentboolean--facet" class="anchor" href="#-clearsilentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-clear"></a> clear([silent:boolean]) : Facet</h5>
+<a id="-clearsilentboolean--facet" class="anchor" href="#-clearsilentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-clear"></a> clear([silent:boolean]) : Facet</h5>
 
 <p>Unselects all the values from the facet. It triggers a 'clear' event unless true is passed as parameter.</p>
 
 <h5>
-<a id="-customdatakeystring-valueobject--facet" class="anchor" href="#-customdatakeystring-valueobject--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-customdata"></a> customData(key:string, [value:object]) : Facet</h5>
+<a id="-customdatakeystring-valueobject--facet" class="anchor" href="#-customdatakeystring-valueobject--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-customdata"></a> customData(key:string, [value:object]) : Facet</h5>
 
 <p>This method can be used to add arbitrary data to pass to the templates.
 Data added using this method is included in the object returned by the toJSON() method
@@ -924,8 +899,7 @@ To retrieve previously set data, just pass the key parameter without any value.<
 </code></pre>
 
 <h5>
-<a id="-isselected--boolean" class="anchor" href="#-isselected--boolean" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-isselected"></a> isSelected : Boolean</h5>
+<a id="-isselected--boolean" class="anchor" href="#-isselected--boolean" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-isselected"></a> isSelected : Boolean</h5>
 
 <p>Returns true if any value is selected from this facet, false otherwise.</p>
 
@@ -943,8 +917,7 @@ facet.clear(); // remove all selected values
 </code></pre>
 
 <h5>
-<a id="-hierarchyhierarchysettingsarray--facet" class="anchor" href="#-hierarchyhierarchysettingsarray--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facet-hierarchy"></a> hierarchy(hierarchySettings:Array) : Facet</h5>
+<a id="-hierarchyhierarchysettingsarray--facet" class="anchor" href="#-hierarchyhierarchysettingsarray--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-hierarchy"></a> hierarchy(hierarchySettings:Array) : Facet</h5>
 
 <p>This method creates a hierarchical representation of facet values, based on the settings
 object given as parameter. Once this method is used, the facet becomes a "hierarchical" facet.
@@ -1069,8 +1042,7 @@ var json = profession.toJSON();
 </code></pre>
 
 <h3>
-<a id="-facetexp" class="anchor" href="#-facetexp" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetexp"></a> FacetExp</h3>
+<a id="-facetexp" class="anchor" href="#-facetexp" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetexp"></a> FacetExp</h3>
 
 <p>FacetExp objects are returned from Facet value and removeValue methods.
 They can be used to coincisely define multiple values on a facet, using
@@ -1088,20 +1060,17 @@ Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 </code></pre>
 
 <h5>
-<a id="-andvaluestring-silentboolean--facet" class="anchor" href="#-andvaluestring-silentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetexp-and"></a> and(value:string, [silent:boolean]) : Facet</h5>
+<a id="-andvaluestring-silentboolean--facet" class="anchor" href="#-andvaluestring-silentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetexp-and"></a> and(value:string, [silent:boolean]) : Facet</h5>
 
 <p>Equivalent to facet.value('Value', 'and'), but can be used for FacetExp chains.</p>
 
 <h5>
-<a id="-orvaluestring-silentboolean--facet" class="anchor" href="#-orvaluestring-silentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="facetexp-or"></a> or(value:string, [silent:boolean]) : Facet</h5>
+<a id="-orvaluestring-silentboolean--facet" class="anchor" href="#-orvaluestring-silentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetexp-or"></a> or(value:string, [silent:boolean]) : Facet</h5>
 
 <p>Equivalent to facet.value('Value', 'or'), but can be used for FacetExp chains.</p>
 
 <h3>
-<a id="-examples" class="anchor" href="#-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="examples"></a> EXAMPLES</h3>
+<a id="-examples" class="anchor" href="#-examples" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="examples"></a> EXAMPLES</h3>
 
 <p>This section contains a list of websites / projects using Facetr.</p>
 
@@ -1113,8 +1082,7 @@ Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 </ul>
 
 <h3>
-<a id="-license" class="anchor" href="#-license" aria-hidden="true"><span class="octicon octicon-link"></span></a>
-<a name="license"></a> LICENSE</h3>
+<a id="-license" class="anchor" href="#-license" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="license"></a> LICENSE</h3>
 
 <p>Backbone.Facetr may be freely distributed under the MIT license.</p>
 
@@ -1158,4 +1126,3 @@ DEALINGS IN THE SOFTWARE.</p>
 
   </body>
 </html>
-
