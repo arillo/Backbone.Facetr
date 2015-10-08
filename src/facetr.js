@@ -25,7 +25,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.3.9';
+    Backbone.Facetr.VERSION = '0.3.10';
 
     //= facetr.helpers.js
     //= facetr.facet.js
