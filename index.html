@@ -60,103 +60,100 @@ Both AMD and CommonJS are supported.</p>
 <h4>
 <a id="npm" class="anchor" href="#npm" aria-hidden="true"><span class="octicon octicon-link"></span></a>npm</h4>
 
-<pre><code>npm install backbone.facetr --save
-</code></pre>
+<div class="highlight highlight-source-shell"><pre>npm install backbone.facetr --save</pre></div>
 
 <h4>
 <a id="bower" class="anchor" href="#bower" aria-hidden="true"><span class="octicon octicon-link"></span></a>bower</h4>
 
-<pre><code>bower install Backbone.Facetr --save
-</code></pre>
+<div class="highlight highlight-source-shell"><pre>bower install Backbone.Facetr --save</pre></div>
 
 <h4>
 <a id="build-from-source" class="anchor" href="#build-from-source" aria-hidden="true"><span class="octicon octicon-link"></span></a>build from source</h4>
 
-<pre><code>git clone git@github.com:arillo/Backbone.Facetr.git # clone repo
-cd Backbone.Facetr # navigate to local repo
-npm install -g grunt-cli # install grunt globally
-npm install # install dependencies
-grunt # build to dist folder
-</code></pre>
+<div class="highlight highlight-source-shell"><pre>git clone git@github.com:arillo/Backbone.Facetr.git <span class="pl-c"># clone repo</span>
+<span class="pl-c1">cd</span> Backbone.Facetr <span class="pl-c"># navigate to local repo</span>
+npm install -g grunt-cli <span class="pl-c"># install grunt globally</span>
+npm install <span class="pl-c"># install dependencies</span>
+grunt <span class="pl-c"># build to dist folder</span></pre></div>
 
 <p>Include in your code using any of the following methods</p>
 
 <h4>
 <a id="amd" class="anchor" href="#amd" aria-hidden="true"><span class="octicon octicon-link"></span></a>AMD</h4>
 
-<pre><code>define('yourmodule', ['backbone.facetr'], function(Facetr){
-    // ... 
-});
-</code></pre>
+<div class="highlight highlight-source-js"><pre>define(<span class="pl-s"><span class="pl-pds">'</span>yourmodule<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>backbone.facetr<span class="pl-pds">'</span></span>], <span class="pl-k">function</span>(<span class="pl-smi">Facetr</span>){
+    <span class="pl-c">// ... </span>
+});</pre></div>
 
 <h4>
 <a id="commonjs" class="anchor" href="#commonjs" aria-hidden="true"><span class="octicon octicon-link"></span></a>CommonJS</h4>
 
-<pre><code>var Facetr = require('backbone.facetr');
-</code></pre>
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> Facetr <span class="pl-k">=</span> <span class="pl-c1">require</span>(<span class="pl-s"><span class="pl-pds">'</span>backbone.facetr<span class="pl-pds">'</span></span>);</pre></div>
 
 <h4>
 <a id="script-tag" class="anchor" href="#script-tag" aria-hidden="true"><span class="octicon octicon-link"></span></a>script tag</h4>
 
-<pre><code>&lt;script src="path/to/libs/backbone.facetr.js"&gt;&lt;/script&gt;
-</code></pre>
+<div class="highlight highlight-text-html-basic"><pre><span class="pl-c">&lt;!-- deps --&gt;</span>
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>path/to/libs/backbone.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>path/to/libs/underscore.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+<span class="pl-c">&lt;!-- facetr --&gt;</span>
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s"><span class="pl-pds">"</span>path/to/libs/backbone.facetr.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
 
 <h3>
 <a id="-basic-usage" class="anchor" href="#-basic-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="basic-usage"></a> BASIC USAGE</h3>
 
-<pre><code>// create a collection with few test items
-var collection = new Backbone.Collection([
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// create a collection with few test items</span>
+<span class="pl-k">var</span> collection <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Backbone.Collection</span>([
     {
-        'Name'      : {
-            'FirstName' : 'Bob',
-            'LastName' : 'Smith'
+        <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span>      <span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>FirstName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>,
+            <span class="pl-s"><span class="pl-pds">'</span>LastName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>
         },
-        'Age'       : 20,
-        'Country'   : 'Australia',
-        'Hobbies'   : ['fishing','painting','playing the ukulele'],
-        'Profession': 'manager'
+        <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>       <span class="pl-k">:</span> <span class="pl-c1">20</span>,
+        <span class="pl-s"><span class="pl-pds">'</span>Country<span class="pl-pds">'</span></span>   <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Australia<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>   <span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>fishing<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>painting<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>playing the ukulele<span class="pl-pds">'</span></span>],
+        <span class="pl-s"><span class="pl-pds">'</span>Profession<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>manager<span class="pl-pds">'</span></span>
     },
     {
-        'Name'      : {
-            'FirstName' : 'Otto',
-            'LastName'  : 'Von Braun'
+        <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span>      <span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>FirstName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Otto<span class="pl-pds">'</span></span>,
+            <span class="pl-s"><span class="pl-pds">'</span>LastName<span class="pl-pds">'</span></span>  <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Von Braun<span class="pl-pds">'</span></span>
         },
-        'Age'       : 35,
-        'Country'   : 'New Zealand',
-        'Hobbies'   : ['drawing', 'painting', 'shopping'],
-        'Profession': 'team manager'
+        <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>       <span class="pl-k">:</span> <span class="pl-c1">35</span>,
+        <span class="pl-s"><span class="pl-pds">'</span>Country<span class="pl-pds">'</span></span>   <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>New Zealand<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>   <span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>drawing<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>painting<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>shopping<span class="pl-pds">'</span></span>],
+        <span class="pl-s"><span class="pl-pds">'</span>Profession<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>team manager<span class="pl-pds">'</span></span>
     },
     {
-        'Name'      : {
-            'FirstName' : 'Sarah',
-            'LastName'  : 'Smith'
+        <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span>      <span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>FirstName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Sarah<span class="pl-pds">'</span></span>,
+            <span class="pl-s"><span class="pl-pds">'</span>LastName<span class="pl-pds">'</span></span>  <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>
         },
-        'Age'       : 28,
-        'Country'   : 'Ireland',
-        'Hobbies'   : ['shopping','painting'],
-        'Profession': 'project manager'
+        <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>       <span class="pl-k">:</span> <span class="pl-c1">28</span>,
+        <span class="pl-s"><span class="pl-pds">'</span>Country<span class="pl-pds">'</span></span>   <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Ireland<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>   <span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>shopping<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>painting<span class="pl-pds">'</span></span>],
+        <span class="pl-s"><span class="pl-pds">'</span>Profession<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>project manager<span class="pl-pds">'</span></span>
     }
 ]);
 
-Facetr(collection).facet('Name.LastName').value('Smith'); // collection contains 'Sarah Smith' and 'Bob Smith'
-Facetr(collection).facet('Hobbies').value('shopping'); // contains only 'Sarah Smith' 
-Facetr(collection).facet('Name.LastName').removeValue('Smith'); // contains 'Sarah Smith' and 'Otto Von Braun'
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.LastName<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>); <span class="pl-c">// collection contains 'Sarah Smith' and 'Bob Smith'</span>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>shopping<span class="pl-pds">'</span></span>); <span class="pl-c">// contains only 'Sarah Smith' </span>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.LastName<span class="pl-pds">'</span></span>).removeValue(<span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>); <span class="pl-c">// contains 'Sarah Smith' and 'Otto Von Braun'</span>
 
-// removes all facet values and restores original collection content
+<span class="pl-c">// removes all facet values and restores original collection content</span>
 Facetr(collection).clearValues();
 
-// if chaining is not your cup of tea, the following is equivalent to the above code
-var facetCollection = Facetr(collection); // returns a FacetCollection object
-var lastNameFacet = facetCollection.facet('Name.LastName'); // returns a Facet object
-var hobbiesFacet = facetCollection.facet('Hobbies');
+<span class="pl-c">// if chaining is not your cup of tea, the following is equivalent to the above code</span>
+<span class="pl-k">var</span> facetCollection <span class="pl-k">=</span> Facetr(collection); <span class="pl-c">// returns a FacetCollection object</span>
+<span class="pl-k">var</span> lastNameFacet <span class="pl-k">=</span> facetCollection.facet(<span class="pl-s"><span class="pl-pds">'</span>Name.LastName<span class="pl-pds">'</span></span>); <span class="pl-c">// returns a Facet object</span>
+<span class="pl-k">var</span> hobbiesFacet <span class="pl-k">=</span> facetCollection.facet(<span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>);
 
-lastNameFacet.value('Smith'); // returns a FacetExp object
-hobbiesFacet.value('shopping');
-lastNameFacet.removeValue('Smith');
+lastNameFacet.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>); <span class="pl-c">// returns a FacetExp object</span>
+hobbiesFacet.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>shopping<span class="pl-pds">'</span></span>);
+lastNameFacet.removeValue(<span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>);
 
-// read the API Reference section for more
-// most examples will use the above collection reference to illustrate functionalities
-</code></pre>
+<span class="pl-c">// read the API Reference section for more</span>
+<span class="pl-c">// most examples will use the above collection reference to illustrate functionalities</span></pre></div>
 
 <h3>
 <a id="-dot-notation" class="anchor" href="#-dot-notation" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="dot-notation"></a> DOT NOTATION</h3>
@@ -169,24 +166,22 @@ Facetr Dot Notation it is possible to define facets on properties of a Model, as
 
 <p>For example, consider the following model:</p>
 
-<pre><code>var model = new Backbone.Model({
-    'Name' : {
-        'FirstName' : 'John',
-        'LastName' : ['Smith','White']
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> model <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Backbone.Model</span>({
+    <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span> <span class="pl-k">:</span> {
+        <span class="pl-s"><span class="pl-pds">'</span>FirstName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>John<span class="pl-pds">'</span></span>,
+        <span class="pl-s"><span class="pl-pds">'</span>LastName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>,<span class="pl-s"><span class="pl-pds">'</span>White<span class="pl-pds">'</span></span>]
     },
-    'City' : 'London',
-    'Age' : 45,
-    'FamilyMembers' : [
-        { 'Name' : 'Robert' },
-        { 'Name' : 'Margaret' }
+    <span class="pl-s"><span class="pl-pds">'</span>City<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>London<span class="pl-pds">'</span></span>,
+    <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-c1">45</span>,
+    <span class="pl-s"><span class="pl-pds">'</span>FamilyMembers<span class="pl-pds">'</span></span> <span class="pl-k">:</span> [
+        { <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Robert<span class="pl-pds">'</span></span> },
+        { <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Margaret<span class="pl-pds">'</span></span> }
     ]
-});
-</code></pre>
+});</pre></div>
 
 <p>To add a facet on property 'FirstName' the following expression in Dot Notation syntax can be used: 'Name.FirstName'.</p>
 
-<pre><code>Facetr(collection).facet('Name.FirstName');
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>);</pre></div>
 
 <p>Theoretically there is no depth limit for a Dot Notation expression (e.g. PropertyName1.PropertyName2...PropertyNameN), the only 
 limitation being the common sense.</p>
@@ -216,14 +211,13 @@ limitation being the common sense.</p>
 <h4>
 <a id="example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>EXAMPLE</h4>
 
-<pre><code>Facetr(collection).facet('City');               // valid, City is a string
-Facetr(collection).facet('Age');                // valid, Age is a Number
-Facetr(collection).facet('Name.LastName');      // valid, LastName is an Array of strings
-Facetr(collection).facet('FamilyMembers.Name'); // valid, takes value of Name of each object in array FamilyMembers
-Facetr(collection).facet('Name');               // error, Name is an object
+<div class="highlight highlight-source-js"><pre>Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>City<span class="pl-pds">'</span></span>);               <span class="pl-c">// valid, City is a string</span>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>);                <span class="pl-c">// valid, Age is a Number</span>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.LastName<span class="pl-pds">'</span></span>);      <span class="pl-c">// valid, LastName is an Array of strings</span>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>FamilyMembers.Name<span class="pl-pds">'</span></span>); <span class="pl-c">// valid, takes value of Name of each object in array FamilyMembers</span>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span>);               <span class="pl-c">// error, Name is an object</span>
 
-// etc..
-</code></pre>
+<span class="pl-c">// etc..</span></pre></div>
 
 <h3>
 <a id="-operators" class="anchor" href="#-operators" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="operators"></a> OPERATORS</h3>
@@ -233,33 +227,31 @@ Facetr(collection).facet('Name');               // error, Name is an object
 <h4>
 <a id="external-operator" class="anchor" href="#external-operator" aria-hidden="true"><span class="octicon octicon-link"></span></a>External Operator</h4>
 
-<pre><code>// create a facet with default external operator 'and'
-var facetCountry = Facetr(collection).facet('Country');
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// create a facet with default external operator 'and'</span>
+<span class="pl-k">var</span> facetCountry <span class="pl-k">=</span> Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Country<span class="pl-pds">'</span></span>);
 
-// or set the external operator explicitly
-var facetLastName = Facetr(collection).facet('Name.LastName', 'and');
+<span class="pl-c">// or set the external operator explicitly</span>
+<span class="pl-k">var</span> facetLastName <span class="pl-k">=</span> Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.LastName<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>and<span class="pl-pds">'</span></span>);
 
-// when filtering, such operator will be used to combine filters of the two facets
-facetCountry.value('Australia');
-facetLastName.value('Smith');
+<span class="pl-c">// when filtering, such operator will be used to combine filters of the two facets</span>
+facetCountry.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Australia<span class="pl-pds">'</span></span>);
+facetLastName.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>);
 
-// collection contains all models with Country equal 'Australia' and LastName equal 'Smith'
-</code></pre>
+<span class="pl-c">// collection contains all models with Country equal 'Australia' and LastName equal 'Smith'</span></pre></div>
 
 <h4>
 <a id="internal-operator" class="anchor" href="#internal-operator" aria-hidden="true"><span class="octicon octicon-link"></span></a>Internal Operator</h4>
 
-<pre><code>// add a value with default internal operator 'or'
-facetCountry.value('Australia');
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// add a value with default internal operator 'or'</span>
+facetCountry.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Australia<span class="pl-pds">'</span></span>);
 
-// or set the internal operator explicitly
-facetCountry.value('Ireland', 'or');
+<span class="pl-c">// or set the internal operator explicitly</span>
+facetCountry.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Ireland<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>or<span class="pl-pds">'</span></span>);
 
-// it is possible to use chaining syntax to combine values
-facetCountry.value('Australia').or('Ireland');
+<span class="pl-c">// it is possible to use chaining syntax to combine values</span>
+facetCountry.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Australia<span class="pl-pds">'</span></span>).or(<span class="pl-s"><span class="pl-pds">'</span>Ireland<span class="pl-pds">'</span></span>);
 
-// collection contains all models with Country equal either 'Australia' or 'Ireland'
-</code></pre>
+<span class="pl-c">// collection contains all models with Country equal either 'Australia' or 'Ireland'</span></pre></div>
 
 <h3>
 <a id="-api-reference" class="anchor" href="#-api-reference" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="api-reference"></a> API Reference</h3>
@@ -329,16 +321,15 @@ facetCountry.value('Australia').or('Ireland');
 any Facetr expression. Returns the created FacetCollection instance for
 method chaining. An id can be associated with the collection.</p>
 
-<p>example                                                                      </p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection);
+<div class="highlight highlight-source-js"><pre>Facetr(collection);
 
-// or also
-Facetr(collection, 'myCollection');
+<span class="pl-c">// or also</span>
+Facetr(collection, <span class="pl-s"><span class="pl-pds">'</span>myCollection<span class="pl-pds">'</span></span>);
 
-// which enables the following syntax
-Facetr('myCollection') === Facetr(collection); // true                                                      
-</code></pre>
+<span class="pl-c">// which enables the following syntax</span>
+Facetr(<span class="pl-s"><span class="pl-pds">'</span>myCollection<span class="pl-pds">'</span></span>) <span class="pl-k">===</span> Facetr(collection); <span class="pl-c">// true</span></pre></div>
 
 <h3>
 <a id="-facetcollection" class="anchor" href="#-facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection"></a> FacetCollection</h3>
@@ -352,22 +343,21 @@ Valid <a href="#operators">external operator</a> values are: 'or' and 'and' (def
 Returns the created Facet instance to allow method chaining.
 Triggers a facet event with the facetName passed to the callback, unless true is passed as last parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).on('facet', function(facetName) {
-    console.log(facetName);
+<div class="highlight highlight-source-js"><pre>Facetr(collection).on(<span class="pl-s"><span class="pl-pds">'</span>facet<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">facetName</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(facetName);
 });
 
-// add facet on property 'Age' using default operator ('and')
-Facetr(collection).facet('Age');
+<span class="pl-c">// add facet on property 'Age' using default operator ('and')</span>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>);
 
-// add facet on property 'LastName' of object 'Name' using 'or' operator
-Facetr(collection).facet('Name.LastName', 'or');
+<span class="pl-c">// add facet on property 'LastName' of object 'Name' using 'or' operator</span>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.LastName<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>or<span class="pl-pds">'</span></span>);
 
-// console output would be
-// Age
-// Name.LastName
-</code></pre>
+<span class="pl-c">// console output would be</span>
+<span class="pl-c">// Age</span>
+<span class="pl-c">// Name.LastName</span></pre></div>
 
 <h5>
 <a id="-tojson--array" class="anchor" href="#-tojson--array" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-tojson"></a> toJSON() : Array</h5>
@@ -377,64 +367,63 @@ added to the collection. Useful for rendering out facets lists.
 Each object in the array is the result of invoking toJSON on each Facet
 (see Facet documentation below for the Facet.toJSON method).</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>// create a collection with two models
-var collection = new Backbone.Collection([
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// create a collection with two models</span>
+<span class="pl-k">var</span> collection <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Backbone.Collection</span>([
     {
-        'Name'      : {
-            'FirstName' : 'Bob',
-            'LastName' : 'Smith'
+        <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span>      <span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>FirstName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>,
+            <span class="pl-s"><span class="pl-pds">'</span>LastName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>
         },
-        'Age'       : 20
+        <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>       <span class="pl-k">:</span> <span class="pl-c1">20</span>
     },
     {
-        'Name'      : {
-            'FirstName' : 'Otto',
-            'LastName'  : 'Von Braun'
+        <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span>      <span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>FirstName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Otto<span class="pl-pds">'</span></span>,
+            <span class="pl-s"><span class="pl-pds">'</span>LastName<span class="pl-pds">'</span></span>  <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Von Braun<span class="pl-pds">'</span></span>
         },
-        'Age'       : 35
+        <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>       <span class="pl-k">:</span> <span class="pl-c1">35</span>
     }
 ]);
 
-Facetr(collection).facet('Name.FirstName').label('First Name');
-Facetr(collection).facet('Name.FirstName').value('Bob');
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).<span class="pl-c1">label</span>(<span class="pl-s"><span class="pl-pds">'</span>First Name<span class="pl-pds">'</span></span>);
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>);
 
-var json = Facetr(collection).toJSON();
+<span class="pl-k">var</span> json <span class="pl-k">=</span> Facetr(collection).toJSON();
 
-// value of json will be an array of Facet data object with the following format:
-//
-// [
-//      {
-//          data : {
-//              extOperator : 'and',
-//              intOperator : 'or',
-//              label       : 'First Name',
-//              name        : 'Name.FirstName',
-//              selected    : true,
-//              sort        : {
-//                  by        : 'value',
-//                  direction : 'asc'
-//              }
-//              customData : {}
-//          },
-//          values : [
-//              {
-//                  active      : true,
-//                  activeCount : 1,
-//                  count       : 1,
-//                  value       : 'Bob'
-//              },
-//              {
-//                  active      : false,
-//                  activeCount : 0,
-//                  count       : 1,
-//                  value       : 'Otto'
-//              }
-//          ]
-//      }
-// ]
-</code></pre>
+<span class="pl-c">// value of json will be an array of Facet data object with the following format:</span>
+<span class="pl-c">//</span>
+<span class="pl-c">// [</span>
+<span class="pl-c">//      {</span>
+<span class="pl-c">//          data : {</span>
+<span class="pl-c">//              extOperator : 'and',</span>
+<span class="pl-c">//              intOperator : 'or',</span>
+<span class="pl-c">//              label       : 'First Name',</span>
+<span class="pl-c">//              name        : 'Name.FirstName',</span>
+<span class="pl-c">//              selected    : true,</span>
+<span class="pl-c">//              sort        : {</span>
+<span class="pl-c">//                  by        : 'value',</span>
+<span class="pl-c">//                  direction : 'asc'</span>
+<span class="pl-c">//              }</span>
+<span class="pl-c">//              customData : {}</span>
+<span class="pl-c">//          },</span>
+<span class="pl-c">//          values : [</span>
+<span class="pl-c">//              {</span>
+<span class="pl-c">//                  active      : true,</span>
+<span class="pl-c">//                  activeCount : 1,</span>
+<span class="pl-c">//                  count       : 1,</span>
+<span class="pl-c">//                  value       : 'Bob'</span>
+<span class="pl-c">//              },</span>
+<span class="pl-c">//              {</span>
+<span class="pl-c">//                  active      : false,</span>
+<span class="pl-c">//                  activeCount : 0,</span>
+<span class="pl-c">//                  count       : 1,</span>
+<span class="pl-c">//                  value       : 'Otto'</span>
+<span class="pl-c">//              }</span>
+<span class="pl-c">//          ]</span>
+<span class="pl-c">//      }</span>
+<span class="pl-c">// ]</span></pre></div>
 
 <h5>
 <a id="-clearsilentboolean--facetcollection" class="anchor" href="#-clearsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-clear"></a> clear([silent:boolean]) : FacetCollection</h5>
@@ -443,17 +432,16 @@ var json = Facetr(collection).toJSON();
 Use this method to reset the original models in the collection.
 Triggers a clear event, unless true is passed as parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facet(collection).on('clear', function() {
-    console.log('All facets were removed');
+<div class="highlight highlight-source-js"><pre>Facet(collection).on(<span class="pl-s"><span class="pl-pds">'</span>clear<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>() {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>All facets were removed<span class="pl-pds">'</span></span>);
 });
 
-Facet(collection).clear();
+Facet(collection).<span class="pl-c1">clear</span>();
 
-// console output
-All facets were removed
-</code></pre>
+<span class="pl-c">// console output:</span>
+<span class="pl-c">// All facets were removed</span></pre></div>
 
 <h5>
 <a id="-remove--undefined" class="anchor" href="#-remove--undefined" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-remove"></a> remove() : undefined</h5>
@@ -462,10 +450,9 @@ All facets were removed
 Facetr(collection) initialization. Resets the original items in the
 collection.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).remove()
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).remove()</pre></div>
 
 <h5>
 <a id="-sortbyattributestring-silent--facetcollection" class="anchor" href="#-sortbyattributestring-silent--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-sortby"></a> sortBy(attribute:string, [silent]) : FacetCollection</h5>
@@ -475,17 +462,16 @@ ascendent sort is used. See asc() and desc() methods below to define sort
 direction. Triggers sort event unless true is passed as last parameter.
 This method automatically recognizes string, numeric or date values.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).on('sort', function(attr, dir) {
-    console.log('Sorting by ' + attr + ' ' + dir);
+<div class="highlight highlight-source-js"><pre>Facetr(collection).on(<span class="pl-s"><span class="pl-pds">'</span>sort<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">attr</span>, <span class="pl-smi">dir</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>Sorting by <span class="pl-pds">'</span></span> <span class="pl-k">+</span> attr <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span> <span class="pl-pds">'</span></span> <span class="pl-k">+</span> dir);
 });
 
-Facetr(collection).sortBy('Age');
+Facetr(collection).sortBy(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>);
 
-// console output
-Sorting by Age asc
-</code></pre>
+<span class="pl-c">// console output:</span>
+<span class="pl-c">// Sorting by Age asc</span></pre></div>
 
 <h5>
 <a id="-ascsilentboolean--facetcollection" class="anchor" href="#-ascsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-asc"></a> asc([silent:boolean]) : FacetCollection</h5>
@@ -495,10 +481,9 @@ sortBy method.
 If sortBy was not invoked before, this method has no effect. Triggers sort
 event unless true is passed as parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).sortBy('Age').asc();
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).sortBy(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>).asc();</pre></div>
 
 <h5>
 <a id="-descsilentboolean--facetcollection" class="anchor" href="#-descsilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-desc"></a> desc([silent:boolean]) : FacetCollection</h5>
@@ -508,10 +493,9 @@ sortBy method.
 If sortBy was not invoked before, this method has no effect. Triggers sort
 event unless true is passed as parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).sortBy('Age').desc();
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).sortBy(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>).desc();</pre></div>
 
 <h5>
 <a id="-addfilterfilternamestring-filterfunction-silentboolean--facetcollection" class="anchor" href="#-addfilterfilternamestring-filterfunction-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-addfilter"></a> addFilter(filterName:string, filter:function, [silent:boolean]) : FacetCollection</h5>
@@ -520,12 +504,11 @@ event unless true is passed as parameter.</p>
 Triggers Backbone.Collection reset unless true is passed as last parameter. Multiple filters can be added as long as they have
 different names. Adding two filters with the same name will result in the first being overwritten by the second.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).addFilter('AgeFilter', function(model) {
-    return model.get('Age') &gt;= 20 &amp;&amp; model.get('Age') &lt; 60; 
-});
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).addFilter(<span class="pl-s"><span class="pl-pds">'</span>AgeFilter<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">model</span>) {
+    <span class="pl-k">return</span> model.get(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>) <span class="pl-k">&gt;=</span> <span class="pl-c1">20</span> <span class="pl-k">&amp;&amp;</span> model.get(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>) <span class="pl-k">&lt;</span> <span class="pl-c1">60</span>; 
+});</pre></div>
 
 <h5>
 <a id="-removefilterfilternamestring-silentboolean--facetcollection" class="anchor" href="#-removefilterfilternamestring-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-removefilter"></a> removeFilter(filterName:string, [silent:boolean]) : FacetCollection</h5>
@@ -533,10 +516,9 @@ different names. Adding two filters with the same name will result in the first 
 <p>Removes the filter with the given name from the collection and unfilters it accordingly. 
 Triggers reset unless true is passed as last parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).removeFilter('AgeFilter');
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).removeFilter(<span class="pl-s"><span class="pl-pds">'</span>AgeFilter<span class="pl-pds">'</span></span>);</pre></div>
 
 <h5>
 <a id="-clearfilterssilentboolean--facetcollection" class="anchor" href="#-clearfilterssilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-clearfilters"></a> clearFilters([silent:boolean]) : FacetCollection</h5>
@@ -544,10 +526,9 @@ Triggers reset unless true is passed as last parameter.</p>
 <p>Removes all the filters previously added to the collection and unfilters it accordingly. 
 Triggers reset unless true is passed as parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).clearFilters();
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).clearFilters();</pre></div>
 
 <h5>
 <a id="-clearvaluessilentboolean--facetcollection" class="anchor" href="#-clearvaluessilentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-clearvalues"></a> clearValues([silent:boolean]) : FacetCollection</h5>
@@ -556,10 +537,9 @@ Triggers reset unless true is passed as parameter.</p>
 the collection to its initial state.
 Triggers a clearValues event unless true is passed as parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).clearValues();
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).clearValues();</pre></div>
 
 <h5>
 <a id="-facetsorderfacetnamesarray-silentboolean--facetcollection" class="anchor" href="#-facetsorderfacetnamesarray-silentboolean--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-facetsorder"></a> facetsOrder(facetNames:Array, [silent:boolean]) : FacetCollection</h5>
@@ -569,17 +549,16 @@ can be used to achieve this by passing an array of facet names which corresponds
 the order to be given to the facets in the list. Triggers a 'facetsOrder' event with the facetNames array passed
 to the event handler, unless true is given as last parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).facet('Age');
-Facetr(collection).facet('Name.FirstName');
+<div class="highlight highlight-source-js"><pre>Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>);
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>);
 
-// Facetr(collection).toJSON() has facet 'Age' at index 0 and 'Name.FirstName' at index 1
+<span class="pl-c">// Facetr(collection).toJSON() has facet 'Age' at index 0 and 'Name.FirstName' at index 1</span>
 
-Facetr(collection).facetsOrder(['Name.FirstName', 'Age']);
+Facetr(collection).facetsOrder([<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>]);
 
-// Facetr(collection).toJSON() has facet 'Name.FirstName' at index 0 and 'Age' at index 1
-</code></pre>
+<span class="pl-c">// Facetr(collection).toJSON() has facet 'Name.FirstName' at index 0 and 'Age' at index 1</span></pre></div>
 
 <h5>
 <a id="-collection--backbonecollection" class="anchor" href="#-collection--backbonecollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-collection"></a> collection() : Backbone.Collection</h5>
@@ -587,36 +566,34 @@ Facetr(collection).facetsOrder(['Name.FirstName', 'Age']);
 <p>Returns the reference to the Backbone.Collection. Useful for cases where the reference
 is needed but it was declared in another scope and is no more accessible.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).collection() === collection; // true
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).collection() <span class="pl-k">===</span> collection; <span class="pl-c">// true</span></pre></div>
 
 <h5>
 <a id="-origlength--number" class="anchor" href="#-origlength--number" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-origlength"></a> origLength() : Number</h5>
 
 <p>Returns the length of the collection before any faceted filtering was applied.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>var collection = new Backbone.Collection([
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> collection <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Backbone.Collection</span>([
     {
-        Name : 'John'
-        Age  : 19
+        Name <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>John<span class="pl-pds">'</span></span>
+        Age  <span class="pl-k">:</span> <span class="pl-c1">19</span>
     },
     {
-        Name : 'Sarah',
-        Age  : 35
+        Name <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Sarah<span class="pl-pds">'</span></span>,
+        Age  <span class="pl-k">:</span> <span class="pl-c1">35</span>
     }
 ]);
 
-collection.length() // 2
+collection.<span class="pl-c1">length</span>() <span class="pl-c">// 2</span>
 
-Facetr(collection).facet('Age').value(35);
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-c1">35</span>);
 
-collection.length(); // 1
-Facetr(collection).origLength(); // 2
-</code></pre>
+collection.<span class="pl-c1">length</span>(); <span class="pl-c">// 1</span>
+Facetr(collection).origLength(); <span class="pl-c">// 2</span></pre></div>
 
 <h5>
 <a id="-facets--array" class="anchor" href="#-facets--array" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-facets"></a> facets() : Array</h5>
@@ -629,31 +606,30 @@ Facetr(collection).origLength(); // 2
 <p>Returns an object representation of the current state of the Facetr collection which
 can be used to reload the same state in future using the initFromSettingsJSON method.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).facet('Name.FirstName').label('First Name');
-Facetr(collection).sortBy('Name.FirstName').asc();
-Facetr(collection).facet('Name.FirstName').value('Bob');
+<div class="highlight highlight-source-js"><pre>Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).<span class="pl-c1">label</span>(<span class="pl-s"><span class="pl-pds">'</span>First Name<span class="pl-pds">'</span></span>);
+Facetr(collection).sortBy(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).asc();
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>);
 
-var json = Facetr(collection).settingsJSON();
+<span class="pl-k">var</span> json <span class="pl-k">=</span> Facetr(collection).settingsJSON();
 
-// value of json will be the following:
-//  
-// {
-//      sort : {
-//          by  :   "Name.FirstName",
-//          dir :   "asc"
-//      },
-//      facets : [
-//          {
-//              attr    :   "Name.FirstName",
-//              eop     :   "and",
-//              iop     :   "or",
-//              vals    :   [ "Bob" ]
-//          }
-//      ]
-//  }
-</code></pre>
+<span class="pl-c">// value of json will be the following:</span>
+<span class="pl-c">//  </span>
+<span class="pl-c">// {</span>
+<span class="pl-c">//      sort : {</span>
+<span class="pl-c">//          by  :   "Name.FirstName",</span>
+<span class="pl-c">//          dir :   "asc"</span>
+<span class="pl-c">//      },</span>
+<span class="pl-c">//      facets : [</span>
+<span class="pl-c">//          {</span>
+<span class="pl-c">//              attr    :   "Name.FirstName",</span>
+<span class="pl-c">//              eop     :   "and",</span>
+<span class="pl-c">//              iop     :   "or",</span>
+<span class="pl-c">//              vals    :   [ "Bob" ]</span>
+<span class="pl-c">//          }</span>
+<span class="pl-c">//      ]</span>
+<span class="pl-c">//  }</span></pre></div>
 
 <h5>
 <a id="-initfromsettingsjsonjsonobject--facetcollection" class="anchor" href="#-initfromsettingsjsonjsonobject--facetcollection" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-initfromsettingsjson"></a> initFromSettingsJSON(json:object) : FacetCollection</h5>
@@ -673,23 +649,22 @@ Triggers a 'filter' event on the FacetCollection passing facetName and facetValu
 a 'value' event on the Facet passing the facetValue to the handler, unless true is passed
 as last parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).on('filter', function(facetName, facetValue) {
-    console.log('filtered by '+ facetName + ' with value equal ' + facetValue);
+<div class="highlight highlight-source-js"><pre>Facetr(collection).on(<span class="pl-s"><span class="pl-pds">'</span>filter<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">facetName</span>, <span class="pl-smi">facetValue</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>filtered by <span class="pl-pds">'</span></span><span class="pl-k">+</span> facetName <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span> with value equal <span class="pl-pds">'</span></span> <span class="pl-k">+</span> facetValue);
 });
 
-var facet = Facetr(collection).facet('Name.FirstName');
+<span class="pl-k">var</span> facet <span class="pl-k">=</span> Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>);
 
-facet.on('value', function(facetValue){
-    console.log('the following value was added to the facet: ' + facetValue);
+facet.on(<span class="pl-s"><span class="pl-pds">'</span>value<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">facetValue</span>){
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>the following value was added to the facet: <span class="pl-pds">'</span></span> <span class="pl-k">+</span> facetValue);
 });
 
-facet.value('Bob');
+facet.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>);
 
-// console output: "filtered by Name.FirstName with value Bob"
-// collection contains only models with FirstName = 'Bob'
-</code></pre>
+<span class="pl-c">// console output: "filtered by Name.FirstName with value Bob"</span>
+<span class="pl-c">// collection contains only models with FirstName = 'Bob'</span></pre></div>
 
 <h5>
 <a id="-removevaluevaluestring-silentboolean--facetexp" class="anchor" href="#-removevaluevaluestring-silentboolean--facetexp" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-removevalue"></a> removeValue(value:string, [silent:boolean]) : FacetExp</h5>
@@ -700,23 +675,22 @@ Triggers a 'unfilter' event on the FacetCollection passing facetName and facetVa
 a 'removeValue' event on the Facet passing the facetValue to the handler, unless true is passed
 as last parameter.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).on('unfilter', function(facetName, facetValue) {
-    console.log('unfiltered by '+ facetName + ' with value equal ' + facetValue);
+<div class="highlight highlight-source-js"><pre>Facetr(collection).on(<span class="pl-s"><span class="pl-pds">'</span>unfilter<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">facetName</span>, <span class="pl-smi">facetValue</span>) {
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>unfiltered by <span class="pl-pds">'</span></span><span class="pl-k">+</span> facetName <span class="pl-k">+</span> <span class="pl-s"><span class="pl-pds">'</span> with value equal <span class="pl-pds">'</span></span> <span class="pl-k">+</span> facetValue);
 });
 
-var facet = Facetr(collection).facet('Name.FirstName');
+<span class="pl-k">var</span> facet <span class="pl-k">=</span> Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>);
 
-facet.on('removeValue', function(value){
-    console.log('the following value was removed from the facet: ' + value);
+facet.on(<span class="pl-s"><span class="pl-pds">'</span>removeValue<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">value</span>){
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>the following value was removed from the facet: <span class="pl-pds">'</span></span> <span class="pl-k">+</span> value);
 });
 
-facet.removeValue('Bob');
+facet.removeValue(<span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>);
 
-// console output: "unfiltered by Name.FirstName with value Bob"
-// collection contains again also models with FirstName = 'Bob'
-</code></pre>
+<span class="pl-c">// console output: "unfiltered by Name.FirstName with value Bob"</span>
+<span class="pl-c">// collection contains again also models with FirstName = 'Bob'</span></pre></div>
 
 <h5>
 <a id="-tojson--object" class="anchor" href="#-tojson--object" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-tojson"></a> toJSON() : object</h5>
@@ -724,62 +698,61 @@ facet.removeValue('Bob');
 <p>Returns an object representation of the current facet data and values.
 Useful for rendering the facet to the page.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>// create a collection with two models
-var collection = new Backbone.Collection([
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// create a collection with two models</span>
+<span class="pl-k">var</span> collection <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Backbone.Collection</span>([
     {
-        'Name'      : {
-            'FirstName' : 'Bob',
-            'LastName' : 'Smith'
+        <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span>      <span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>FirstName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>,
+            <span class="pl-s"><span class="pl-pds">'</span>LastName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Smith<span class="pl-pds">'</span></span>
         },
-        'Age'       : 20
+        <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>       <span class="pl-k">:</span> <span class="pl-c1">20</span>
     },
     {
-        'Name'      : {
-            'FirstName' : 'Otto',
-            'LastName'  : 'Von Braun'
+        <span class="pl-s"><span class="pl-pds">'</span>Name<span class="pl-pds">'</span></span>      <span class="pl-k">:</span> {
+            <span class="pl-s"><span class="pl-pds">'</span>FirstName<span class="pl-pds">'</span></span> <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Otto<span class="pl-pds">'</span></span>,
+            <span class="pl-s"><span class="pl-pds">'</span>LastName<span class="pl-pds">'</span></span>  <span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>Von Braun<span class="pl-pds">'</span></span>
         },
-        'Age'       : 35
+        <span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>       <span class="pl-k">:</span> <span class="pl-c1">35</span>
     }
 ]);
 
-Facetr(collection).facet('Name.FirstName').label('First Name');
-Facetr(collection).facet('Name.FirstName').value('Bob');
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).<span class="pl-c1">label</span>(<span class="pl-s"><span class="pl-pds">'</span>First Name<span class="pl-pds">'</span></span>);
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>Bob<span class="pl-pds">'</span></span>);
 
-var json = Facetr(collection).facet('Name.FirstName').toJSON();
+<span class="pl-k">var</span> json <span class="pl-k">=</span> Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).toJSON();
 
-// json is equal to:
-//
-//  {
-//      data : {
-//          extOperator : 'and',
-//          intOperator : 'or',
-//          label       : 'First Name',
-//          name        : 'Name.FirstName',
-//          selected    : true,
-//          sort        : {
-//              by        : 'value',
-//              direction : 'asc'
-//          }
-//          customData : {}
-//      },
-//      values : [
-//          {
-//              active      : true,
-//              activeCount : 1,
-//              count       : 1,
-//              value       : 'Bob'
-//          },
-//          {
-//              active      : false,
-//              activeCount : 0,
-//              count       : 1,
-//              value       : 'Otto'
-//          }
-//      ]
-//  }
-</code></pre>
+<span class="pl-c">// json is equal to:</span>
+<span class="pl-c">//</span>
+<span class="pl-c">//  {</span>
+<span class="pl-c">//      data : {</span>
+<span class="pl-c">//          extOperator : 'and',</span>
+<span class="pl-c">//          intOperator : 'or',</span>
+<span class="pl-c">//          label       : 'First Name',</span>
+<span class="pl-c">//          name        : 'Name.FirstName',</span>
+<span class="pl-c">//          selected    : true,</span>
+<span class="pl-c">//          sort        : {</span>
+<span class="pl-c">//              by        : 'value',</span>
+<span class="pl-c">//              direction : 'asc'</span>
+<span class="pl-c">//          }</span>
+<span class="pl-c">//          customData : {}</span>
+<span class="pl-c">//      },</span>
+<span class="pl-c">//      values : [</span>
+<span class="pl-c">//          {</span>
+<span class="pl-c">//              active      : true,</span>
+<span class="pl-c">//              activeCount : 1,</span>
+<span class="pl-c">//              count       : 1,</span>
+<span class="pl-c">//              value       : 'Bob'</span>
+<span class="pl-c">//          },</span>
+<span class="pl-c">//          {</span>
+<span class="pl-c">//              active      : false,</span>
+<span class="pl-c">//              activeCount : 0,</span>
+<span class="pl-c">//              count       : 1,</span>
+<span class="pl-c">//              value       : 'Otto'</span>
+<span class="pl-c">//          }</span>
+<span class="pl-c">//      ]</span>
+<span class="pl-c">//  }</span></pre></div>
 
 <h5>
 <a id="-labellabelstring--facet" class="anchor" href="#-labellabelstring--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-label"></a> label(label:string) : Facet</h5>
@@ -787,15 +760,14 @@ var json = Facetr(collection).facet('Name.FirstName').toJSON();
 <p>Use this method to set a human readable label for the facet.
 This can be used when rendering the facet on the page.</p>
 
-<p>example:</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).facet('Name.FirstName').label('First Name');
+<div class="highlight highlight-source-js"><pre>Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).<span class="pl-c1">label</span>(<span class="pl-s"><span class="pl-pds">'</span>First Name<span class="pl-pds">'</span></span>);
 
-Facetr(collection).facet('Name.FirstName').toJSON();
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).toJSON();
 
-// the property data.label has value 'First Name'
-// while the property data.name stays 'Name.FirstName'
-</code></pre>
+<span class="pl-c">// the property data.label has value 'First Name'</span>
+<span class="pl-c">// while the property data.name stays 'Name.FirstName'</span></pre></div>
 
 <h5>
 <a id="-sortbycount--facet" class="anchor" href="#-sortbycount--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-sortbycount"></a> sortByCount() : Facet</h5>
@@ -804,22 +776,21 @@ Facetr(collection).facet('Name.FirstName').toJSON();
 of models in the original collection with an attribute having as name 
 the facet name and value the given value.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>// we use the colleciton defined in Basic Usage section
-var facet = Facetr(collection).facet('Hobbies');
+<div class="highlight highlight-source-js"><pre><span class="pl-c">// we use the colleciton defined in Basic Usage section</span>
+<span class="pl-k">var</span> facet <span class="pl-k">=</span> Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>);
 
-facet.value('painting'); // painting count = 3  
-facet.value('drawing');  // drawing count = 1
+facet.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>painting<span class="pl-pds">'</span></span>); <span class="pl-c">// painting count = 3  </span>
+facet.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>drawing<span class="pl-pds">'</span></span>);  <span class="pl-c">// drawing count = 1</span>
 
-// facet.toJSON().data.values[0] = 'drawing'
-// facet.toJSON().data.values[1] = 'painting'
+<span class="pl-c">// facet.toJSON().data.values[0] = 'drawing'</span>
+<span class="pl-c">// facet.toJSON().data.values[1] = 'painting'</span>
 
 facet.sortByCount();
 
-// facet.toJSON().data.values[0] = 'painting'
-// facet.toJSON().data.values[1] = 'drawing'
-</code></pre>
+<span class="pl-c">// facet.toJSON().data.values[0] = 'painting'</span>
+<span class="pl-c">// facet.toJSON().data.values[1] = 'drawing'</span></pre></div>
 
 <h5>
 <a id="-sortbyactivecount--facet" class="anchor" href="#-sortbyactivecount--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-sortbyactivecount"></a> sortByActiveCount() : Facet</h5>
@@ -828,24 +799,23 @@ facet.sortByCount();
 of models in the current filtered collection with an attribute having as name
 the facet name and value the given value.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>var facet = Facetr(collection).facet('Hobbies');
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> facet <span class="pl-k">=</span> Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>);
 
-facet.value('fishing');   
-facet.value('shopping');  
+facet.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>fishing<span class="pl-pds">'</span></span>);
+facet.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>shopping<span class="pl-pds">'</span></span>);
 
-// fishing active count = 1
-// shopping active count = 2
+<span class="pl-c">// fishing active count = 1</span>
+<span class="pl-c">// shopping active count = 2</span>
 
-// facet.toJSON().data.values[0] = 'fishing'
-// facet.toJSON().data.values[1] = 'shopping'
+<span class="pl-c">// facet.toJSON().data.values[0] = 'fishing'</span>
+<span class="pl-c">// facet.toJSON().data.values[1] = 'shopping'</span>
 
 facet.sortByActiveCount();
 
-// facet.toJSON().data.values[0] = 'shopping'
-// facet.toJSON().data.values[1] = 'fishing' 
-</code></pre>
+<span class="pl-c">// facet.toJSON().data.values[0] = 'shopping'</span>
+<span class="pl-c">// facet.toJSON().data.values[1] = 'fishing'</span></pre></div>
 
 <h5>
 <a id="-sortbyvalue--facet" class="anchor" href="#-sortbyvalue--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-sortbyvalue"></a> sortByValue() : Facet</h5>
@@ -857,20 +827,18 @@ facet.sortByActiveCount();
 
 <p>Sets the direction of the values sort to ascendent.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).facet('Name.FirstName').asc();
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).asc();</pre></div>
 
 <h5>
 <a id="-desc--facet" class="anchor" href="#-desc--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-desc"></a> desc() : Facet</h5>
 
 <p>Sets the direction of the values sort to descendant.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).facet('Name.FirstName').sortByCount().desc();
-</code></pre>
+<div class="highlight highlight-source-js"><pre>Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).sortByCount().desc();</pre></div>
 
 <h5>
 <a id="-remove--undefined-1" class="anchor" href="#-remove--undefined-1" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-remove"></a> remove() : undefined</h5>
@@ -890,31 +858,29 @@ Data added using this method is included in the object returned by the toJSON() 
 in the data.customData property.
 To retrieve previously set data, just pass the key parameter without any value.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>var facet = Facetr('myCollection').facet('Hobbies').customData('sublabel', 'Available hobbies');
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> facet <span class="pl-k">=</span> Facetr(<span class="pl-s"><span class="pl-pds">'</span>myCollection<span class="pl-pds">'</span></span>).facet(<span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>).customData(<span class="pl-s"><span class="pl-pds">'</span>sublabel<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>Available hobbies<span class="pl-pds">'</span></span>);
 
-// facet.customData('sublabel') returns 'Available hobbies'
-// facet.toJSON().data.customData = { sublabel : 'Available hobbies' }
-</code></pre>
+<span class="pl-c">// facet.customData('sublabel') returns 'Available hobbies'</span>
+<span class="pl-c">// facet.toJSON().data.customData = { sublabel : 'Available hobbies' }</span></pre></div>
 
 <h5>
 <a id="-isselected--boolean" class="anchor" href="#-isselected--boolean" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-isselected"></a> isSelected : Boolean</h5>
 
 <p>Returns true if any value is selected from this facet, false otherwise.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>var facet = Facetr('myCollection').facet('Hobbies');
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> facet <span class="pl-k">=</span> Facetr(<span class="pl-s"><span class="pl-pds">'</span>myCollection<span class="pl-pds">'</span></span>).facet(<span class="pl-s"><span class="pl-pds">'</span>Hobbies<span class="pl-pds">'</span></span>);
 
-facet.value('fishing');
+facet.<span class="pl-c1">value</span>(<span class="pl-s"><span class="pl-pds">'</span>fishing<span class="pl-pds">'</span></span>);
 
-// facet.isSelected() returns true
+<span class="pl-c">// facet.isSelected() returns true</span>
 
-facet.clear(); // remove all selected values
+facet.<span class="pl-c1">clear</span>(); <span class="pl-c">// remove all selected values</span>
 
-// facet.isSelected() returns false
-</code></pre>
+<span class="pl-c">// facet.isSelected() returns false</span></pre></div>
 
 <h5>
 <a id="-hierarchyhierarchysettingsarray--facet" class="anchor" href="#-hierarchyhierarchysettingsarray--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-hierarchy"></a> hierarchy(hierarchySettings:Array) : Facet</h5>
@@ -930,35 +896,34 @@ contain a "hierarchical" property with value true and a "groupedValues" array, w
 
 <p>groupedValues</p>
 
-<pre><code>[
+<div class="highlight highlight-source-js"><pre>[
     {
-        value: "manager",
-        label: "Manager",
-        active: false,
-        activeCount: 7,
-        count: 7,
-        groups: [
+        value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>manager<span class="pl-pds">"</span></span>,
+        label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Manager<span class="pl-pds">"</span></span>,
+        active<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+        activeCount<span class="pl-k">:</span> <span class="pl-c1">7</span>,
+        count<span class="pl-k">:</span> <span class="pl-c1">7</span>,
+        groups<span class="pl-k">:</span> [
             {
-                value: "team manager",
-                label: "Team Manager",
-                active: false,
-                activeCount: 5,
-                count: 5,
-                groups: [
+                value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>team manager<span class="pl-pds">"</span></span>,
+                label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Team Manager<span class="pl-pds">"</span></span>,
+                active<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+                activeCount<span class="pl-k">:</span> <span class="pl-c1">5</span>,
+                count<span class="pl-k">:</span> <span class="pl-c1">5</span>,
+                groups<span class="pl-k">:</span> [
                     { ... other groups values ... }
                 ]
             },
              {
-                value: "manager",
-                label: "Manager",
-                active: false,
-                activeCount: 5,
-                count: 5 // no groups property means that this value has no children groups
+                value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>manager<span class="pl-pds">"</span></span>,
+                label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Manager<span class="pl-pds">"</span></span>,
+                active<span class="pl-k">:</span> <span class="pl-c1">false</span>,
+                activeCount<span class="pl-k">:</span> <span class="pl-c1">5</span>,
+                count<span class="pl-k">:</span> <span class="pl-c1">5</span> <span class="pl-c">// no groups property means that this value has no children groups</span>
             },
         ]
     }
-]
-</code></pre>
+]</pre></div>
 
 <ul>
 <li><p>when a value from the facet is selected, also the models resulting from selecting its descendents values are
@@ -967,79 +932,78 @@ included in the result set</p></li>
 </ul>
 
 <p>The hierarchySettings argument is an array with different "hierarchical value" objects, where it is possible
-to specify the hierarchy of values along with a label. See the example below to understand the hierarchySettings format.</p>
+to specify the hierarchy of values along with a label. See the <strong>Example</strong> below to understand the hierarchySettings format.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>var hierarchySettings = [
-    {               
-        value: "manager",
-        label: "Manager",
-        groups: [
-            {
-                value: "project manager",
-                label: "Project Manager",
-                groups: [
-                    {
-                        value: "team manager",
-                        label: "Team Manager"
-                    }
-                ]
-            }
-        ]
-    }
-];
+<div class="highlight highlight-source-js"><pre>    <span class="pl-k">var</span> hierarchySettings <span class="pl-k">=</span> [
+        {               
+            value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>manager<span class="pl-pds">"</span></span>,
+            label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Manager<span class="pl-pds">"</span></span>,
+            groups<span class="pl-k">:</span> [
+                {
+                    value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>project manager<span class="pl-pds">"</span></span>,
+                    label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Project Manager<span class="pl-pds">"</span></span>,
+                    groups<span class="pl-k">:</span> [
+                        {
+                            value<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>team manager<span class="pl-pds">"</span></span>,
+                            label<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">"</span>Team Manager<span class="pl-pds">"</span></span>
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
 
-var profession = Facetr(collection).facet('Profession').hierarchy(hierarchySettings);
+    <span class="pl-k">var</span> profession <span class="pl-k">=</span> Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Profession<span class="pl-pds">'</span></span>).hierarchy(hierarchySettings);
 
-var json = profession.toJSON();
+    <span class="pl-k">var</span> json <span class="pl-k">=</span> profession.toJSON();
 
-// value of json variable would be:
-//
-// {
-//  "data": {
-//      "name":"Profession",
-//      "hierarchical":true,
-//      "label":"Profession",
-//      "extOperator":"and",
-//      "intOperator":"or",
-//      "sort":{
-//          "by":"activeCount",
-//          "direction":"desc"
-//      },
-//      "selected":false,
-//      "customData":{}
-//  },
-//  "values": [ ... stays as the normal facets ... ],
-//  "groupedValues":[
-//      {
-//          "value":"manager",
-//          "label":"Manager",
-//          "active":false,
-//          "activeCount":3,
-//          "count":3,
-//          "groups":[
-//              {
-//                  "value":"project manager",
-//                  "label":"Project Manager",
-//                  "active":false,
-//                  "activeCount":2,
-//                  "count":2,
-//                  "groups":[
-//                      {
-//                          "value":"team manager",
-//                          "label":"Team Manager",
-//                          "active":false,
-//                          "activeCount":1,
-//                          "count":1
-//                      }
-//                  ]
-//              }
-//          ]
-//      }
-//  ]
-// }
-</code></pre>
+    <span class="pl-c">// value of json variable would be:</span>
+    <span class="pl-c">//</span>
+    <span class="pl-c">// {</span>
+    <span class="pl-c">//  "data": {</span>
+    <span class="pl-c">//      "name":"Profession",</span>
+    <span class="pl-c">//      "hierarchical":true,</span>
+    <span class="pl-c">//      "label":"Profession",</span>
+    <span class="pl-c">//      "extOperator":"and",</span>
+    <span class="pl-c">//      "intOperator":"or",</span>
+    <span class="pl-c">//      "sort":{</span>
+    <span class="pl-c">//          "by":"activeCount",</span>
+    <span class="pl-c">//          "direction":"desc"</span>
+    <span class="pl-c">//      },</span>
+    <span class="pl-c">//      "selected":false,</span>
+    <span class="pl-c">//      "customData":{}</span>
+    <span class="pl-c">//  },</span>
+    <span class="pl-c">//  "values": [ ... stays as the normal facets ... ],</span>
+    <span class="pl-c">//  "groupedValues":[</span>
+    <span class="pl-c">//      {</span>
+    <span class="pl-c">//          "value":"manager",</span>
+    <span class="pl-c">//          "label":"Manager",</span>
+    <span class="pl-c">//          "active":false,</span>
+    <span class="pl-c">//          "activeCount":3,</span>
+    <span class="pl-c">//          "count":3,</span>
+    <span class="pl-c">//          "groups":[</span>
+    <span class="pl-c">//              {</span>
+    <span class="pl-c">//                  "value":"project manager",</span>
+    <span class="pl-c">//                  "label":"Project Manager",</span>
+    <span class="pl-c">//                  "active":false,</span>
+    <span class="pl-c">//                  "activeCount":2,</span>
+    <span class="pl-c">//                  "count":2,</span>
+    <span class="pl-c">//                  "groups":[</span>
+    <span class="pl-c">//                      {</span>
+    <span class="pl-c">//                          "value":"team manager",</span>
+    <span class="pl-c">//                          "label":"Team Manager",</span>
+    <span class="pl-c">//                          "active":false,</span>
+    <span class="pl-c">//                          "activeCount":1,</span>
+    <span class="pl-c">//                          "count":1</span>
+    <span class="pl-c">//                      }</span>
+    <span class="pl-c">//                  ]</span>
+    <span class="pl-c">//              }</span>
+    <span class="pl-c">//          ]</span>
+    <span class="pl-c">//      }</span>
+    <span class="pl-c">//  ]</span>
+    <span class="pl-c">// }</span></pre></div>
 
 <h3>
 <a id="-facetexp" class="anchor" href="#-facetexp" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetexp"></a> FacetExp</h3>
@@ -1048,16 +1012,15 @@ var json = profession.toJSON();
 They can be used to coincisely define multiple values on a facet, using
 different operators.</p>
 
-<p>example</p>
+<p><strong>Example</strong></p>
 
-<pre><code>Facetr(collection).facet('Age').value(12, 'and');
-Facetr(collection).facet('Age').value(15, 'or');
-Facetr(collection).facet('Age').value(39, 'and');
+<div class="highlight highlight-source-js"><pre>Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-c1">12</span>, <span class="pl-s"><span class="pl-pds">'</span>and<span class="pl-pds">'</span></span>);
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-c1">15</span>, <span class="pl-s"><span class="pl-pds">'</span>or<span class="pl-pds">'</span></span>);
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-c1">39</span>, <span class="pl-s"><span class="pl-pds">'</span>and<span class="pl-pds">'</span></span>);
 
-// can also be expressed with the following syntax
+<span class="pl-c">// can also be expressed with the following syntax</span>
 
-Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
-</code></pre>
+Facetr(collection).facet(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>).<span class="pl-c1">value</span>(<span class="pl-c1">12</span>, <span class="pl-s"><span class="pl-pds">'</span>and<span class="pl-pds">'</span></span>).or(<span class="pl-c1">15</span>).and(<span class="pl-c1">39</span>);</pre></div>
 
 <h5>
 <a id="-andvaluestring-silentboolean--facet" class="anchor" href="#-andvaluestring-silentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetexp-and"></a> and(value:string, [silent:boolean]) : Facet</h5>
@@ -1078,7 +1041,6 @@ Facetr(collection).facet('Age').value(12, 'and').or(15).and(39);
 <li><a href="http://ruefer-ing.ch/referenzen">ruefer-ing.ch</a></li>
 <li><a href="http://terra-vecchia.ch/sozialtherapie/angebote-und-betriebe">terra-vecchia.ch</a></li>
 <li><a href="http://grimselhydro.ch/referenzen">grimselhydro.ch</a></li>
-<li><a href="http://www.redbullalpenbrevet.ch/helden">redbullalpenbrevet.ch</a></li>
 </ul>
 
 <h3>
