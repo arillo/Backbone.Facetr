@@ -317,7 +317,7 @@ Triggers a facet event with the facetName passed to the callback, unless true is
 
 ```js
 Facetr(collection).on('facet', function(facetName) {
-    console.log(facetName);
+    console.log('added facet', facetName);
 });
 
 // add facet on property 'Age' using default operator ('and')
@@ -327,8 +327,8 @@ Facetr(collection).facet('Age');
 Facetr(collection).facet('Name.LastName', 'or');
 
 // console output would be
-// Age
-// Name.LastName
+// added facet Age
+// added facet Name.LastName
 ```
 
 
@@ -836,9 +836,25 @@ Sets the direction of the values sort to descendant.
 Facetr(collection).facet('Name.FirstName').sortByCount().desc();
 ```
 
-##### <a name="facet-remove"></a> remove() : undefined
+##### <a name="facet-remove"></a> remove([silent:boolean]) : undefined
 
 Removes the facet and all its values and unfilters the collection accordingly.
+It triggers a "removeFacet" event on the facet collection, unless true is passed as parameter.
+
+```js
+var facetCollection = Facetr(collection);
+var facet = facetCollection.facet('Age');
+
+facetCollection.on('removeFacet', function(facetName){
+    console.log('removed facet', facetName);
+});
+
+facet.remove();
+
+// console output would be
+// removed facet Age
+// removed facet Name.LastName
+```
 
 ##### <a name="facet-clear"></a> clear([silent:boolean]) : Facet
 

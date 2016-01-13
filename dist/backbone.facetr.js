@@ -1,4 +1,4 @@
-// backbone.facetr 0.3.10 
+// backbone.facetr 0.4.0 
 // Copyright (c)2012 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.3.10';
+    Backbone.Facetr.VERSION = '0.4.0';
 
     // facet collections cache
     var _collections = {};
@@ -521,7 +521,7 @@
         };
         
         // removes this facet from the FacetCollection, by delegating removal operations to the FacetCollection instance
-        this.remove = function() {
+        this.remove = function(silent) {
             // detach event listeners from collection vent object
             vent.off('resetCollection', _computeActiveValuesCount);
         
@@ -533,7 +533,7 @@
         
             // trigger an event to notify the FacetCollection instance of the change
             // which will then remove the facet from the facets object
-            vent.trigger('removeFacet', _name); 
+            vent.trigger('removeFacet', _name, silent); 
         };
         
         // adds the given value
@@ -762,10 +762,14 @@
             });
         },
         // deletes the entry for the facet with the given name from the facets hash 
-        _removeFacet = function(facetName) {
+        _removeFacet = function(facetName, silent) {
             delete _facets[facetName];
             delete _activeModels[facetName];
             _resetCollection();
+    
+            if(silent !== true) {
+              _self.trigger('removeFacet', facetName);
+            }
         },
         // fetch (or create if not existing) a facetData object from the facets hash
         _begetFacet = function(facetName, operator) {
@@ -798,7 +802,7 @@
             
             if(silent !== true){
                 // expose filter event
-                this.trigger('filter', facetName, facetValue);
+                _self.trigger('filter', facetName, facetValue);
             }
         },
         _unfilterBy = function(facetName, facetValue, cids, silent) {
@@ -806,7 +810,7 @@
             
             if(silent !== true){
                 // expose unfilter event
-                this.trigger('unfilter', facetName, facetValue);
+                _self.trigger('unfilter', facetName, facetValue);
             }
         },
         _resetCollection = function() {

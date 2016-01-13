@@ -32,10 +32,14 @@ var FacetCollection = function(collection) {
         });
     },
     // deletes the entry for the facet with the given name from the facets hash 
-    _removeFacet = function(facetName) {
+    _removeFacet = function(facetName, silent) {
         delete _facets[facetName];
         delete _activeModels[facetName];
         _resetCollection();
+
+        if(silent !== true) {
+          _self.trigger('removeFacet', facetName);
+        }
     },
     // fetch (or create if not existing) a facetData object from the facets hash
     _begetFacet = function(facetName, operator) {
@@ -68,7 +72,7 @@ var FacetCollection = function(collection) {
         
         if(silent !== true){
             // expose filter event
-            this.trigger('filter', facetName, facetValue);
+            _self.trigger('filter', facetName, facetValue);
         }
     },
     _unfilterBy = function(facetName, facetValue, cids, silent) {
@@ -76,7 +80,7 @@ var FacetCollection = function(collection) {
         
         if(silent !== true){
             // expose unfilter event
-            this.trigger('unfilter', facetName, facetValue);
+            _self.trigger('unfilter', facetName, facetValue);
         }
     },
     _resetCollection = function() {

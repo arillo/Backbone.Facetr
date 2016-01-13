@@ -435,7 +435,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     };
     
     // removes this facet from the FacetCollection, by delegating removal operations to the FacetCollection instance
-    this.remove = function() {
+    this.remove = function(silent) {
         // detach event listeners from collection vent object
         vent.off('resetCollection', _computeActiveValuesCount);
     
@@ -447,7 +447,7 @@ var Facet = function(facetName, modelsMap, vent, extOperator) {
     
         // trigger an event to notify the FacetCollection instance of the change
         // which will then remove the facet from the facets object
-        vent.trigger('removeFacet', _name); 
+        vent.trigger('removeFacet', _name, silent); 
     };
     
     // adds the given value

@@ -290,6 +290,17 @@ describe('Backbone.Facetr', function() {
                             expect(Facetr(collection).toJSON().length).toEqual(0);
                             expect(collection.length).toEqual(4);
                         });
+
+                        it('triggers a "removeFacet" event on the FacetCollection, passing the facetName to the event handler, unless true (silent) is passed as last parameter', function(){
+                            var facetCollection = Facetr(collection);
+                            spyOn(facetCollection, 'trigger');
+                            var facet = facetCollection.facet('Age', null, true);
+                            facet.remove();
+                            expect(facetCollection.trigger).toHaveBeenCalledWith('removeFacet', 'Age');
+                            facet = facetCollection.facet('Age', null, true);
+                            facet.remove(true);
+                            expect(facetCollection.trigger.calls.count()).toEqual(1);
+                        });
                     });
                     
                     // Facet value method
