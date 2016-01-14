@@ -229,10 +229,6 @@ describe('Backbone.Facetr', function() {
                   var facetCountry = facetedCollection.facet('Country');
                   facetCountry.value('Australia');
                   var facetAge = facetedCollection.facet('Age');
-                  
-                  // console.log(JSON.stringify(facetCountry.activeValues()));
-                  // console.log(JSON.stringify(facetAge.activeValues()));
-                  // console.log(JSON.stringify(facetAge.toJSON()));
 
                   _.forEach(facetAge.toJSON().values, function(v){
                     var expected = {};
