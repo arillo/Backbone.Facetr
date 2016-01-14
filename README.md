@@ -853,7 +853,6 @@ facet.remove();
 
 // console output would be
 // removed facet Age
-// removed facet Name.LastName
 ```
 
 ##### <a name="facet-clear"></a> clear([silent:boolean]) : Facet
