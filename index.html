@@ -346,7 +346,7 @@ Triggers a facet event with the facetName passed to the callback, unless true is
 <p><strong>Example</strong></p>
 
 <div class="highlight highlight-source-js"><pre><span class="pl-en">Facetr</span>(collection).<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>facet<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">facetName</span>) {
-    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(facetName);
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>added facet<span class="pl-pds">'</span></span>, facetName);
 });
 
 <span class="pl-c">// add facet on property 'Age' using default operator ('and')</span>
@@ -356,8 +356,8 @@ Triggers a facet event with the facetName passed to the callback, unless true is
 <span class="pl-en">Facetr</span>(collection).<span class="pl-en">facet</span>(<span class="pl-s"><span class="pl-pds">'</span>Name.LastName<span class="pl-pds">'</span></span>, <span class="pl-s"><span class="pl-pds">'</span>or<span class="pl-pds">'</span></span>);
 
 <span class="pl-c">// console output would be</span>
-<span class="pl-c">// Age</span>
-<span class="pl-c">// Name.LastName</span></pre></div>
+<span class="pl-c">// added facet Age</span>
+<span class="pl-c">// added facet Name.LastName</span></pre></div>
 
 <h5>
 <a id="-tojson--array" class="anchor" href="#-tojson--array" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facetcollection-tojson"></a> toJSON() : Array</h5>
@@ -841,9 +841,22 @@ the facet name and value the given value.</p>
 <div class="highlight highlight-source-js"><pre><span class="pl-en">Facetr</span>(collection).<span class="pl-en">facet</span>(<span class="pl-s"><span class="pl-pds">'</span>Name.FirstName<span class="pl-pds">'</span></span>).<span class="pl-en">sortByCount</span>().<span class="pl-en">desc</span>();</pre></div>
 
 <h5>
-<a id="-remove--undefined-1" class="anchor" href="#-remove--undefined-1" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-remove"></a> remove() : undefined</h5>
+<a id="-removesilentboolean--undefined" class="anchor" href="#-removesilentboolean--undefined" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-remove"></a> remove([silent:boolean]) : undefined</h5>
 
-<p>Removes the facet and all its values and unfilters the collection accordingly.</p>
+<p>Removes the facet and all its values and unfilters the collection accordingly.
+It triggers a "removeFacet" event on the facet collection, unless true is passed as parameter.</p>
+
+<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> facetCollection <span class="pl-k">=</span> <span class="pl-en">Facetr</span>(collection);
+<span class="pl-k">var</span> facet <span class="pl-k">=</span> <span class="pl-smi">facetCollection</span>.<span class="pl-en">facet</span>(<span class="pl-s"><span class="pl-pds">'</span>Age<span class="pl-pds">'</span></span>);
+
+<span class="pl-smi">facetCollection</span>.<span class="pl-en">on</span>(<span class="pl-s"><span class="pl-pds">'</span>removeFacet<span class="pl-pds">'</span></span>, <span class="pl-k">function</span>(<span class="pl-smi">facetName</span>){
+    <span class="pl-en">console</span>.<span class="pl-c1">log</span>(<span class="pl-s"><span class="pl-pds">'</span>removed facet<span class="pl-pds">'</span></span>, facetName);
+});
+
+<span class="pl-smi">facet</span>.<span class="pl-en">remove</span>();
+
+<span class="pl-c">// console output would be</span>
+<span class="pl-c">// removed facet Age</span></pre></div>
 
 <h5>
 <a id="-clearsilentboolean--facet" class="anchor" href="#-clearsilentboolean--facet" aria-hidden="true"><span class="octicon octicon-link"></span></a><a name="facet-clear"></a> clear([silent:boolean]) : Facet</h5>
