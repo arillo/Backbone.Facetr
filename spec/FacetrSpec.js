@@ -223,6 +223,47 @@ describe('Backbone.Facetr', function() {
                     expect(collection.length).toEqual(facetedCollection.origLength());
                 });
 
+                it('creates the new facet with values count calculated considering current filters', function(){
+                  var facetedCollection = Facetr(collection);
+                  
+                  var facetCountry = facetedCollection.facet('Country');
+                  facetCountry.value('Australia');
+                  var facetAge = facetedCollection.facet('Age');
+                  
+                  // console.log(JSON.stringify(facetCountry.activeValues()));
+                  // console.log(JSON.stringify(facetAge.activeValues()));
+                  // console.log(JSON.stringify(facetAge.toJSON()));
+
+                  _.forEach(facetAge.toJSON().values, function(v){
+                    var expected = {};
+                    
+                    switch(v.value){
+                      case 20:{
+                        expected.active = false;
+                        expected.count = 1;
+                        expected.activeCount = 1;
+                      } break;
+                      
+                      case 28:{
+                        expected.active = false;
+                        expected.count = 2;
+                        expected.activeCount = 1;
+                      } break;
+
+                      case 35:{
+                        expected.active = false;
+                        expected.count = 1;
+                        expected.activeCount = 0;
+                      } break;
+                    }
+
+                    expect(expected.active).toEqual(v.active);
+                    expect(expected.count).toEqual(v.count);
+                    expect(expected.activeCount).toEqual(v.activeCount);
+                  });
+
+                });
+
                 // Facet
                 describe('returns a Facet that', function() {
                     // Facet toJSON

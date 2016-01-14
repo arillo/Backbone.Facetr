@@ -1,4 +1,4 @@
-// backbone.facetr 0.4.0 
+// backbone.facetr 0.4.1 
 // Copyright (c)2012 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.4.0';
+    Backbone.Facetr.VERSION = '0.4.1';
 
     // facet collections cache
     var _collections = {};
@@ -986,6 +986,8 @@
             var op = (operator && (operator === 'and' || operator === 'or')) ? operator : 'and';
     
             _facets[facetName] = _begetFacet(facetName, op);
+            
+            _resetCollection();
             
             if(silent !== true){
                 this.trigger('facet', facetName);

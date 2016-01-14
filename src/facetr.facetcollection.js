@@ -257,6 +257,8 @@ var FacetCollection = function(collection) {
 
         _facets[facetName] = _begetFacet(facetName, op);
         
+        _resetCollection();
+        
         if(silent !== true){
             this.trigger('facet', facetName);
         }
