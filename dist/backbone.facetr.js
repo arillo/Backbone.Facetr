@@ -1,4 +1,4 @@
-// backbone.facetr 0.4.1 
+// backbone.facetr 0.4.2 
 // Copyright (c)2012 Arillo GmbH 
 // Author: Francesco Macri 
 // Distributed under MIT license 
@@ -30,7 +30,7 @@
         return _getCollection(collection);
     };
 
-    Backbone.Facetr.VERSION = '0.4.1';
+    Backbone.Facetr.VERSION = '0.4.2';
 
     // facet collections cache
     var _collections = {};
@@ -1180,54 +1180,55 @@
         };
     
         this.initFromSettingsJSON = function(json) {
-            var facetCollection, facetr, facets, sort, filter, facetData, attr, 
+            var facetCollection, facetr, facets, sort, facetData, attr, 
             eop, iop, fsort, cust, values, facet, i, j, k, len, len2;
     
             facetr = Backbone.Facetr;
             facetCollection = facetr(collection);
             facets = json.facets;
             sort = json.sort;
-            filter = json.search;
     
-            for(i = 0, len = facets.length; i < len; i += 1) {
-                facetData = facets[i];
-                attr = facetData.attr;
-                eop = facetData.eop;
-                iop = facetData.iop;
-                fsort = facetData.sort;
-                cust = facetData.cust;
-                values = facetData.vals;
+            if(facets != null) {
+              for(i = 0, len = facets.length; i < len; i += 1) {
+                  facetData = facets[i];
+                  attr = facetData.attr;
+                  eop = facetData.eop;
+                  iop = facetData.iop;
+                  fsort = facetData.sort;
+                  cust = facetData.cust;
+                  values = facetData.vals;
     
-                facet = facetCollection.facet(attr, eop);
+                  facet = facetCollection.facet(attr, eop);
     
-                switch(fsort.by){
-                    case 'count' : {
-                        facet.sortByCount();
-                    } break;
-                    case 'activeCount' : {
-                        facet.sortByActiveCount();
-                    } break;
-                    default:{
-                        facet.sortByValue();
-                    }
-                }
+                  switch(fsort.by){
+                      case 'count' : {
+                          facet.sortByCount();
+                      } break;
+                      case 'activeCount' : {
+                          facet.sortByActiveCount();
+                      } break;
+                      default:{
+                          facet.sortByValue();
+                      }
+                  }
     
-                facet[fsort.direction]();
-                
-                if(cust){
-                    for(k in cust){
-                        if(cust.hasOwnProperty(k)){
-                            facet.customData(k, cust[k]);
-                        }
-                    }
-                }
+                  facet[fsort.direction]();
+                  
+                  if(cust){
+                      for(k in cust){
+                          if(cust.hasOwnProperty(k)){
+                              facet.customData(k, cust[k]);
+                          }
+                      }
+                  }
     
-                for(j = 0, len2 = values.length; j < len2; j += 1) {
-                    facet.value(values[j], iop);
-                }
+                  for(j = 0, len2 = values.length; j < len2; j += 1) {
+                      facet.value(values[j], iop);
+                  }
+              }
             }
     
-            if(sort) {
+            if(sort != null) {
                 var sattr = sort.by,
                     sdir  = sort.dir;
                     
