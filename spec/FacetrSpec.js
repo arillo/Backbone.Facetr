@@ -570,6 +570,78 @@ describe('Backbone.Facetr', function() {
                 });
             });
 
+            // FacetCollection settingsJSON
+            describe('has a settingsJSON method', function(){
+              it('that returns current facets, sort order and customData to object', function(){
+                var facetCollection = Facetr(collection);
+                facetCollection.facet('Age').label('Years').value(20);
+                facetCollection.sortBy('Age').desc();
+
+                var settingsJSON = facetCollection.settingsJSON();
+
+                expect(settingsJSON.sort.by).toEqual('Age');
+                expect(settingsJSON.sort.dir).toEqual('desc');
+                expect(settingsJSON.facets.length).toEqual(1);
+                expect(settingsJSON.facets[0].attr).toEqual('Age');
+                expect(settingsJSON.facets[0].lab).toEqual('Years');
+                expect(settingsJSON.facets[0].eop).toEqual('and');
+                expect(settingsJSON.facets[0].iop).toEqual('or');
+                expect(settingsJSON.facets[0].vals.length).toEqual(1);
+                expect(settingsJSON.facets[0].vals[0]).toEqual(20);
+              });
+            });
+
+            // FacetCollection initFromSettingsJSON
+            describe('has a initFromSettingsJSON method', function(){
+              it('that inits the faceted collection with the given settingsJSON options', function(){
+                var facetCollection = Facetr(collection);
+                facetCollection.facet('Age').label('Years').value(20);
+                facetCollection.sortBy('Age').desc();
+
+                var settingsJSON = facetCollection.settingsJSON();
+
+                facetCollection.remove();
+
+                facetCollection = Facetr(collection);
+
+                facetCollection.initFromSettingsJSON(settingsJSON);
+
+                var facetCollectionJSON = facetCollection.toJSON();
+
+                expect(facetCollectionJSON.length).toEqual(1);
+                expect(facetCollectionJSON[0].data.name).toEqual('Age');
+                expect(facetCollectionJSON[0].data.label).toEqual('Years');
+                expect(facetCollectionJSON[0].data.selected).toBeTruthy();
+
+                _.each(facetCollectionJSON[0].values, function(v){
+                  switch(v.value) {
+                    case 20: {
+                      expect(v.count).toEqual(1);
+                      expect(v.activeCount).toEqual(1);
+                      expect(v.active).toEqual(true);
+                    } break;
+
+                    case 28: {
+                      expect(v.count).toEqual(2);
+                      expect(v.activeCount).toEqual(0);
+                      expect(v.active).toEqual(false);
+                    } break;
+
+                    case 35: {
+                      expect(v.count).toEqual(1);
+                      expect(v.activeCount).toEqual(0);
+                      expect(v.active).toEqual(false);
+                    } break;
+                  }
+                });
+
+                settingsJSON = facetCollection.settingsJSON();
+
+                expect(settingsJSON.sort.by).toEqual('Age');
+                expect(settingsJSON.sort.dir).toEqual('desc');
+              });
+            });
+
             // FacetCollection update on reset
             describe('updates itself on each Backbone Collection reset', function() {
                 it('by reapplying all facets to the new Model instances', function() {

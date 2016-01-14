@@ -451,7 +451,7 @@ var FacetCollection = function(collection) {
 
     this.initFromSettingsJSON = function(json) {
         var facetCollection, facetr, facets, sort, facetData, attr, 
-        eop, iop, fsort, cust, values, facet, i, j, k, len, len2;
+        lab, eop, iop, fsort, cust, values, facet, i, j, k, len, len2;
 
         facetr = Backbone.Facetr;
         facetCollection = facetr(collection);
@@ -462,6 +462,7 @@ var FacetCollection = function(collection) {
           for(i = 0, len = facets.length; i < len; i += 1) {
               facetData = facets[i];
               attr = facetData.attr;
+              lab = facetData.lab;
               eop = facetData.eop;
               iop = facetData.iop;
               fsort = facetData.sort;
@@ -469,6 +470,10 @@ var FacetCollection = function(collection) {
               values = facetData.vals;
 
               facet = facetCollection.facet(attr, eop);
+
+              if(lab) {
+                facet.label(lab);
+              }
 
               switch(fsort.by){
                   case 'count' : {
@@ -533,7 +538,7 @@ var FacetCollection = function(collection) {
             
             for(facet in _facets) {
                 if(_facets.hasOwnProperty(facet)) {
-                    facetJSON= _facets[facet].facet.toJSON();
+                    facetJSON = _facets[facet].facet.toJSON();
                     values = _.pluck(facetJSON.values, 'active');
                     activeValues = [];
                     
@@ -544,12 +549,13 @@ var FacetCollection = function(collection) {
                     }
 
                     json.facets.push({
-                        'attr' : facetJSON.data.name,
-                        'eop'  : facetJSON.data.extOperator,
-                        'iop'  : facetJSON.data.intOperator,
-                        'sort' : facetJSON.data.sort,
-                        'cust' : facetJSON.data.customData,
-                        'vals' : activeValues 
+                        'attr'  : facetJSON.data.name,
+                        'lab' : facetJSON.data.label,
+                        'eop'   : facetJSON.data.extOperator,
+                        'iop'   : facetJSON.data.intOperator,
+                        'sort'  : facetJSON.data.sort,
+                        'cust'  : facetJSON.data.customData,
+                        'vals'  : activeValues 
                     });
                 }
             }
